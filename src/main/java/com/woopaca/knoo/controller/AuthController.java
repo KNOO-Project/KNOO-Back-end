@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -21,7 +22,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<String> userSignUp(@RequestBody final SignUpRequestDto signUpRequestDto) {
+    public ResponseEntity<String> userSignUp(@RequestBody @Valid final SignUpRequestDto signUpRequestDto) {
         log.info("userSignUp");
         Long joinUserId = userService.signUp(signUpRequestDto);
         return ResponseEntity.created(URI.create("/users/" + joinUserId))
