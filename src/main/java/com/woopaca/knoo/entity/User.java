@@ -1,5 +1,6 @@
 package com.woopaca.knoo.entity;
 
+import com.woopaca.knoo.controller.dto.SignUpRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -17,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +39,8 @@ public class User implements UserDetails {
     private String password;
     @Column(unique = true)
     private String name;
+    @Column(unique = true)
+    private String email;
     private String joinDate;
     private String campus;
     private String major;
@@ -46,14 +51,26 @@ public class User implements UserDetails {
     private List<String> roles = new ArrayList<>();
 
     @Builder
-    public User(String username, String password, String name, String joinDate,
-                String campus, String major) {
+    public User(String username, String password, String name, String email,
+                String joinDate, String campus, String major) {
         this.username = username;
         this.password = password;
         this.name = name;
+        this.email = email;
         this.joinDate = joinDate;
         this.campus = campus;
         this.major = major;
+    }
+
+    public static User from(final SignUpRequestDto signUpRequestDto) {
+        return User.builder()
+                .username(signUpRequestDto.getUsername())
+                .password(BCrypt.hashpw(signUpRequestDto.getPassword(),
+                        BCrypt.gensalt()))
+                .name(signUpRequestDto.getName())
+                .email(signUpRequestDto.getEmail())
+                .joinDate(LocalDateTime.now().toString())
+                .build();
     }
 
     @Override

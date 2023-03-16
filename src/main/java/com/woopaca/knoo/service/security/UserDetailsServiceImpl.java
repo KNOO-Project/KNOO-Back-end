@@ -1,4 +1,4 @@
-package com.woopaca.knoo.service;
+package com.woopaca.knoo.service.security;
 
 import com.woopaca.knoo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
