@@ -1,0 +1,2 @@
+jwt:
+  secret: KNOO_SECRET_KEY_BASE_64
