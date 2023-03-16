@@ -1,6 +1,8 @@
 package com.woopaca.knoo.controller.dto;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,8 @@ import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class SignUpRequestDto {
 
     @NotBlank(message = "회원 아이디는 비어있을 수 없습니다.")
