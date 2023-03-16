@@ -106,6 +106,6 @@
 
 <br>
 
-# DB ERD
+<img width="90%" alt="스크린샷 2023-03-16 19 07 51" src="https://user-images.githubusercontent.com/69714701/225584742-72ed848d-0427-4d9f-8ca9-ba95123c61c1.png">
 
-<img width="80%" alt="스크린샷 2023-03-15 13 54 37" src="https://user-images.githubusercontent.com/69714701/225210511-c61fd05f-f69c-4362-ae26-6ad95e6246d1.png">
+
