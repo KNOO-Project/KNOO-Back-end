@@ -8,8 +8,6 @@ spring:
     username: jcw
     password: 1234
   jpa:
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -22,3 +20,6 @@ logging:
     org.hibernate.sql: debug
     org.hibernate.type: trace
     org.apache.coyote.http11: debug
+
+server:
+  port: 8888
