@@ -62,8 +62,8 @@ public class User implements UserDetails {
         this.major = major;
     }
 
-    public static User from(final SignUpRequestDto signUpRequestDto) {
-        return User.builder()
+    public static User join(final SignUpRequestDto signUpRequestDto) {
+        User user = User.builder()
                 .username(signUpRequestDto.getUsername())
                 .password(BCrypt.hashpw(signUpRequestDto.getPassword(),
                         BCrypt.gensalt()))
@@ -71,6 +71,8 @@ public class User implements UserDetails {
                 .email(signUpRequestDto.getEmail())
                 .joinDate(LocalDateTime.now().toString())
                 .build();
+        user.roles.add("ROLE_USER");
+        return user;
     }
 
     @Override

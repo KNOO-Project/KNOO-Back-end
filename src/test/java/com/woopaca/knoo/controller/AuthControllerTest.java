@@ -80,7 +80,7 @@ class AuthControllerTest {
                 .name("test")
                 .email("test@smail.kongju.ac.kr")
                 .build();
-        User user = User.from(signUpRequestDto1);
+        User user = User.join(signUpRequestDto1);
         userRepository.save(user);
 
         SignUpRequestDto signUpRequestDto2 = SignUpRequestDto.builder()

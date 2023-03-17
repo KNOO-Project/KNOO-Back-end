@@ -21,7 +21,7 @@ public class SimpleAuthUserService implements UserService {
     @Transactional
     public Long signUp(final SignUpRequestDto signUpRequestDto) {
         userValidator.validateSignUpUser(signUpRequestDto);
-        User user = User.from(signUpRequestDto);
+        User user = User.join(signUpRequestDto);
         User joinUser = userRepository.save(user);
         return joinUser.getId();
     }
