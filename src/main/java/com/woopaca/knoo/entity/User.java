@@ -10,15 +10,19 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,8 +46,14 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
     private String joinDate;
+    @Enumerated(value = EnumType.STRING)
+    private EmailVerify emailVerify;
     private String campus;
     private String major;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Verification verification;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "Role", joinColumns = @JoinColumn(name = "user_id"))
@@ -52,14 +62,24 @@ public class User implements UserDetails {
 
     @Builder
     public User(String username, String password, String name, String email,
-                String joinDate, String campus, String major) {
+                String joinDate, EmailVerify emailVerify, String campus, String major) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
         this.joinDate = joinDate;
+        this.emailVerify = emailVerify;
         this.campus = campus;
         this.major = major;
+    }
+
+    public void setVerification(Verification verification) {
+        this.verification = verification;
+        verification.setUser(this);
+    }
+
+    public void verify() {
+        emailVerify = EmailVerify.ENABLE;
     }
 
     public static User join(final SignUpRequestDto signUpRequestDto) {
@@ -70,6 +90,7 @@ public class User implements UserDetails {
                 .name(signUpRequestDto.getName())
                 .email(signUpRequestDto.getEmail())
                 .joinDate(LocalDateTime.now().toString())
+                .emailVerify(EmailVerify.DISABLE)
                 .build();
         user.roles.add("ROLE_USER");
         return user;
