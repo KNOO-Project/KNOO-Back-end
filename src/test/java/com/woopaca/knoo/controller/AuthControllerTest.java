@@ -2,6 +2,8 @@ package com.woopaca.knoo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.controller.dto.SignUpRequestDto;
+import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ class AuthControllerTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     @DisplayName("회원가입 성공")
@@ -62,6 +66,36 @@ class AuthControllerTest {
 
         //then
         resultActions.andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @DisplayName("회원가입 실패 - 아이디 중복")
+    void signUpFailDuplicateUsername() throws Exception {
+        //given
+        SignUpRequestDto signUpRequestDto1 = SignUpRequestDto.builder()
+                .username("username")
+                .password("password")
+                .passwordCheck("password")
+                .name("test")
+                .email("test@smail.kongju.ac.kr")
+                .build();
+        User user = User.from(signUpRequestDto1);
+        userRepository.save(user);
+
+        SignUpRequestDto signUpRequestDto2 = SignUpRequestDto.builder()
+                .username("username")
+                .password("password")
+                .passwordCheck("password")
+                .name("test2")
+                .email("test2@smail.kongju.ac.kr")
+                .build();
+
+        //when
+        ResultActions resultActions = resultActions(signUpRequestDto2);
+
+        //then
+        resultActions.andExpect(status().isConflict());
 
     }
 
