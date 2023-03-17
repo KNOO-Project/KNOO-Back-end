@@ -3,17 +3,22 @@ package com.woopaca.knoo.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.controller.dto.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.entity.Verification;
 import com.woopaca.knoo.repository.UserRepository;
+import com.woopaca.knoo.service.MailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,6 +34,9 @@ class AuthControllerTest {
     ObjectMapper mapper;
     @Autowired
     UserRepository userRepository;
+
+    @MockBean
+    MailService mailService;
 
     @Test
     @DisplayName("회원가입 성공")
@@ -81,6 +89,8 @@ class AuthControllerTest {
                 .email("test@smail.kongju.ac.kr")
                 .build();
         User user = User.join(signUpRequestDto1);
+        Verification verification = Verification.createVerification();
+        user.setVerification(verification);
         userRepository.save(user);
 
         SignUpRequestDto signUpRequestDto2 = SignUpRequestDto.builder()
@@ -100,7 +110,9 @@ class AuthControllerTest {
     }
 
     private ResultActions resultActions(SignUpRequestDto signUpRequestDto) throws Exception {
-        return mockMvc.perform(post("/auth/sign-up")
+        doNothing().when(mailService).sendAuthMail(anyString(), anyString());
+
+        return mockMvc.perform(post("/api/v1/auth/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(signUpRequestDto)))
                 .andDo(print());

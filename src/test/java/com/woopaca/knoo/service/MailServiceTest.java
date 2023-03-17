@@ -16,7 +16,7 @@ class MailServiceTest {
     @Test
     @DisplayName("메일 전송")
     void mailSendTest() throws Exception {
-        String receivedUserMail = "jcw1031@smail.kongju.ac.kr";
+        String receivedUserMail = "jcw001031@gmail.com";
         mailService.sendAuthMail(receivedUserMail, UUID.randomUUID().toString());
     }
 }

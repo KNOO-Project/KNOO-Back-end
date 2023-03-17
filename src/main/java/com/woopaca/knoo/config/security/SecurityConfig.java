@@ -27,8 +27,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // permitAll() -> 모두 허용     authenticated() -> 인증 필요     hasRole() -> 권한 필요
-                .antMatchers("/auth/sign-up", "/auth/sign-in").permitAll()
-                .antMatchers(HttpMethod.GET, "/posts").permitAll()
+                .antMatchers("/api/v1/auth/sign-up", "/api/v1/auth/sign-in").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/posts").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

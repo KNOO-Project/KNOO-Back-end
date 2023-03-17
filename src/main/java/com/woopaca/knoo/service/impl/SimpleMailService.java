@@ -22,12 +22,11 @@ public class SimpleMailService implements MailService {
     private static final String HOST = "http://localhost:8888";
 
     @Override
-    public String sendAuthMail(final String receivedUserMail, final String uuid) {
+    public void sendAuthMail(final String receivedUserMail, final String uuid) {
         log.info("인증 메일 발송 [{}]", receivedUserMail);
 
         MimeMessage message = createMessage(receivedUserMail, uuid);
         mailSender.send(message);
-        return null;
     }
 
     private MimeMessage createMessage(final String receivedUserMail, final String uuid) {
