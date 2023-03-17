@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.UUID;
+
 @SpringBootTest
 class MailServiceTest {
 
@@ -15,6 +17,6 @@ class MailServiceTest {
     @DisplayName("메일 전송")
     void mailSendTest() throws Exception {
         String receivedUserMail = "jcw1031@smail.kongju.ac.kr";
-        mailService.sendAuthMail(receivedUserMail);
+        mailService.sendAuthMail(receivedUserMail, UUID.randomUUID().toString());
     }
 }

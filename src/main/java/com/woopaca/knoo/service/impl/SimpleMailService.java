@@ -11,7 +11,6 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,17 +22,17 @@ public class SimpleMailService implements MailService {
     private static final String HOST = "http://localhost:8888";
 
     @Override
-    public String sendAuthMail(final String receivedUserMail) {
+    public String sendAuthMail(final String receivedUserMail, final String uuid) {
         log.info("인증 메일 발송 [{}]", receivedUserMail);
 
-        MimeMessage message = createMessage(receivedUserMail);
+        MimeMessage message = createMessage(receivedUserMail, uuid);
         mailSender.send(message);
         return null;
     }
 
-    private MimeMessage createMessage(final String receivedUserMail) {
+    private MimeMessage createMessage(final String receivedUserMail, final String uuid) {
         MimeMessage message = mailSender.createMimeMessage();
-        String messageContent = createMessageContent();
+        String messageContent = createMessageContent(uuid);
 
         try {
             message.addRecipients(Message.RecipientType.TO, receivedUserMail);
@@ -46,9 +45,8 @@ public class SimpleMailService implements MailService {
         return message;
     }
 
-    private String createMessageContent() {
-        String uuid = UUID.randomUUID().toString();
-        String url = HOST + "/auth/mail/" + uuid;
+    private String createMessageContent(String uuid) {
+        String url = HOST + "/auth/mail?code=" + uuid;
         return "<div>" +
                 "<h3>[KNOO] 아래 URL을 통해 회원가입을 완료하세요.<h3><br>" +
                 "<a href=\"" + url + "\">KNOO 이메일 인증하기</a>" +

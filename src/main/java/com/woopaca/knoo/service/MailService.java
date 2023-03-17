@@ -4,5 +4,6 @@ import javax.mail.MessagingException;
 
 public interface MailService {
 
-    String sendAuthMail(final String receivedUserMail) throws MessagingException;
+    String sendAuthMail(final String receivedUserMail, final String uuid)
+            throws MessagingException;
 }

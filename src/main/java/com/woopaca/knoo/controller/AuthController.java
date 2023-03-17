@@ -26,6 +26,6 @@ public class AuthController {
         log.info("userSignUp");
         Long joinUserId = userService.signUp(signUpRequestDto);
         return ResponseEntity.created(URI.create("/users/" + joinUserId))
-                .body("회원가입이 완료되었습니다.");
+                .body("회원가입 인증 이메일이 전송되었습니다.");
     }
 }
