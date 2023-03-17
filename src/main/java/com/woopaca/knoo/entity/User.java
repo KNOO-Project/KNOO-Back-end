@@ -78,6 +78,10 @@ public class User implements UserDetails {
         verification.setUser(this);
     }
 
+    public void verify() {
+        emailVerify = EmailVerify.ENABLE;
+    }
+
     public static User join(final SignUpRequestDto signUpRequestDto) {
         User user = User.builder()
                 .username(signUpRequestDto.getUsername())

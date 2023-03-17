@@ -2,6 +2,10 @@ package com.woopaca.knoo.validator.impl;
 
 import com.woopaca.knoo.annotation.Validator;
 import com.woopaca.knoo.controller.dto.SignUpRequestDto;
+import com.woopaca.knoo.entity.EmailVerify;
+import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.entity.Verification;
+import com.woopaca.knoo.exception.user.impl.AlreadyMailVerifiedException;
 import com.woopaca.knoo.exception.user.impl.DuplicateEmailException;
 import com.woopaca.knoo.exception.user.impl.DuplicateNameException;
 import com.woopaca.knoo.exception.user.impl.DuplicateUsernameException;
@@ -52,5 +56,15 @@ public class BasicUserValidator implements UserValidator {
         userRepository.findByEmail(email).ifPresent(user -> {
             throw new DuplicateEmailException();
         });
+    }
+
+    @Override
+    public void validateUserMailVerification(final Verification verification) {
+        User user = verification.getUser();
+        EmailVerify emailVerify = user.getEmailVerify();
+
+        if (emailVerify.equals(EmailVerify.ENABLE)) {
+            throw new AlreadyMailVerifiedException();
+        }
     }
 }

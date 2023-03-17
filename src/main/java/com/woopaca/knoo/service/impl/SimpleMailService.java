@@ -45,7 +45,7 @@ public class SimpleMailService implements MailService {
     }
 
     private String createMessageContent(String uuid) {
-        String url = HOST + "/auth/mail?code=" + uuid;
+        String url = HOST + "/api/v1/auth/mail?code=" + uuid;
         return "<div>" +
                 "<h3>[KNOO] 아래 URL을 통해 회원가입을 완료하세요.<h3><br>" +
                 "<a href=\"" + url + "\">KNOO 이메일 인증하기</a>" +
