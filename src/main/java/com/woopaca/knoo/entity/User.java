@@ -14,6 +14,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,6 +44,8 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
     private String joinDate;
+    @Enumerated(value = EnumType.STRING)
+    private EmailAuth emailAuth;
     private String campus;
     private String major;
 
@@ -52,12 +56,13 @@ public class User implements UserDetails {
 
     @Builder
     public User(String username, String password, String name, String email,
-                String joinDate, String campus, String major) {
+                String joinDate, EmailAuth emailAuth, String campus, String major) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
         this.joinDate = joinDate;
+        this.emailAuth = emailAuth;
         this.campus = campus;
         this.major = major;
     }
@@ -70,6 +75,7 @@ public class User implements UserDetails {
                 .name(signUpRequestDto.getName())
                 .email(signUpRequestDto.getEmail())
                 .joinDate(LocalDateTime.now().toString())
+                .emailAuth(EmailAuth.UNAUTHORIZED)
                 .build();
         user.roles.add("ROLE_USER");
         return user;
