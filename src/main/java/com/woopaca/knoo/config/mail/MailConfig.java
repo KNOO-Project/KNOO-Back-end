@@ -15,19 +15,19 @@ public class MailConfig {
 
     @Value("${mail.smtp.port}")
     private int port;
-    @Value("${mail.smtp.socket_factory.port}")
+    @Value("${mail.smtp.socketFactory.port}")
     private int socketPort;
-    @Value("${mail.smtp.socket_factory.fallback}")
+    @Value("${mail.smtp.socketFactory.fallback}")
     private boolean fallback;
     @Value("${mail.smtp.auth}")
     private boolean auth;
-    @Value("${mail.smtp.start_tls.enable}")
+    @Value("${mail.smtp.starttls.enable}")
     private boolean startTls;
-    @Value("${mail.smtp.start_tls.required}")
+    @Value("${mail.smtp.starttls.required}")
     private boolean startTlsRequired;
-    @Value("${admin_mail.id}")
+    @Value("${AdminMail.id}")
     private String id;
-    @Value("${admin_mail.password}")
+    @Value("${AdminMail.password}")
     private String password;
 
     @Bean
@@ -44,12 +44,12 @@ public class MailConfig {
 
     private Properties getMailProperties() {
         Properties properties = new Properties();
-        properties.put("mail.smtp.socket_factory.port", socketPort);
+        properties.put("mail.smtp.socketFactory.port", socketPort);
         properties.put("mail.smtp.auth", auth);
-        properties.put("mail.smtp.start_tls.enable", startTls);
-        properties.put("mail.smtp.start_tls.required", startTlsRequired);
-        properties.put("mail.smtp.socket_factory.fallback", fallback);
-        properties.put("mail.smtp.socket_factory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.starttls.enable", startTls);
+        properties.put("mail.smtp.starttls.required", startTlsRequired);
+        properties.put("mail.smtp.socketFactory.fallback", fallback);
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         return properties;
     }
 }
