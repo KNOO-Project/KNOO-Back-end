@@ -105,6 +105,8 @@
 
 <br>
 
+# DB 설계
+
 <img width="90%" alt="스크린샷 2023-03-18 20 52 23" src="https://user-images.githubusercontent.com/69714701/226104423-199c614c-3061-4743-ba2a-5059cd2decf9.png">
 
 
