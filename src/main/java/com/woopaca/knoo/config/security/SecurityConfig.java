@@ -1,6 +1,8 @@
 package com.woopaca.knoo.config.security;
 
 import com.woopaca.knoo.config.jwt.JwtAuthenticationFilter;
+import com.woopaca.knoo.exception.handler.security.CustomAccessDeniedHandler;
+import com.woopaca.knoo.exception.handler.security.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +30,13 @@ public class SecurityConfig {
                 // permitAll() -> 모두 허용     authenticated() -> 인증 필요     hasRole() -> 권한 필요
 //                .antMatchers("/api/v1/auth/sign-up", "/api/v1/auth/sign-in").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/v1/posts").permitAll()
+                .antMatchers("/api/v1/test").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

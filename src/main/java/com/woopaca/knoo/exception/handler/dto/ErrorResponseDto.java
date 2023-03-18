@@ -16,13 +16,15 @@ public class ErrorResponseDto {
     private String errorType;
     private String message;
     private String path;
+    private String errorCode;
 
     @Builder
-    public ErrorResponseDto(int statusCode, String errorType, String message, String path) {
+    public ErrorResponseDto(int statusCode, String errorType, String message, String path, String errorCode) {
         this.statusCode = statusCode;
         this.errorType = errorType;
         this.message = message;
         this.path = path;
+        this.errorCode = errorCode;
     }
 
     public static ErrorResponseDto of(KnooException exception, HttpServletRequest request) {
@@ -31,6 +33,7 @@ public class ErrorResponseDto {
                 .errorType(exception.getKnooError().getHttpStatus().name())
                 .message(exception.getKnooError().getMessage())
                 .path(request.getRequestURI())
+                .errorCode(exception.getKnooError().getErrorCode())
                 .build();
     }
 }

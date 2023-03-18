@@ -7,4 +7,6 @@ public interface KnooError {
     HttpStatus getHttpStatus();
 
     String getMessage();
+
+    String getErrorCode();
 }
