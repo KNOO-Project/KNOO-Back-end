@@ -5,6 +5,7 @@ import com.woopaca.knoo.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -21,6 +22,7 @@ public class SimpleMailService implements MailService {
 
     private static final String HOST = "http://localhost:8888";
 
+    @Async
     @Override
     public void sendAuthMail(final String receivedUserMail, final String uuid) {
         log.info("인증 메일 발송 [{}]", receivedUserMail);

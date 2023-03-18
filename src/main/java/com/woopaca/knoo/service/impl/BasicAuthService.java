@@ -32,10 +32,10 @@ public class BasicAuthService implements AuthService {
         Verification verification = Verification.createVerification();
         joinUser.setVerification(verification);
 
+        userRepository.save(joinUser);
+
         mailService.sendAuthMail(joinUser.getEmail(),
                 joinUser.getVerification().getVerification_code());
-
-        userRepository.save(joinUser);
         return joinUser.getId();
     }
 
