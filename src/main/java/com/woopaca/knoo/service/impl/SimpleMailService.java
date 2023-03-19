@@ -22,7 +22,7 @@ public class SimpleMailService implements MailService {
     private final JavaMailSender mailSender;
 
     @Value("${server.host}")
-    private static final String HOST = null;
+    private String host;
 
     @Async
     @Override
@@ -49,7 +49,7 @@ public class SimpleMailService implements MailService {
     }
 
     private String createMessageContent(String uuid) {
-        String url = HOST + "/api/v1/auth/mail?code=" + uuid;
+        String url = host + "/api/v1/auth/mail?code=" + uuid;
         return "<div>" +
                 "<h3>[KNOO] 아래 URL을 통해 회원가입을 완료하세요.<h3><br>" +
                 "<a href=\"" + url + "\">KNOO 이메일 인증하기</a>" +

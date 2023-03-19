@@ -28,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @Value("${server.host}")
-    private static final String HOST = "http://localhost:8888";
+    private String host;
 
     @PostMapping("/sign-up")
     public ResponseEntity<String> userSignUp(@RequestBody @Valid final SignUpRequestDto signUpRequestDto) {
@@ -41,7 +41,7 @@ public class AuthController {
     public ResponseEntity<String> userMailVerify(@RequestParam("code") final String code,
                                                  final HttpServletResponse response) throws IOException {
         authService.mailVerify(code);
-        response.sendRedirect(HOST + "/mail-verify");
+        response.sendRedirect(host + "/mail-verify");
         return ResponseEntity.ok().body("이메일 인증이 완료되었습니다.");
     }
 
