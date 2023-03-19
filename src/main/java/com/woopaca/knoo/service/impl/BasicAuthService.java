@@ -66,6 +66,9 @@ public class BasicAuthService implements AuthService {
         }
 
         User authenticatedUser = (User) authentication.getPrincipal();
+        if (signInRequestDto.isAutoSignIn()) {
+            return "Bearer " + jwtProvider.createToken(authenticatedUser, 24 * 7);
+        }
         return "Bearer " + jwtProvider.createToken(authenticatedUser, 3);
     }
 }
