@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 @Slf4j
-public class UserExceptionHandler {
+public class KnooExceptionHandler {
 
     @ExceptionHandler(KnooException.class)
-    public ResponseEntity<ErrorResponseDto> userExceptionHandler(
+    public ResponseEntity<ErrorResponseDto> knooExceptionHandler(
             KnooException exception, HttpServletRequest request
     ) {
+        log.error("errorCode: {}, path: {}, message: {}", exception.getKnooError().getErrorCode(),
+                request.getRequestURI(), exception.getKnooError().getMessage());
         ErrorResponseDto errorResponseDto = ErrorResponseDto.of(exception, request);
         return ResponseEntity.status(errorResponseDto.getStatusCode())
                 .body(errorResponseDto);
