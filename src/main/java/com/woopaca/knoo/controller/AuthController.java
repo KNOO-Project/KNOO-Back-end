@@ -1,5 +1,6 @@
 package com.woopaca.knoo.controller;
 
+import com.woopaca.knoo.controller.dto.SignInRequestDto;
 import com.woopaca.knoo.controller.dto.SignUpRequestDto;
 import com.woopaca.knoo.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,11 @@ public class AuthController {
         authService.mailVerify(code);
         response.sendRedirect("http://localhost:8888/mail-verify");
         return ResponseEntity.ok().body("이메일 인증이 완료되었습니다.");
+    }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<String> userSignIn(@RequestBody final SignInRequestDto signInRequestDto) {
+        String token = authService.signIn(signInRequestDto);
+        return ResponseEntity.ok().body(token);
     }
 }

@@ -30,13 +30,13 @@ public class SecurityConfig {
                 // permitAll() -> 모두 허용     authenticated() -> 인증 필요     hasRole() -> 권한 필요
 //                .antMatchers("/api/v1/auth/sign-up", "/api/v1/auth/sign-in").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/v1/posts").permitAll()
-                .antMatchers("/api/v1/test").authenticated()
+                .antMatchers("/api/v1/auth/sign-in", "/api/v1/auth/sign-up").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+                .and()
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

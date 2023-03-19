@@ -53,8 +53,8 @@ public class JwtUtils {
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUsernameInToken(token));
-        new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-        return null;
+        return new UsernamePasswordAuthenticationToken(userDetails, "",
+                userDetails.getAuthorities());
     }
 
     public String getUsernameInToken(String token) {

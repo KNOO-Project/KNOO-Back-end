@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -26,6 +26,7 @@ import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,31 +86,24 @@ public class User implements UserDetails {
     public static User join(final SignUpRequestDto signUpRequestDto) {
         User user = User.builder()
                 .username(signUpRequestDto.getUsername())
-                .password(BCrypt.hashpw(signUpRequestDto.getPassword(),
-                        BCrypt.gensalt()))
+                .password((signUpRequestDto.getPassword()))
                 .name(signUpRequestDto.getName())
                 .email(signUpRequestDto.getEmail())
                 .joinDate(LocalDateTime.now().toString())
                 .emailVerify(EmailVerify.DISABLE)
                 .build();
-        user.roles.add("ROLE_USER");
+        user.roles = Collections.singletonList("ROLE_USER");
         return user;
+    }
+
+    public void encodePassword(final PasswordEncoder passwordEncoder) {
+        password = passwordEncoder.encode(password);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
     }
 
     @Override

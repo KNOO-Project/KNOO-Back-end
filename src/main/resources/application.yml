@@ -1,5 +1,5 @@
 jwt:
-  secret: KNOO_SECRET_KEY_BASE_64
+  secret: ENC(/G8cvTMa1ouMZHUxBr1GQeO8k2L3z7wwTm2t3I5Bv+M=)
 
 spring:
   datasource:
