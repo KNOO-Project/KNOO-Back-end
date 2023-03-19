@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,11 +27,20 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponseDto> requestBodyNotReadableExceptionHandler(
-            HttpMessageNotReadableException exception, HttpServletRequest request
+            HttpServletRequest request
     ) {
         log.error("HTTP 메시지 바디를 읽을 수 없습니다.");
         return createResponseEntity(HttpStatus.BAD_REQUEST,
                 "메시지 바디를 읽을 수 없습니다.", request, "KN202");
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponseDto> httpMethodNotSupportedExceptionHandler(
+            HttpServletRequest request
+    ) {
+        log.error("지원하지 않는 HTTP Method");
+        return createResponseEntity(HttpStatus.BAD_REQUEST,
+                "지원하지 않는 HTTP Method 입니다.", request, "KN203");
     }
 
     private static ResponseEntity<ErrorResponseDto> createResponseEntity(
