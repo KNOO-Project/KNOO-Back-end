@@ -5,6 +5,7 @@ import com.woopaca.knoo.controller.dto.SignUpRequestDto;
 import com.woopaca.knoo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,9 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Value("${server.host}")
+    private static final String HOST = "http://localhost:8888";
+
     @PostMapping("/sign-up")
     public ResponseEntity<String> userSignUp(@RequestBody @Valid final SignUpRequestDto signUpRequestDto) {
         Long joinUserId = authService.signUp(signUpRequestDto);
@@ -37,7 +41,7 @@ public class AuthController {
     public ResponseEntity<String> userMailVerify(@RequestParam("code") final String code,
                                                  final HttpServletResponse response) throws IOException {
         authService.mailVerify(code);
-        response.sendRedirect("http://localhost:8888/mail-verify");
+        response.sendRedirect(HOST + "/mail-verify");
         return ResponseEntity.ok().body("이메일 인증이 완료되었습니다.");
     }
 
