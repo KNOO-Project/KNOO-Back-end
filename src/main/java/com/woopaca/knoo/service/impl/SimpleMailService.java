@@ -4,6 +4,7 @@ import com.woopaca.knoo.exception.mail.MessageCreationException;
 import com.woopaca.knoo.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ public class SimpleMailService implements MailService {
 
     private final JavaMailSender mailSender;
 
-    private static final String HOST = "http://localhost:8888";
+    @Value("${server.host}")
+    private static final String HOST = null;
 
     @Async
     @Override
