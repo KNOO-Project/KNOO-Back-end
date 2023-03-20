@@ -1,4 +1,4 @@
-package com.woopaca.knoo.controller.dto;
+package com.woopaca.knoo.controller.auth.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

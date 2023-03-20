@@ -1,8 +1,8 @@
 package com.woopaca.knoo.validator.impl;
 
 import com.woopaca.knoo.annotation.Validator;
-import com.woopaca.knoo.controller.dto.SignInRequestDto;
-import com.woopaca.knoo.controller.dto.SignUpRequestDto;
+import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;
+import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.entity.Verification;

@@ -1,7 +1,7 @@
 package com.woopaca.knoo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.woopaca.knoo.controller.dto.SignUpRequestDto;
+import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.entity.Verification;
 import com.woopaca.knoo.repository.UserRepository;

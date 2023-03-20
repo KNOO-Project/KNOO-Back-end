@@ -1,8 +1,8 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.dto.SignInRequestDto;
-import com.woopaca.knoo.controller.dto.SignUpRequestDto;
+import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;
+import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.entity.Verification;
 import com.woopaca.knoo.exception.user.impl.InvalidAuthenticationException;
