@@ -3,7 +3,6 @@ package com.woopaca.knoo.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.entity.Verification;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.service.MailService;
 import org.junit.jupiter.api.DisplayName;
@@ -89,8 +88,6 @@ class SignUpTest {
                 .email("test@smail.kongju.ac.kr")
                 .build();
         User user = User.join(signUpRequestDto1);
-        Verification verification = Verification.createVerification();
-        user.setVerification(verification);
         userRepository.save(user);
 
         SignUpRequestDto signUpRequestDto2 = SignUpRequestDto.builder()

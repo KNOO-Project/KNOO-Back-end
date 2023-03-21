@@ -4,11 +4,9 @@ import com.woopaca.knoo.config.jwt.JwtProvider;
 import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;
 import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.entity.Verification;
 import com.woopaca.knoo.exception.user.impl.InvalidAuthenticationException;
 import com.woopaca.knoo.exception.user.impl.VerificationNotFoundException;
 import com.woopaca.knoo.repository.UserRepository;
-import com.woopaca.knoo.repository.VerificationRepository;
 import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.MailService;
 import com.woopaca.knoo.validator.AuthValidator;
@@ -26,7 +24,6 @@ public class BasicAuthService implements AuthService {
     private final UserRepository userRepository;
     private final AuthValidator authValidator;
     private final MailService mailService;
-    private final VerificationRepository verificationRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -37,24 +34,18 @@ public class BasicAuthService implements AuthService {
 
         User joinUser = User.join(signUpRequestDto);
         joinUser.encodePassword(passwordEncoder);
-        Verification verification = Verification.createVerification();
-        joinUser.setVerification(verification);
-
         userRepository.save(joinUser);
 
-        mailService.sendAuthMail(joinUser.getEmail(),
-                joinUser.getVerification().getVerification_code());
+        mailService.sendAuthMail(joinUser.getEmail(), joinUser.getVerificationCode());
         return joinUser.getId();
     }
 
     @Override
     @Transactional
     public void mailVerify(final String code) {
-        Verification verification = verificationRepository.findByCodeWithUser(code)
+        User user = userRepository.findByVerificationCode(code)
                 .orElseThrow(() -> new VerificationNotFoundException());
-        authValidator.validateAlreadyMailVerifiedUser(verification);
-
-        User user = verification.getUser();
+        authValidator.validateAlreadyMailVerifiedUser(user);
         user.verify();
     }
 

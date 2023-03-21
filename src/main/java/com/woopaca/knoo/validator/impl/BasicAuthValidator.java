@@ -5,7 +5,6 @@ import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;
 import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.entity.Verification;
 import com.woopaca.knoo.exception.user.impl.AlreadyMailVerifiedException;
 import com.woopaca.knoo.exception.user.impl.DuplicateEmailException;
 import com.woopaca.knoo.exception.user.impl.DuplicateNameException;
@@ -67,8 +66,7 @@ public class BasicAuthValidator implements AuthValidator {
     }
 
     @Override
-    public void validateAlreadyMailVerifiedUser(final Verification verification) {
-        User user = verification.getUser();
+    public void validateAlreadyMailVerifiedUser(final User user) {
         EmailVerify emailVerify = user.getEmailVerify();
 
         if (emailVerify.equals(EmailVerify.ENABLE)) {

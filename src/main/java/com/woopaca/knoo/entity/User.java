@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -23,12 +22,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -50,12 +49,9 @@ public class User implements UserDetails {
     private String joinDate;
     @Enumerated(value = EnumType.STRING)
     private EmailVerify emailVerify;
+    private String verificationCode;
     private String campus;
     private String major;
-
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Verification verification;
 
     @OneToMany(mappedBy = "writer")
     private List<Post> posts = new ArrayList<>();
@@ -76,20 +72,16 @@ public class User implements UserDetails {
 
     @Builder
     public User(String username, String password, String name, String email,
-                String joinDate, EmailVerify emailVerify, String campus, String major) {
+                String joinDate, EmailVerify emailVerify, String verificationCode, String campus, String major) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
         this.joinDate = joinDate;
         this.emailVerify = emailVerify;
+        this.verificationCode = verificationCode;
         this.campus = campus;
         this.major = major;
-    }
-
-    public void setVerification(Verification verification) {
-        this.verification = verification;
-        verification.setUser(this);
     }
 
     public void verify() {
@@ -104,6 +96,7 @@ public class User implements UserDetails {
                 .email(signUpRequestDto.getEmail())
                 .joinDate(LocalDateTime.now().toString())
                 .emailVerify(EmailVerify.DISABLE)
+                .verificationCode(UUID.randomUUID().toString())
                 .build();
         user.roles = Collections.singletonList("ROLE_USER");
         return user;
