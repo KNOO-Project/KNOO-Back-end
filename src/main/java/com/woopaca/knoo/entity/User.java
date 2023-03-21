@@ -39,16 +39,20 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
     private String joinDate;
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private EmailVerify emailVerify;
+    @Column(nullable = false)
     private String verificationCode;
     private String campus;
     private String major;

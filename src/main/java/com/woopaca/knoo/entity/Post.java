@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,9 +28,14 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
+    @Column(nullable = false)
     private String postTitle;
+    @Column(nullable = false)
     private String postContent;
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private PostCategory postCategory;
+    @Column(nullable = false)
     private String postDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
