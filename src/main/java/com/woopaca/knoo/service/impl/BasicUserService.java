@@ -36,7 +36,7 @@ public class BasicUserService implements UserService {
         List<PostPreviewDto> likePostList = postService.userLikePostList(user, PageRequest.of(0, 5));
 
         return UserInfoResponseDto.builder()
-                .name(username)
+                .name(user.getName())
                 .writePosts(writePostList)
                 .commentPosts(commentPostList)
                 .likePosts(likePostList)
