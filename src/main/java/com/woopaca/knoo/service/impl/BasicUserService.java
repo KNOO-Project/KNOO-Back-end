@@ -37,6 +37,7 @@ public class BasicUserService implements UserService {
 
         return UserInfoResponseDto.builder()
                 .name(user.getName())
+                .email(user.getEmail())
                 .writePosts(writePostList)
                 .commentPosts(commentPostList)
                 .likePosts(likePostList)
