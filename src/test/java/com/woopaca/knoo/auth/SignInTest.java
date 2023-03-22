@@ -1,4 +1,4 @@
-package com.woopaca.knoo.controller;
+package com.woopaca.knoo.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;

@@ -1,5 +1,7 @@
 package com.woopaca.knoo.service.impl;
 
+import com.woopaca.knoo.config.jwt.JwtUtils;
+import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.repository.PostRepository;
@@ -19,6 +21,19 @@ import java.util.List;
 public class BasicPostService implements PostService {
 
     private final PostRepository postRepository;
+    private final JwtUtils jwtUtils;
+
+    @Override
+    @Transactional
+    public Long writePost(final String authorization, final WritePostRequestDto writePostRequestDto) {
+        String token = jwtUtils.resolveToken(authorization);
+        User user = jwtUtils.getAuthenticationPrincipal(token);
+
+        Post post = Post.from(writePostRequestDto);
+        post.writePost(user);
+        Post savedPost = postRepository.save(post);
+        return savedPost.getId();
+    }
 
     @Override
     public List<PostPreviewDto> userWritePostList(final User user, final Pageable pageable) {

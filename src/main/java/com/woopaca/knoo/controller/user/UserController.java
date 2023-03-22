@@ -18,7 +18,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserInfoResponseDto> userProfile(
-            @RequestHeader("Authorization") String authorization) {
+            @RequestHeader("Authorization") final String authorization) {
         UserInfoResponseDto userInfoResponseDto = userService.userInfo(authorization);
         return ResponseEntity.ok().body(userInfoResponseDto);
     }
