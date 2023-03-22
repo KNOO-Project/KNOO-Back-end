@@ -1,5 +1,6 @@
 package com.woopaca.knoo.exception.handler.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.exception.KnooException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,10 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponseDto {
 
+    @JsonProperty(value = "status_code")
     private int statusCode;
+    @JsonProperty(value = "error_type")
     private String errorType;
     private String message;
     private String path;
+    @JsonProperty(value = "error_code")
     private String errorCode;
 
     @Builder

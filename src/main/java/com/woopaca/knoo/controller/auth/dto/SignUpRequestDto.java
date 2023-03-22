@@ -1,5 +1,6 @@
 package com.woopaca.knoo.controller.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,7 @@ public class SignUpRequestDto {
     @Pattern(regexp = "^[^ㄱ-ㅎㅏ-ㅢ가-힣|\\s]*$", message = "회원 비밀번호는 영문자, 숫자, 특수문자만 가능합니다.")
     private String password;
     @NotBlank(message = "비밀번호 확인은 비어있을 수 없습니다.")
+    @JsonProperty(value = "password_check")
     private String passwordCheck;
     @NotBlank(message = "회원 이름은 비어있을 수 없습니다.")
     @Size(min = 2, max = 10, message = "회원 이름은 2자 이상, 10자 이하이어야 합니다.")

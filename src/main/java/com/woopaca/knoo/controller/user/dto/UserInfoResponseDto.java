@@ -1,5 +1,6 @@
 package com.woopaca.knoo.controller.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.service.dto.PostPreviewDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,8 +15,11 @@ public class UserInfoResponseDto {
 
     private String name;
     private String email;
+    @JsonProperty(value = "write_posts")
     private List<PostPreviewDto> writePosts;
+    @JsonProperty(value = "comment_posts")
     private List<PostPreviewDto> commentPosts;
+    @JsonProperty(value = "like_posts")
     private List<PostPreviewDto> likePosts;
 
     @Builder
