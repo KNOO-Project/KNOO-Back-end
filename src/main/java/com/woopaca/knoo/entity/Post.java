@@ -1,5 +1,6 @@
 package com.woopaca.knoo.entity;
 
+import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +57,17 @@ public class Post {
         this.postContent = postContent;
         this.postCategory = postCategory;
         this.postDate = postDate;
+    }
+
+    public static Post from(final WritePostRequestDto writePostRequestDto) {
+        String postDate = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return Post.builder()
+                .postTitle(writePostRequestDto.getPostTitle())
+                .postContent(writePostRequestDto.getPostContent())
+                .postCategory(writePostRequestDto.getPostCategory())
+                .postDate(postDate)
+                .build();
     }
 
     public void writePost(User writer) {

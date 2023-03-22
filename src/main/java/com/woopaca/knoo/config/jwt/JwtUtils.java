@@ -1,5 +1,6 @@
 package com.woopaca.knoo.config.jwt;
 
+import com.woopaca.knoo.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -63,5 +64,10 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public User getAuthenticationPrincipal(String token) {
+        String username = getUsernameInToken(token);
+        return (User) userDetailsService.loadUserByUsername(username);
     }
 }
