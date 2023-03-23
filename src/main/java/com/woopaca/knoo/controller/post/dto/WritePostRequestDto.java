@@ -29,4 +29,7 @@ public class WritePostRequestDto {
     @JsonAlias(value = "post_category")
     @NotNull(message = "게시글 카테고리의 값이 올바르지 않습니다.")
     private PostCategory postCategory;
+    @JsonAlias(value = "anonymous")
+    @NotNull(message = "익명 선택 정보가 비어있습니다.")
+    private Boolean isAnonymous;
 }

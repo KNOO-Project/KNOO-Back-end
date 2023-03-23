@@ -40,6 +40,8 @@ public class Post {
     private PostCategory postCategory;
     @Column(nullable = false)
     private String postDate;
+    @Column(name = "anonymous")
+    private boolean isAnonymous;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -52,21 +54,24 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post(String postTitle, String postContent, PostCategory postCategory, String postDate) {
+    public Post(String postTitle, String postContent, PostCategory postCategory,
+                String postDate, boolean isAnonymous) {
         this.postTitle = postTitle;
         this.postContent = postContent;
         this.postCategory = postCategory;
         this.postDate = postDate;
+        this.isAnonymous = isAnonymous;
     }
 
     public static Post from(final WritePostRequestDto writePostRequestDto) {
         String postDate = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
         return Post.builder()
                 .postTitle(writePostRequestDto.getPostTitle())
                 .postContent(writePostRequestDto.getPostContent())
                 .postCategory(writePostRequestDto.getPostCategory())
                 .postDate(postDate)
+                .isAnonymous(writePostRequestDto.getIsAnonymous())
                 .build();
     }
 

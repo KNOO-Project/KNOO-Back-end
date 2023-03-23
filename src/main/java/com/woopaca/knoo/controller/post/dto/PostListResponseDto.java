@@ -33,7 +33,7 @@ public class PostListResponseDto {
                 .postId(post.getId())
                 .postTitle(post.getPostTitle())
                 .postDate(post.getPostDate())
-                .writerName(post.getWriter().getName())
+                .writerName(post.isAnonymous() ? "KNOOER" : post.getWriter().getName())
                 .build();
     }
 }
