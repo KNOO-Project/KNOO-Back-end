@@ -15,13 +15,16 @@ public class PostListResponseDto {
     private Long postId;
     @JsonProperty(value = "post_title")
     private String postTitle;
+    @JsonProperty(value = "post_date")
+    private String postDate;
     @JsonProperty(value = "writer_name")
     private String writerName;
 
     @Builder
-    public PostListResponseDto(Long postId, String postTitle, String writerName) {
+    public PostListResponseDto(Long postId, String postTitle, String postDate, String writerName) {
         this.postId = postId;
         this.postTitle = postTitle;
+        this.postDate = postDate;
         this.writerName = writerName;
     }
 
@@ -29,6 +32,7 @@ public class PostListResponseDto {
         return PostListResponseDto.builder()
                 .postId(post.getId())
                 .postTitle(post.getPostTitle())
+                .postDate(post.getPostDate())
                 .writerName(post.getWriter().getName())
                 .build();
     }
