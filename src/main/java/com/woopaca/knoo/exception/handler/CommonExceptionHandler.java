@@ -22,7 +22,7 @@ public class CommonExceptionHandler {
     ) {
         log.error("필드 검증 예외 -> {}", exception.getFieldError().getDefaultMessage());
         return createResponseEntity(HttpStatus.BAD_REQUEST,
-                exception.getFieldError().getDefaultMessage(), request, "KN201");
+                exception.getFieldError().getDefaultMessage(), request, "KN101");
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -31,7 +31,7 @@ public class CommonExceptionHandler {
     ) {
         log.error("HTTP 메시지 바디를 읽을 수 없습니다.");
         return createResponseEntity(HttpStatus.BAD_REQUEST,
-                "메시지 바디를 읽을 수 없습니다.", request, "KN202");
+                "메시지 바디를 읽을 수 없습니다.", request, "KN102");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -40,7 +40,7 @@ public class CommonExceptionHandler {
     ) {
         log.error("지원하지 않는 HTTP Method");
         return createResponseEntity(HttpStatus.BAD_REQUEST,
-                "지원하지 않는 HTTP Method 입니다.", request, "KN203");
+                "지원하지 않는 HTTP Method 입니다.", request, "KN103");
     }
 
     private static ResponseEntity<ErrorResponseDto> createResponseEntity(

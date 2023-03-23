@@ -25,7 +25,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 .errorType(HttpStatus.FORBIDDEN.name())
                 .message("접근 권한이 없습니다.")
                 .path(request.getRequestURI())
-                .errorCode("KN302")
+                .errorCode("KN002")
                 .build();
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

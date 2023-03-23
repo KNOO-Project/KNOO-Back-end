@@ -1,8 +1,10 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.config.jwt.JwtUtils;
+import com.woopaca.knoo.controller.post.dto.PostListResponseDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.Post;
+import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.PostService;
@@ -33,6 +35,18 @@ public class BasicPostService implements PostService {
         post.writePost(user);
         Post savedPost = postRepository.save(post);
         return savedPost.getId();
+    }
+
+    @Override
+    public List<PostListResponseDto> postList(final PostCategory postCategory) {
+        List<PostListResponseDto> postList = new ArrayList<>();
+
+        List<Post> posts = postRepository.findByPostCategoryOrderByPostDate(postCategory);
+        for (Post post : posts) {
+            postList.add(PostListResponseDto.from(post));
+        }
+
+        return postList;
     }
 
     @Override
