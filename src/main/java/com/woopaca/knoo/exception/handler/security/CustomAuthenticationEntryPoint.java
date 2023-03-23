@@ -28,7 +28,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 .errorType(HttpStatus.UNAUTHORIZED.name())
                 .message("유효하지 않은 토큰입니다.")
                 .path(request.getRequestURI())
-                .errorCode("KN301")
+                .errorCode("KN001")
                 .build();
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
