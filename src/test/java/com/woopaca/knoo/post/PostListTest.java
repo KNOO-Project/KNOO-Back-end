@@ -43,10 +43,9 @@ public class PostListTest {
     @DisplayName("게시글 리스트 조회 실패 - 없는 카테고리")
     void getPostListFail() throws Exception {
         //given
-        String category = "test";
 
         //when
-        ResultActions resultActions = resultActions(category);
+        ResultActions resultActions = resultActions("test");
 
         //then
         resultActions.andExpect(status().isNotFound());

@@ -6,6 +6,7 @@ import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.exception.post.impl.PostCategoryNotFound;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.PostService;
 import com.woopaca.knoo.service.dto.PostPreviewDto;
@@ -39,6 +40,10 @@ public class BasicPostService implements PostService {
 
     @Override
     public List<PostListResponseDto> postList(final PostCategory postCategory) {
+        if (postCategory == null) {
+            throw new PostCategoryNotFound();
+        }
+
         List<PostListResponseDto> postList = new ArrayList<>();
 
         List<Post> posts = postRepository.findByPostCategoryOrderByPostDate(postCategory);
