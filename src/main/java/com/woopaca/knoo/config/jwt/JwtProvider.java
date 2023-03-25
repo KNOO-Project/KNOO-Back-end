@@ -28,6 +28,7 @@ public class JwtProvider {
         Claims claims = Jwts.claims().setSubject(authenticatedUser.getUsername());
         claims.put("id", authenticatedUser.getId());
         claims.put("roles", authenticatedUser.getRoles());
+        claims.put("code", authenticatedUser.getVerificationCode());
 
         Date now = new Date();
         return Jwts.builder()
