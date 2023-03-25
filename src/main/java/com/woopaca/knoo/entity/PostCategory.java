@@ -1,6 +1,5 @@
 package com.woopaca.knoo.entity;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +20,7 @@ public enum PostCategory {
     @JsonValue
     private final String categoryName;
 
-    @JsonCreator
     public static PostCategory hasCategoryName(String categoryName) {
-        log.info("hasCategoryName 호출");
         for (PostCategory postCategory : PostCategory.values()) {
             if (postCategory.categoryName.equals(categoryName)) {
                 return postCategory;

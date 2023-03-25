@@ -32,15 +32,14 @@ public class PostController {
             @RequestHeader("Authorization") final String authorization,
             @RequestBody @Valid final WritePostRequestDto writePostRequestDto
     ) {
-        log.info("anonymous = {}", writePostRequestDto.getIsAnonymous());
         Long postId = postService.writePost(authorization, writePostRequestDto);
-        return ResponseEntity.created(URI.create("/posts/" + postId))
+        return ResponseEntity.created(URI.create("/api/v1/posts/" + postId))
                 .body("게시글 작성이 완료되었습니다.");
     }
 
     @GetMapping("/{category}")
     public ResponseEntity<List<PostListResponseDto>> writtenPostList(
-            @PathVariable("category") final PostCategory postCategory
+            @PathVariable(value = "category", required = false) final PostCategory postCategory
     ) {
         List<PostListResponseDto> postList = postService.postList(postCategory);
         return ResponseEntity.ok().body(postList);
