@@ -45,7 +45,6 @@ public class BasicPostService implements PostService {
         }
 
         List<PostListResponseDto> postList = new ArrayList<>();
-
         List<Post> posts = postRepository.findByPostCategoryOrderByPostDate(postCategory);
         for (Post post : posts) {
             postList.add(PostListResponseDto.from(post));
@@ -57,36 +56,31 @@ public class BasicPostService implements PostService {
     @Override
     public List<PostPreviewDto> userWritePostList(final User user, final Pageable pageable) {
         List<PostPreviewDto> userWritePosts = new ArrayList<>();
-
         List<Post> postListFive = postRepository.findByWriter(user, pageable);
-        for (Post post : postListFive) {
-            PostPreviewDto postPreviewDto = PostPreviewDto.of(post.getId(), post.getPostTitle());
-            userWritePosts.add(postPreviewDto);
-        }
+        postsToPostPreviewList(postListFive, userWritePosts);
         return userWritePosts;
     }
 
     @Override
     public List<PostPreviewDto> userCommentPostList(final User user, final Pageable pageable) {
         List<PostPreviewDto> userCommentPosts = new ArrayList<>();
-
         List<Post> postListFive = postRepository.findByCommentWriter(user, pageable);
-        for (Post post : postListFive) {
-            PostPreviewDto postPreviewDto = PostPreviewDto.of(post.getId(), post.getPostTitle());
-            userCommentPosts.add(postPreviewDto);
-        }
+        postsToPostPreviewList(postListFive, userCommentPosts);
         return userCommentPosts;
     }
 
     @Override
     public List<PostPreviewDto> userLikePostList(User user, final Pageable pageable) {
-        List<PostPreviewDto> userCommentPosts = new ArrayList<>();
-
+        List<PostPreviewDto> userLikePosts = new ArrayList<>();
         List<Post> postListFive = postRepository.findByLikeUser(user, pageable);
-        for (Post post : postListFive) {
+        postsToPostPreviewList(postListFive, userLikePosts);
+        return userLikePosts;
+    }
+
+    private void postsToPostPreviewList(List<Post> posts, List<PostPreviewDto> postPreviewList) {
+        for (Post post : posts) {
             PostPreviewDto postPreviewDto = PostPreviewDto.of(post.getId(), post.getPostTitle());
-            userCommentPosts.add(postPreviewDto);
+            postPreviewList.add(postPreviewDto);
         }
-        return userCommentPosts;
     }
 }

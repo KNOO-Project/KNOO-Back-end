@@ -36,6 +36,7 @@ public class JwtProvider {
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + HOUR_TIME * tokenExpireHour))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setIssuer("KNOO")
                 .compact();
     }
 }
