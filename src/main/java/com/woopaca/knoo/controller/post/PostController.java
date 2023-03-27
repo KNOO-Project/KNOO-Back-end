@@ -1,5 +1,6 @@
 package com.woopaca.knoo.controller.post;
 
+import com.woopaca.knoo.controller.post.dto.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.post.dto.PostListResponseDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.PostCategory;
@@ -19,6 +20,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
@@ -29,7 +32,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<String> writeNewPost(
-            @RequestHeader("Authorization") final String authorization,
+            @RequestHeader(AUTHORIZATION) final String authorization,
             @RequestBody @Valid final WritePostRequestDto writePostRequestDto
     ) {
         Long postId = postService.writePost(authorization, writePostRequestDto);
@@ -39,9 +42,18 @@ public class PostController {
 
     @GetMapping("/{category}")
     public ResponseEntity<List<PostListResponseDto>> writtenPostList(
-            @PathVariable(value = "category", required = false) final PostCategory postCategory
+            @PathVariable(value = "category") final PostCategory postCategory
     ) {
         List<PostListResponseDto> postList = postService.postList(postCategory);
         return ResponseEntity.ok().body(postList);
+    }
+
+    @GetMapping("/{category}/{postId}")
+    public ResponseEntity<PostDetailsResponseDto> postDetailsInfo(
+            @RequestHeader(AUTHORIZATION) final String authorization,
+            @PathVariable("postId") final Long postId,
+            @PathVariable("category") final String postCategory) {
+        PostDetailsResponseDto postDetails = postService.postDetails(postId, authorization);
+        return ResponseEntity.ok().body(postDetails);
     }
 }

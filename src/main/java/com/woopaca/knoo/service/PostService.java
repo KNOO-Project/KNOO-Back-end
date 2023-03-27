@@ -1,5 +1,6 @@
 package com.woopaca.knoo.service;
 
+import com.woopaca.knoo.controller.post.dto.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.post.dto.PostListResponseDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.PostCategory;
@@ -14,6 +15,8 @@ public interface PostService {
     Long writePost(final String authorization, final WritePostRequestDto writePostRequestDto);
 
     List<PostListResponseDto> postList(final PostCategory postCategory);
+
+    PostDetailsResponseDto postDetails(final Long postId, final String authorization);
 
     List<PostPreviewDto> userWritePostList(final User user, final Pageable pageable);
 

@@ -16,14 +16,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByPostCategoryOrderByPostDate(PostCategory postCategory);
 
-    @Query("SELECT p FROM Post p WHERE p.writer = :user ORDER BY p.postDate DESC")
+    @Query("SELECT p FROM Post p WHERE p.writer = :user ORDER BY p.id DESC")
     List<Post> findByWriter(@Param("user") User user, Pageable pageable);
 
-    @Query("SELECT DISTINCT p FROM Post p LEFT OUTER JOIN p.comments c " +
-            "WHERE c.writer = :user ORDER BY p.postDate DESC")
+    @Query("SELECT DISTINCT p FROM Post p LEFT JOIN p.comments c " +
+            "WHERE c.writer = :user ORDER BY p.id DESC")
     List<Post> findByCommentWriter(@Param("user") User user, Pageable pageable);
 
-    @Query("SELECT p FROM Post p LEFT OUTER JOIN p.postLikes pl " +
-            "WHERE pl.user = :user ORDER BY pl.postLikeDate DESC")
+    @Query("SELECT p FROM Post p LEFT JOIN p.postLikes pl " +
+            "WHERE pl.user = :user ORDER BY pl.id DESC")
     List<Post> findByLikeUser(@Param("user") User user, Pageable pageable);
 }
