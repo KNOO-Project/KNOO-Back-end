@@ -53,7 +53,7 @@ public class PostDetailsResponseDto {
         @JsonProperty(value = "writer_name")
         private String writerName;
         @JsonProperty(value = "is_written_by_user")
-        private boolean isWrittenByUser;
+        private Boolean isWrittenByUser;
 
         @Builder
         public PostDetailsDto(String postTitle, String postContent, String postDate,
@@ -91,7 +91,7 @@ public class PostDetailsResponseDto {
         @JsonProperty(value = "writer_name")
         private String writerName;
         @JsonProperty(value = "is_written_by_user")
-        private boolean isWrittenByUser;
+        private Boolean isWrittenByUser;
 
         @Builder
         public CommentListDto(String commentContent, String commentDate,

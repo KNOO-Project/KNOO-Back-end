@@ -52,7 +52,7 @@ public class PostController {
     public ResponseEntity<PostDetailsResponseDto> postDetailsInfo(
             @RequestHeader(AUTHORIZATION) final String authorization,
             @PathVariable("postId") final Long postId,
-            @PathVariable("category") final String postCategory) {
+            @PathVariable("category") String ignore) {
         PostDetailsResponseDto postDetails = postService.postDetails(postId, authorization);
         return ResponseEntity.ok().body(postDetails);
     }
