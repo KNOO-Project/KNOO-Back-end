@@ -1,5 +1,6 @@
-package com.woopaca.knoo.config.jwt;
+package com.woopaca.knoo.config.jwt.filter;
 
+import com.woopaca.knoo.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

@@ -1,6 +1,6 @@
 package com.woopaca.knoo.config.security;
 
-import com.woopaca.knoo.config.jwt.JwtAuthenticationFilter;
+import com.woopaca.knoo.config.jwt.filter.JwtAuthenticationFilter;
 import com.woopaca.knoo.exception.handler.security.CustomAccessDeniedHandler;
 import com.woopaca.knoo.exception.handler.security.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
