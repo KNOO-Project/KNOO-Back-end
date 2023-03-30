@@ -92,6 +92,8 @@ public class PostDetailsResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     static class CommentListDto {
 
+        @JsonProperty(value = "comment_id")
+        private Long commentId;
         @JsonProperty(value = "comment_content")
         private String commentContent;
         @JsonProperty(value = "comment_date")
@@ -109,9 +111,10 @@ public class PostDetailsResponseDto {
 
         @Builder
         public CommentListDto(
-                String commentContent, String commentDate, String writerName,
+                Long commentId, String commentContent, String commentDate, String writerName,
                 Boolean isDeleted, Long parentCommentId, int likesCount, Boolean isWrittenByUser
         ) {
+            this.commentId = commentId;
             this.commentContent = commentContent;
             this.commentDate = commentDate;
             this.writerName = writerName;
@@ -138,6 +141,7 @@ public class PostDetailsResponseDto {
             }
 
             return CommentListDto.builder()
+                    .commentId(comment.getId())
                     .commentContent(comment.getCommentContent())
                     .commentDate(comment.getCommentDate())
                     .writerName(writerName)
