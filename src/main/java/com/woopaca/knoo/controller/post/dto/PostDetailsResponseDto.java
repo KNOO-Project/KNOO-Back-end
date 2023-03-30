@@ -31,7 +31,7 @@ public class PostDetailsResponseDto {
         PostDetailsDto postDetails = PostDetailsDto.of(post, authenticatedUser);
         List<CommentListDto> commentList = new ArrayList<>();
         for (Comment comment : comments) {
-            commentList.add(CommentListDto.of(comment, authenticatedUser));
+            commentList.add(CommentListDto.of(comment, post, authenticatedUser));
         }
 
         return PostDetailsResponseDto.builder()
@@ -121,11 +121,13 @@ public class PostDetailsResponseDto {
             this.isWrittenByUser = isWrittenByUser;
         }
 
-        public static CommentListDto of(final Comment comment, final User authenticatedUser) {
-            User writer = comment.getWriter();
-            boolean isWrittenByUser = authenticatedUser == writer;
-            String writerName = writer.getName();
-            if (isWrittenByUser) {
+        public static CommentListDto of(final Comment comment, Post post, final User authenticatedUser) {
+            User commentWriter = comment.getWriter();
+            boolean isWrittenByUser = authenticatedUser == commentWriter;
+
+            String writerName = commentWriter.getName();
+            User postWriter = post.getWriter();
+            if (postWriter == commentWriter) {
                 writerName = "글쓴이";
             }
 
