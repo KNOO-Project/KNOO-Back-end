@@ -1,0 +1,29 @@
+{
+  "data": {
+    "comment": {
+      "id": "6f8781d8-9c0c-422e-89f4-9ba99950f5d0",
+      "replies": [
+        {
+          "id": "57c5a845-f95c-4ee0-abac-803ca83dce6a",
+          "user": {
+            "id": "2d43d220-d12c-40ee-a038-6a6e47e7b3b5",
+            "username": "teo",
+            "profile": {
+              "id": "0176af92-4fff-49e3-98da-91e5ac373cfc",
+              "thumbnail": "https://images.velog.io/images/teo/profile/97dd319e-a77f-488f-a502-f2ac80fec110/IMG_4733_Original.jpg",
+              "__typename": "UserProfile"
+            },
+            "__typename": "User"
+          },
+          "text": "뻔한 결론의 형태가 된 건 아닐까 생각했는데 인사이트와 고민을 봐주어서 고맙습니다. :)",
+          "replies_count": 0,
+          "created_at": "2023-03-27T01:59:55.754Z",
+          "level": 1,
+          "deleted": false,
+          "__typename": "Comment"
+        }
+      ],
+      "__typename": "Comment"
+    }
+  }
+}

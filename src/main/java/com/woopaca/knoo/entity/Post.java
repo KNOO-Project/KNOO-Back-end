@@ -40,8 +40,12 @@ public class Post {
     private PostCategory postCategory;
     @Column(nullable = false)
     private String postDate;
-    @Column(name = "anonymous")
+    @Column(name = "anonymous", nullable = false)
     private boolean isAnonymous;
+    @Column(nullable = false)
+    private int commentsCount;
+    @Column(nullable = false)
+    private int likesCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -78,5 +82,9 @@ public class Post {
     public void writePost(User writer) {
         this.writer = writer;
         writer.getPosts().add(this);
+    }
+
+    public void commentWritten() {
+        commentsCount++;
     }
 }

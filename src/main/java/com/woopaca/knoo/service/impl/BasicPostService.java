@@ -35,10 +35,10 @@ public class BasicPostService implements PostService {
     @Transactional
     public Long writePost(final String authorization, final WritePostRequestDto writePostRequestDto) {
         String token = jwtUtils.resolveToken(authorization);
-        User user = jwtUtils.getAuthenticationPrincipal(token);
+        User authentcatedUser = jwtUtils.getAuthenticationPrincipal(token);
 
         Post post = Post.from(writePostRequestDto);
-        post.writePost(user);
+        post.writePost(authentcatedUser);
         Post savedPost = postRepository.save(post);
         return savedPost.getId();
     }

@@ -42,7 +42,7 @@ public class PostController {
 
     @GetMapping("/{category}")
     public ResponseEntity<List<PostListResponseDto>> writtenPostList(
-            @PathVariable(value = "category") final PostCategory postCategory
+            @PathVariable("category") final PostCategory postCategory
     ) {
         List<PostListResponseDto> postList = postService.postList(postCategory);
         return ResponseEntity.ok().body(postList);

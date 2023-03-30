@@ -104,12 +104,16 @@ public class PostDetailsResponseDto {
 
         public static CommentListDto of(final Comment comment, final User authenticatedUser) {
             User writer = comment.getWriter();
-            boolean isWrittenByUser = writer == authenticatedUser;
+            boolean isWrittenByUser = authenticatedUser == writer;
+            String writerName = writer.getName();
+            if (isWrittenByUser) {
+                writerName = "글쓴이";
+            }
 
             return CommentListDto.builder()
                     .commentContent(comment.getCommentContent())
                     .commentDate(comment.getCommentDate())
-                    .writerName(writer.getName())
+                    .writerName(writerName)
                     .isWrittenByUser(isWrittenByUser)
                     .build();
         }

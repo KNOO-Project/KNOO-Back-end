@@ -1,5 +1,6 @@
 package com.woopaca.knoo.entity;
 
+import com.woopaca.knoo.controller.comment.dto.WriteCommentRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +33,14 @@ public class Comment {
     private String commentContent;
     @Column(nullable = false)
     private String commentDate;
-    private Integer commentBundle;
-    private Integer commentDepth;
+    @Column(nullable = false)
+    private int likesCount;
+    @Column(name = "deleted", nullable = false)
+    private boolean isDeleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_comment_id")
+    private Comment parentComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -45,11 +54,18 @@ public class Comment {
     private List<CommentLike> commentLikes = new ArrayList<>();
 
     @Builder
-    public Comment(String commentContent, String commentDate, Integer commentBundle, Integer commentDepth) {
+    public Comment(String commentContent, String commentDate) {
         this.commentContent = commentContent;
         this.commentDate = commentDate;
-        this.commentBundle = commentBundle;
-        this.commentDepth = commentDepth;
+    }
+
+    public static Comment from(final WriteCommentRequestDto writeCommentRequestDto) {
+        String commentDate = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        return Comment.builder()
+                .commentContent(writeCommentRequestDto.getCommentContent())
+                .commentDate(commentDate)
+                .build();
     }
 
     public void writeComment(User writer, Post post) {
@@ -57,5 +73,6 @@ public class Comment {
         this.post = post;
         writer.getComments().add(this);
         post.getComments().add(this);
+        post.commentWritten();
     }
 }
