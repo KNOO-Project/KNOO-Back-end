@@ -52,16 +52,22 @@ public class PostDetailsResponseDto {
         private String postDate;
         @JsonProperty(value = "writer_name")
         private String writerName;
+        @JsonProperty(value = "comments_count")
+        private int commentsCount;
+        @JsonProperty(value = "likes_count")
+        private int likesCount;
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
         @Builder
-        public PostDetailsDto(String postTitle, String postContent, String postDate,
-                              String writerName, boolean isWrittenByUser) {
+        public PostDetailsDto(String postTitle, String postContent, String postDate, String writerName,
+                              int commentsCount, int likesCount, Boolean isWrittenByUser) {
             this.postTitle = postTitle;
             this.postContent = postContent;
             this.postDate = postDate;
             this.writerName = writerName;
+            this.commentsCount = commentsCount;
+            this.likesCount = likesCount;
             this.isWrittenByUser = isWrittenByUser;
         }
 
@@ -75,6 +81,8 @@ public class PostDetailsResponseDto {
                     .postContent(post.getPostContent())
                     .postDate(post.getPostDate())
                     .writerName(writerName)
+                    .commentsCount(post.getCommentsCount())
+                    .likesCount(post.getLikesCount())
                     .isWrittenByUser(isWrittenByUser)
                     .build();
         }
@@ -90,15 +98,26 @@ public class PostDetailsResponseDto {
         private String commentDate;
         @JsonProperty(value = "writer_name")
         private String writerName;
+        @JsonProperty(value = "deleted")
+        private Boolean isDeleted;
+        @JsonProperty(value = "parent_comment_id")
+        private Long parentCommentId;
+        @JsonProperty(value = "likes_count")
+        private int likesCount;
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
         @Builder
-        public CommentListDto(String commentContent, String commentDate,
-                              String writerName, boolean isWrittenByUser) {
+        public CommentListDto(
+                String commentContent, String commentDate, String writerName,
+                Boolean isDeleted, Long parentCommentId, int likesCount, Boolean isWrittenByUser
+        ) {
             this.commentContent = commentContent;
             this.commentDate = commentDate;
             this.writerName = writerName;
+            this.isDeleted = isDeleted;
+            this.parentCommentId = parentCommentId;
+            this.likesCount = likesCount;
             this.isWrittenByUser = isWrittenByUser;
         }
 
@@ -110,10 +129,19 @@ public class PostDetailsResponseDto {
                 writerName = "글쓴이";
             }
 
+            Comment parentComment = comment.getParentComment();
+            Long parentCommentId = null;
+            if (parentComment != null) {
+                parentCommentId = parentComment.getId();
+            }
+
             return CommentListDto.builder()
                     .commentContent(comment.getCommentContent())
                     .commentDate(comment.getCommentDate())
                     .writerName(writerName)
+                    .isDeleted(comment.isDeleted())
+                    .parentCommentId(parentCommentId)
+                    .likesCount(comment.getLikesCount())
                     .isWrittenByUser(isWrittenByUser)
                     .build();
         }
