@@ -1,9 +1,11 @@
 package com.woopaca.knoo.service;
 
 import com.woopaca.knoo.controller.comment.dto.WriteCommentRequestDto;
+import org.springframework.lang.Nullable;
 
 public interface CommentService {
 
     void writeComment(final WriteCommentRequestDto writeCommentRequestDto,
-                      final Long postId, final String authorization);
+                      @Nullable final Long postId, @Nullable final Long commentId,
+                      final String authorization);
 }

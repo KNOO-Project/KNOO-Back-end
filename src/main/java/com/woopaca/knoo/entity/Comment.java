@@ -75,4 +75,16 @@ public class Comment {
         post.getComments().add(this);
         post.commentWritten();
     }
+
+    public void reply(final User writer, final Comment parentComment) {
+        this.parentComment = parentComment;
+        this.writer = writer;
+        writer.getComments().add(this);
+
+        Post post = parentComment.getPost();
+        this.post = post;
+        post.getComments().add(this);
+
+        post.commentWritten();
+    }
 }
