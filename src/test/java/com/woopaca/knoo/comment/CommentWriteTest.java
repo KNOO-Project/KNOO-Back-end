@@ -1,7 +1,8 @@
-package com.woopaca.knoo.post;
+package com.woopaca.knoo.comment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
+import com.woopaca.knoo.controller.comment.dto.WriteCommentRequestDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.PostCategory;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -23,28 +25,31 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
 @SpringBootTest
-@WithMockUser
+@AutoConfigureMockMvc
 @Transactional
-public class PostDetailsTest {
+@WithMockUser
+public class CommentWriteTest {
 
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
     @Autowired
-    PostService postService;
+    JwtProvider jwtProvider;
     @Autowired
     UserRepository userRepository;
     @Autowired
-    JwtProvider jwtProvider;
+    PostService postService;
 
     private String authorization;
+    private Long postId;
 
     @BeforeEach
     void beforeEach() {
@@ -60,31 +65,53 @@ public class PostDetailsTest {
         userRepository.save(user);
 
         authorization = "Bearer " + jwtProvider.createToken(user, 10);
+
+        WritePostRequestDto writePostRequestDto = WritePostRequestDto.builder()
+                .postTitle("test")
+                .postContent("test")
+                .postCategory(PostCategory.FREE)
+                .isAnonymous(false)
+                .build();
+        postId = postService.writePost(authorization, writePostRequestDto);
     }
 
     @Test
-    @DisplayName("게시글 상세 조회 성공")
-    void getPostDetailsSuccess() throws Exception {
+    @DisplayName("댓글 작성 성공")
+    void commentWriteSuccess() throws Exception {
         //given
-        WritePostRequestDto writePostRequestDto = WritePostRequestDto.builder()
-                .postTitle("test title")
-                .postContent("test content")
-                .postCategory(PostCategory.FREE)
-                .isAnonymous(true)
-                .build();
-        Long postId = postService.writePost(authorization, writePostRequestDto);
+        WriteCommentRequestDto writeCommentRequestDto =
+                new WriteCommentRequestDto("test comment");
 
         //when
-        ResultActions resultActions = resultActions(postId);
+        ResultActions resultActions = resultActions(writeCommentRequestDto);
 
         //then
-        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(status().isCreated())
+                .andExpect(content().string("댓글 작성이 완료되었습니다."));
 
     }
 
-    private ResultActions resultActions(Long postId) throws Exception {
-        return mockMvc.perform(get("/api/v1/posts/free/" + postId)
-                        .header(HttpHeaders.AUTHORIZATION, authorization))
+    @Test
+    @DisplayName("")
+    void commentWriteFailBlank() throws Exception {
+        //given
+        WriteCommentRequestDto writeCommentRequestDto =
+                new WriteCommentRequestDto("  ");
+
+        //when
+        ResultActions resultActions = resultActions(writeCommentRequestDto);
+
+        //then
+        resultActions.andExpect(status().isBadRequest());
+
+    }
+
+    private ResultActions resultActions(WriteCommentRequestDto writeCommentRequestDto) throws Exception {
+        return mockMvc.perform(post("/api/v1/comments")
+                        .param("post_id", String.valueOf(postId))
+                        .header(HttpHeaders.AUTHORIZATION, authorization)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(writeCommentRequestDto)))
                 .andDo(print());
     }
 }

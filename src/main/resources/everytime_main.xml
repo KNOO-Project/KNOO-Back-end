@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <board id="384379" name="자유게시판" type="list">
+        <article id="297203863" text="드림기숙사 퇴실일 아시는분?" createdAt="2023-04-05 19:09:22" posvote="0" commentCount="0"
+                 title="드림기숙사 퇴실"/>
+        <article id="297203479" text="벌점 4점 살살 녹네요" createdAt="2023-04-05 19:06:41" posvote="0" commentCount="0"
+                 title="알바 때문에 대비훈련 못하는 여자 ^^"/>
+        <article id="297203322" text="싸구려 생수 끓인거보다&lt;br />정수기 뜨거운물에 먹는 컵라면이&lt;br />더맛있네"
+                 createdAt="2023-04-05 19:05:46" posvote="0" commentCount="1" title="근데진짜 물에따라 컵라면 맛이다른듯.."/>
+        <article id="297203218" text="무조건 자기말이 맞고 자기 말에 반박하면 어떻게든 자기 말 듣도록 함 .. 자기 말대로 안하면 안따르는 사람이 이상한거지 자기 말이 이상한거라곤"
+                 createdAt="2023-04-05 19:05:09" posvote="0" commentCount="2" title="아빠 성격 너무 싫은데 어떡하지"/>
+    </board>
+    <board id="258890" name="비밀게시판" type="article">
+        <article id="297202301" text="선배 진짜진짜 좋아해 선배는 날 안좋아하는것같지만" createdAt="2023-04-05 18:59:01" posvote="0"
+                 commentCount="3"/>
+        <article id="297199945" text="나 오늘 이상형 봤어🥹 그것도 3번이나 마주침" createdAt="2023-04-05 18:42:59" posvote="0"
+                 commentCount="2"/>
+    </board>
+    <board id="385991" name="졸업생게시판" type="article">
+        <article id="297138043" text="신관에 남아있는 졸업생분..!." createdAt="2023-04-05 10:53:28" posvote="0" commentCount="7"/>
+        <article id="297050263"
+                 text="취업 고민&lt;br />이번에 연고지 현기 1차벤더 중견기업을 붙었는데 대기업 서합된곳도 있어 정말고민이 됩니다&lt;br />1. 중견취업 (연고지 +영끌 4초 5후)"
+                 createdAt="2023-04-04 20:14:10" posvote="0" commentCount="4"/>
+    </board>
+    <board id="385902" name="새내기게시판" type="article">
+        <article id="297200967" text="고민한번하면 풀릴때까지 하는 성격인데 어쩌지" createdAt="2023-04-05 18:50:04" posvote="0"
+                 commentCount="1"/>
+        <article id="297191824" text="ㅇㅅㅈ ㅅㅅㄹ ㅂㅂ교수님 수업 레포트.. 제출 어디다가 하는 건지 아는 사람? lms랑 통합사이트 봤는데 없는 것 같아서"
+                 createdAt="2023-04-05 17:47:18" posvote="0" commentCount="7"/>
+    </board>
+    <board id="482634" name="시사·이슈" type="list">
+        <article id="297202434"
+                 text="물가랑 북한 보면 문재인 때문이 큰거같다&lt;br />나만 그렇게 생각해??&lt;br />최저임금 급격하게 올리는거부터 가스비 동결로 인한 후폭풍 등등&lt;br />북한이 고분고분 "
+                 createdAt="2023-04-05 19:00:00" posvote="0" commentCount="0" title="진짜 요새 암만 생각해도"/>
+        <article id="297189976" text="https://n.news.naver.com/article/081/0003351573?sid=100"
+                 createdAt="2023-04-05 17:34:23" posvote="0" commentCount="0"
+                 title="한덕수, “독도는 우리땅” 질문에 “절대 아니다”…황당 말실수"/>
+        <article id="297181446" text="하지만 내가 본 윤을 비난하는 사람들은 모두 찢 지지자였다..." createdAt="2023-04-05 16:33:18" posvote="1"
+                 commentCount="3" title="윤을 비난하는 사람들은 찢 지지자가 아니다"/>
+        <article id="297161303" text="꼴보순데 쟤만 쳐맞는 거 보면 불쌍하긴 하노ㅋㅋㅋ 첫글은 지워짐" createdAt="2023-04-05 13:57:17" posvote="0"
+                 commentCount="0" title="먼저 틀 딱 프레임 씌운건"/>
+    </board>
+    <board id="384403" name="장터게시판" type="list">
+        <article id="297203158" text="2300원에 살수있는 쿠폰 쓸사람?" createdAt="2023-04-05 19:04:45" posvote="0" commentCount="0"
+                 title="네고왕 새우버거 오늘까지"/>
+        <article id="297199523" text="2기가 3000원에 사요&lt;br />쪽지 주세요" createdAt="2023-04-05 18:40:03" posvote="0"
+                 commentCount="1" title="sk 데이터 사요"/>
+        <article id="297197848"
+                 text="올영에서 샀는데 한번쓰고 안썼어요&lt;br />건성인데 모르고 향기만 보고사서 팔아요&lt;br />지성분께 추천드려요&lt;br />지금 15900원에 팔고있는데 &lt;br />할인해서 7900원"
+                 createdAt="2023-04-05 18:28:29" posvote="0" commentCount="7" title="헤드엔숄더 샴푸 15900-> 3000원"
+                 attachId="58059715" attachFileName="everytime-1680686908725.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/653/58059715/everytime-1680686908725.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=BJmEXD~aWwrd3nLZtRXq-aQfRkvcKi6i6nKsD-Xq3ILSTY1Rg1sH7m0cXLJxWEoo55Nd8fzyEtSQMP6g1X-OhuE2E60EEo9f9gi4OkJJUJIWvKKsGGFbK0VnNsWgSuULEJVOYDifAtAur8ABxsO1q4Mxu37LTQTnR9IJxSvc7WqBk7394fsJhvFpf3Ns2X10i9nla4pkvjjEgKFk2AA4cbwxSQhK-~A95nis3Fghg0NAa6kMUd6VqA3HRZSzP~Etcpc6pRaUlxVqpkpPDWjDFGxFiw30o1V~xHjcY2Aj0cEBKi1rFPztlA1--ZUtLYedE7ConOIzRlddm725m0MgXg__"/>
+        <article id="297195118" text="https://everytime.kr/384403/v/294251973" createdAt="2023-04-05 18:10:25"
+                 posvote="0" commentCount="0" title="🤍예쁜 옷들 더 업로드 했습니다🤍"/>
+    </board>
+    <board id="258892" name="정보게시판" type="list">
+        <article id="295263022"
+                 text="안녕하세요. 공주대학교 보건진료소입니다.&lt;br />3월 24일은 「제13회 결핵 예방의 날」이자 「세계 결핵의 날」로 보건진료소에서는 결핵 발병률을 낮"
+                 createdAt="2023-03-23 12:23:09" posvote="0" commentCount="4"
+                 title="❤😷제 13회 결핵 예방의 날😷❤ 퀴즈 풀고 상품권 받자~!🎁" attachId="57726533"
+                 attachFileName="everytime-web-1679541745688.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/140/57726533/everytime-web-1679541745688.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=AflhPngWeDZPSQRwWrBWm8tqiRpxb9dnPI2EoEQFpQ8lk1vYcS7FwSQWjf9RnFX6SPEudvMUq0~A3fE3XgEtQwJwlC4FjwseZ~yHy~HOklrgLCLXcB28zSeC2PWbEhkdh-9k-doDQensrgQb9~Qd-IGxhH4KN4r9LwkjmNufI6mHX-LXKsiASu0N-RMTqUam1jAZEAFLHJoFoX4Ll4RcfB01ldggIBNA0valPA8iY4m0bO-ymjk-3kZN75-NdDxLHq1oAfe4mWnx1bakm~wo3iilgXhtBgyk4flwp-axersB~kQ5VoHSi4oAQAMC7DFg8ktDlUFvS37qUHb3TukmQg__"/>
+        <article id="293573649" text="이번주 목요일 휴강 맞죠?! 확인차 질문드립니다!" createdAt="2023-03-13 12:21:47" posvote="0"
+                 commentCount="7" title="생활과 법률"/>
+        <article id="293455708" text="고속터미널 말고 남부터미널도 있는데 모르는 사람도 있는 것 같아서 글 남겨요 하루에 세 대 뿐이긴 한데 고터는 임박해서는 항상 매진이라 시간 맞"
+                 createdAt="2023-03-12 20:21:57" posvote="4" commentCount="8" title="서울에서 공주 가는 버스" attachId="57403604"
+                 attachFileName="everytime-1678620114980.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/264/57403604/everytime-1678620114980.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=UiyCL~S6j3rbbnGRzYcrZGHvp3ipFs4fbu94rS6uar286NJcyjQFp0xqzpOuslxq6asoN7YdBjJpcltFmMQC4AP4TB6zzkTNguStWB6Q8XPnQssE5-aNKnANU7tTjnbxmXBR0DFcRzsbAHZwoyXEfu4bgwg8R26UHyXikDcErlsFp7XTB~HaIuzrMFgOpa1QcR20wjFchtJReXwieXDSMNxhUhWHD~R323uIxMyi6~wM0GZqoKwZK0N9gGFyVA78Sp9HPsiKT3gxtPwKiCXV3y2pIVy7FBX~LvXBArKH8qgEbFOcznodTZHGQaZpSZQv2p5OYm7h8CB8HpPQIkfifA__"/>
+        <article id="292055652" text="청년센터에서 하는 프로그램 입니다!" createdAt="2023-03-06 22:33:11" posvote="33" commentCount="9"
+                 title="나태주 시인에게 시 배우실 분을 구합니다" attachId="57128548" attachFileName="everytime-1678109590620.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/534/57128548/everytime-1678109590620.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=cHolYbk1zou8DKg-129axgfbCo5D1PffbKKfowaH-Hn-V3ScHZiGLzujRb3Be-lsFo9mtpCmzbHUoJBgkWpxc0K1VCRDtESyGY3Fw3vCcZBKIhqTeBK9263ufbDor--y1WgOt5SmhMpZik~kCn4wQNlSykqCyjamWM00WBmhruKvKVl7Al1BwUmRvCbudoXAIfoScVpRc2304vhd24xhUn2RRd4qpLZ7pMwITGcVFrlKIQEuyPP-PZZgQ01C7z6tm3yJgELqBdFmoANWvefHW~FT6-daZYqr8cqCVVWJb89~MisJ2TWEZG8Jm4hIc5qxAgyrFyMV3~-RB9SjIDK7Ag__"/>
+    </board>
+    <board id="384392" name="취업·진로" type="list">
+        <article id="297094112" text="이번에 생태원으로 인턴도 해보고 취업도 고민하고 있는데 재직중이나 관련된 정보 아시는 선배님이 계실까요😢😢"
+                 createdAt="2023-04-05 00:10:48" posvote="0" commentCount="0" title="국립생태원 가신 선배님들 계신가요..?"/>
+        <article id="297087553" text="천캠에서 같이 참가하실분 구합니다.&lt;br />쪽지주세요!" createdAt="2023-04-04 23:38:00" posvote="0"
+                 commentCount="0" title="전기안전정책 경진대회" attachId="58041961" attachFileName="everytime-1680619078217.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/903/58041961/everytime-1680619078217.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=rFF815rS4Wxw1E370z2Xr46YNrq63P4sMyIHwPxdtOle3nrUt2c5qHpB2SGqW9SFNSS39qMgj0EF94OObX~F3rxfHpNUJT8EQDxI00xul7~ukSx59dHgD9VwMJLMEZqF3XkqbQ2jqSE6UDETaWy37uuzUuvQQaObWMY89vf8znVUEvFj4Yc8gwWqs7dxs6dCEMdFsf~qacZBNL-DMlIeBZEnzxIa2LapTrB9-ou9RwyqpVe6TMZOYPLAOtDSKffzCvjixJwyi~ST6F5MKfPJcK9BBnZCFh6lUm18pHDbZWlrXunAGa0R74Jki9qLcM2ERyICDlHGAv0Wge4zXivhHQ__"/>
+        <article id="296990252" text="사정이 있어서 2학년을 마치고 휴학하고 학력 안보는 대신 경력이나 실무능력을 평가하는 곳으로 취업을 했는데 제가 마지막 목표는 대기업이나 공기업"
+                 createdAt="2023-04-04 12:43:17" posvote="0" commentCount="0" title="혹시 아시는 분 계실까요??"/>
+        <article id="296976781" text="혹시 작년에 해경 구급 시험 보신분 계시나요.." createdAt="2023-04-04 10:44:06" posvote="0"
+                 commentCount="0" title="해경 구급"/>
+    </board>
+    <board id="488195" name="공시생 게시판" type="article">
+        <article id="235242604"
+                 text="작년에 합격하고 입직 이후 일에 치이며 살다보니 날짜 감각이 무뎌졌나봐요. 벌써 개강날이네요..세월 무엇...ㅠㅠ&lt;br />공시 또는 취업준비에 한창이"
+                 createdAt="2022-03-02 10:23:26" posvote="1" commentCount="0"/>
+        <article id="219510161" text="소방공무원준비생은없나&lt;br />20만원할인받고 듣자&lt;br />https://m.cafe.naver.com/m2school/4154770"
+                 createdAt="2021-11-24 23:23:21" posvote="0" commentCount="0" attachId="44575484"
+                 attachFileName="everytime-1637763800800.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/588/44575484/everytime-1637763800800.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=FQdKhFKLSHHqOMFonb7EwofQrck6AQRAXCYZxZ5gVF-Oq1K~9D0RI-sR0rsFLnZXss9cV5RFNzxk2AMR7rWQ4VIC6JwOXHhqvaFMNQYAH8pNGPtSL~OgvsXFBbzr4KIUqVGYoa0~fV7Fxp2FgUheXH-l3RhwCzIG2ri4l5DtDKCjhc7vYBBTPVGDCdbGSy2d9aYN2fpCcrMh7P3Qx6ovBXIO0YtpAesVBf6udKeYCeImtFhW~X4MHrsFH6xetoLY1GlWH-4z-9F41aZBp36DjOHGrrC9mEFKWNdqE~96usffwfd1gKFdn3C2rRs8NutLNhtKfQJYbtI4xMCWksy9jw__"/>
+    </board>
+    <board id="367495" name="홍보게시판" type="list">
+        <article id="297202194"
+                 text="2023 인사대 벚꽃축제 영어영문학과 부스 💍 비즈링 in-us 💍&lt;br />안녕하십니까 공주대학교 영어영문학과 제 34대 학생회 in-us 입니다 :"
+                 createdAt="2023-04-05 18:58:19" posvote="0" commentCount="0"
+                 title="2023 인사대 벚꽃축제 영어영문학과 부스 💍 비즈링 in-us 💍" attachId="58060583"
+                 attachFileName="everytime-1680688697010.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/404/58060583/everytime-1680688697010.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=kF~AHAnpxaDGHVx6P~5U-AgO8HIsM8O2ZP2rOGVK8YeoTwQWykiWAcXvXMaz~gGFXlRWfLR6gb0OysORGiUiTTd1gzzxB8qP2gLzx2YU98m4TvwXFQHCXdmP7eKyN1sVbXqds4TzvTQmOaULZTfo-9XgpaUbJ73pujFdJJYCbZ5niEvpLm68pFfTp-bTuR2fu2l2OmzQK4qbDCT8QyRC0R8NBP3KnK~hhWWOfzbFdoSg~duO4Qoh-6hZgVDR1Uygy2McQinoSVyBPIdvyI8FCuVrvZAhgh3bgm8DoaybRvUWo~dZ89PwPhOiJIb3c10VAO-f7e2kUrWA6cZi~8yiwQ__"/>
+        <article id="297199948"
+                 text="2023 하계 제주도 대종주 대원 모집‼️&lt;br />지난번 동계 대종주를 다녀와서 너무 행복했기에 하계 대종주 신청만을 기다리고 있었는데요🙏&lt;br />많은 사람들에"
+                 createdAt="2023-04-05 18:43:00" posvote="0" commentCount="0" title="[20세상] 2023 하계 제주도 대원 모집"
+                 attachId="58060115" attachFileName="everytime-1680687771635.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/520/58060115/everytime-1680687771635.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=FQD8BZtMVdOojpGKzXsoSRRT6NKcWEPZVmmG0AVGGZxf9o~6cvm~QDhkqyExydhSIs4vlIA7MKK3j1tEa~XpgCTXmzVLyyRNOE~vQC46xXxSikskdTCbEDwwGl0OYkJlDj~zwM6Y2raAFw4705rP9QH9VfN8P1bdu0Ym9TRqSsTA~4g0GgKmAubT-yRdzbdw1wEGKqk2LxkfXB3o1CNT-Y-RTxTrMPNH~rXIjAzPrmN1waCerX2L5EhS4FELrcvENn4OHWJG0S22jrbYkwCDidMqtR-KQMbTz37wg7iZnODzYUa7TRwZ1JFhENriU2HYpL4MITjVnkM3jQ1200497Q__"/>
+        <article id="297165933"
+                 text="4월 ON갖 집사(랑해)🥰 &lt;br />공주 청년 집사들 모두 모여라~&lt;br />식물🪴 &amp; 🐶애완동물🐱을 위한 프로그램으로 찾아왔습니다!!&lt;br />❣️찐식물 집사 &amp;lt"
+                 createdAt="2023-04-05 14:34:17" posvote="0" commentCount="0" title="✨️4월 ON갖 클래스 라인업🥳✨️"
+                 attachId="58053705" attachFileName="everytime-1680672854045.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/997/58053705/everytime-1680672854045.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=Eix1xabKmKVQa~KBGntkXtxXJfDInCnCvolk9pt3HfJ2Tkc7OXn9j~k13DB9L3GSG9hsrueAsX8pCTfbU6lBXOUU2hoBIbb0JLmGRZt1d4mywVnXnw2OqfDRNqv4tJS3EtHUd70UUk67soxSPzhKlmouElkLCcxwDwYU1tWgpxR3pPKCpH31B~JzIsydFG0e00SIyrtS07Q0WW38gZHBjsZkHMYdCcayXtlj9Kb5IlygWH74xlkMaJ-7A85S6Qus-~rqEkUJzrpzk-aOgOG4qgYkIVYfAI-cMS-DD55wF0qKvhVEwKOqTinOz3AnvXvVQuVUWwgFMCaeaDvPrgUrCg__"/>
+        <article id="297164226"
+                 text="❤️꼼꼼히 읽은 후 인적사항과 함께 연락주세요&lt;br />알바 공고   &lt;br />근무기간   : 5월부터 근무 시작 후 3개월 이상&lt;br />근무요일   : 월, 화, 수"
+                 createdAt="2023-04-05 14:20:36" posvote="0" commentCount="0" title="💙남자 아쿠아레나 수영장 알바 공고💙"/>
+    </board>
+    <board id="418827" name="동아리·학회" type="list">
+        <article id="297200058"
+                 text="😎우리랑 같이 데이트 하러 갈래?😎&lt;br />안녕하세요! 여행 연합동아리 Date입니다!⚡️&lt;br />*운영 주체:본 동아리는 대학생들에 의해 자치적으로 운영되며"
+                 createdAt="2023-04-05 18:43:41" posvote="0" commentCount="0" title="✨우리랑 같이 데이트 갈래??✨"/>
+        <article id="297198542"
+                 text="안녕하세요, 공주대학교 그룹사운드 가시나무새입니다.&lt;br />-&lt;br />공주대학교 신관캠퍼스를 대표하는 세 밴드&lt;br />가시나무새, IF, 봉황이&lt;br />지난 3월 20일 저"
+                 createdAt="2023-04-05 18:33:20" posvote="2" commentCount="0"
+                 title="🕊가시나무새🕊 2023 가시나무새 x IF x 봉황 연합공연 영상 공개" attachId="58059842"
+                 attachFileName="everytime-web-1680687195705.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/812/58059842/everytime-web-1680687195705.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=UvDBZHua6xkIWFK-P6pFJW4GW6KKcSEKLAKxPECTV6YrOsOoibLtjhCKBya9tcc5Nna0IwcPY14eWyJ3~f-PxUfy1bkS7-VPwUAqEdb8BaQAGTPuclqbOOZdtEXqksruG2fuvcRWpsdzbi8mrPbzDCBZ0mzwhHvGF2ahAb8VjBP0rw79n04ZL-EpoXnYoCBFUamG-RQH3zIMzjz7P8rnJZKraUJcWtoeCs8eoRrm8Df4lhrMDltKoTXS134NO9K1OQprTiBmCSb5StgFRiGrH7KXm6enlEuET0ULCFcN4HAqjgWstJA7C0VoRDKFvN7Jhkop6mrPPAipnQAwiN9h9Q__"/>
+        <article id="296829185" text="4월 3일 - 4일 교양관 앞 부스에서 Go Together 홍보전이 진행됩니다 ! 필담도 참여하여 작품 전시 및 이름시 짓기, 필담의 시 문구"
+                 createdAt="2023-04-03 11:02:17" posvote="7" commentCount="2" title="🤍 필담 부스 ON 🤍" attachId="57995991"
+                 attachFileName="everytime-1680487335996.jpg"
+                 attachFileUrl="https://cf-ea.everytime.kr/attach_thumbnail/251/57995991/everytime-1680487335996.jpg?Expires=1680690322&amp;Key-Pair-Id=APKAICU6XZKH23IGASFA&amp;Signature=Vf6s-9SOEaW0KCvBo9PZyr7SULDOsueWxJd9DuoNkdfMaMEuG2iV0vhVNOFw8Spm5oaLOlh9igQ5xSAy7~F96NbaIeNsz1jWE41Ure8lFzRkgJVDJ5NW~xckPy62jl-mP630qEVxwFqBmq9EQpHJaVgpq0HQD4FkSGi1OZ88vbXvW3DKE7iAn9Z4YtcsElnh9h1Y5XNmua1DgcL84o-41S5oFqMUZxCvecgubwBkT3fbyYsn2gvCU9uXn8rC2YkP~kECtJbnIn3~PZQcZIOq1OZ~SMVIXlplO5N5-VAviaQvHGAh7CGvnlxYzKicNDMmsr7agHjJ-vnyew06By-GLg__"/>
+        <article id="296808050" text="https://everytime.kr/385902/v/296714264" createdAt="2023-04-03 02:45:51"
+                 posvote="1" commentCount="0" title="!예술 놀이방 많관부!"/>
+    </board>
+    <bookstore>
+        <item image="https://cf-cii.everytime.kr/f01f988c34b3b9c5cef8b7024fe518c9ef75854d6237e2d62d2f1cd0bb40f46f/1680681109833_0_thumb.jpg"
+              title="R-확률통계" price="20,000원"/>
+        <item image="https://cf-cii.everytime.kr/e745fdd6c6fc707319a73b8a6f314f13df24c72cebf60bc40312a912182baf5e/1680681084352_0_thumb.jpg"
+              title="공학윤리" price="5,000원"/>
+        <item image="https://cf-cii.everytime.kr/e745fdd6c6fc707319a73b8a6f314f13df24c72cebf60bc40312a912182baf5e/1680681026600_0_thumb.jpg"
+              title="공학법제" price="7,000원"/>
+        <item image="https://cf-cii.everytime.kr/e745fdd6c6fc707319a73b8a6f314f13df24c72cebf60bc40312a912182baf5e/1680680983541_0_thumb.jpg"
+              title="광통신공학(5판)" price="5,000원"/>
+    </bookstore>
+</response>
