@@ -48,7 +48,7 @@ public class PostListTest {
         ResultActions resultActions = resultActions("test");
 
         //then
-        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(status().isBadRequest());
 
     }
 

@@ -26,7 +26,7 @@ public class BasicCommentService implements CommentService {
 
     @Override
     @Transactional
-    public void writeComment(
+    public Long writeComment(
             final WriteCommentRequestDto writeCommentRequestDto, @Nullable final Long postId,
             @Nullable final Long commentId, final String authorization
     ) {
@@ -35,25 +35,28 @@ public class BasicCommentService implements CommentService {
         Comment comment = Comment.from(writeCommentRequestDto);
 
         if (postId != null) {
-            newComment(comment, postId, authenticatedUser);
-            return;
+            Comment writtenComment = newComment(comment, postId, authenticatedUser);
+            return writtenComment.getId();
         }
         if (commentId != null) {
-            newReply(comment, commentId, authenticatedUser);
+            Comment writtenReply = newReply(comment, commentId, authenticatedUser);
+            return writtenReply.getId();
         }
+
+        return null;
     }
 
-    private void newComment(final Comment comment, final Long postId, final User authenticatedUser) {
+    private Comment newComment(final Comment comment, final Long postId, final User authenticatedUser) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         comment.writeComment(authenticatedUser, post);
-        commentRepository.save(comment);
+        return commentRepository.save(comment);
     }
 
-    private void newReply(final Comment comment, final Long commentId,
-                          final User authenticatedUser) {
+    private Comment newReply(final Comment comment, final Long commentId,
+                             final User authenticatedUser) {
         Comment parentComment =
                 commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         comment.reply(authenticatedUser, parentComment);
-        commentRepository.save(comment);
+        return commentRepository.save(comment);
     }
 }

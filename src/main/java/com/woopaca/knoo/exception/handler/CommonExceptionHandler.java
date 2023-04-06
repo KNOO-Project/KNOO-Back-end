@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CommonExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDto> fieldInvalidExceptionHandler(
+    protected ResponseEntity<ErrorResponseDto> fieldInvalidExceptionHandler(
             MethodArgumentNotValidException exception, HttpServletRequest request
     ) {
         log.error("필드 검증 예외 -> {}", exception.getFieldError().getDefaultMessage());
@@ -26,7 +27,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponseDto> requestBodyNotReadableExceptionHandler(
+    protected ResponseEntity<ErrorResponseDto> requestBodyNotReadableExceptionHandler(
             HttpServletRequest request
     ) {
         log.error("HTTP 메시지 바디를 읽을 수 없습니다.");
@@ -35,7 +36,7 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ErrorResponseDto> httpMethodNotSupportedExceptionHandler(
+    protected ResponseEntity<ErrorResponseDto> httpMethodNotSupportedExceptionHandler(
             HttpServletRequest request
     ) {
         log.error("지원하지 않는 HTTP Method");
@@ -43,7 +44,16 @@ public class CommonExceptionHandler {
                 "지원하지 않는 HTTP Method 입니다.", request, "KN103");
     }
 
-    private static ResponseEntity<ErrorResponseDto> createResponseEntity(
+    @ExceptionHandler(MissingPathVariableException.class)
+    protected ResponseEntity<ErrorResponseDto> pathVariableExceptionHandler(
+            HttpServletRequest request
+    ) {
+        log.error("경로 변수 값이 존재하지 않거나 올바르지 않습니다.");
+        return createResponseEntity(HttpStatus.BAD_REQUEST,
+                "경로 변수 값이 올바르지 않습니다.", request, "KN104");
+    }
+
+    private ResponseEntity<ErrorResponseDto> createResponseEntity(
             HttpStatus httpStatus, String message, HttpServletRequest request, String errorCode
     ) {
         ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()

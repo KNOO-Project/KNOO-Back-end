@@ -8,6 +8,7 @@ import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.repository.UserRepository;
+import com.woopaca.knoo.service.CommentService;
 import com.woopaca.knoo.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,21 +35,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @WithMockUser
-public class CommentWriteTest {
+public class ReplyCommentWriteTest {
 
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
     @Autowired
-    JwtProvider jwtProvider;
-    @Autowired
     UserRepository userRepository;
     @Autowired
     PostService postService;
+    @Autowired
+    CommentService commentService;
+    @Autowired
+    JwtProvider jwtProvider;
 
     private String authorization;
-    private Long postId;
+    private Long commentId;
 
     @BeforeEach
     void beforeEach() {
@@ -71,43 +74,32 @@ public class CommentWriteTest {
                 .postCategory(PostCategory.FREE)
                 .isAnonymous(false)
                 .build();
-        postId = postService.writePost(authorization, writePostRequestDto);
+        Long postId = postService.writePost(authorization, writePostRequestDto);
+
+        WriteCommentRequestDto writeCommentRequestDto =
+                new WriteCommentRequestDto("test comment");
+        commentId =
+                commentService.writeComment(writeCommentRequestDto, postId, null, authorization);
     }
 
     @Test
-    @DisplayName("댓글 작성 성공")
-    void commentWriteSuccess() throws Exception {
+    @DisplayName("대댓글 작성 성공")
+    void replyWriteSuccess() throws Exception {
         //given
-        WriteCommentRequestDto writeCommentRequestDto =
-                new WriteCommentRequestDto("test comment");
+        WriteCommentRequestDto writeCommentRequestDto = new WriteCommentRequestDto("test reply");
 
         //when
         ResultActions resultActions = resultActions(writeCommentRequestDto);
 
         //then
         resultActions.andExpect(status().isCreated())
-                .andExpect(content().string("댓글 작성이 완료되었습니다."));
-
-    }
-
-    @Test
-    @DisplayName("댓글 작성 실패 - 공백")
-    void commentWriteFailBlank() throws Exception {
-        //given
-        WriteCommentRequestDto writeCommentRequestDto =
-                new WriteCommentRequestDto("  ");
-
-        //when
-        ResultActions resultActions = resultActions(writeCommentRequestDto);
-
-        //then
-        resultActions.andExpect(status().isBadRequest());
+                .andExpect(content().string("대댓글 작성이 완료되었습니다."));
 
     }
 
     private ResultActions resultActions(WriteCommentRequestDto writeCommentRequestDto) throws Exception {
-        return mockMvc.perform(post("/api/v1/comments")
-                        .param("post_id", String.valueOf(postId))
+        return mockMvc.perform(post("/api/v1/comments/reply")
+                        .param("comment_id", commentId.toString())
                         .header(HttpHeaders.AUTHORIZATION, authorization)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(writeCommentRequestDto)))

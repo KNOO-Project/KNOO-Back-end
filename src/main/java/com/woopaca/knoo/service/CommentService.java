@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 
 public interface CommentService {
 
-    void writeComment(final WriteCommentRequestDto writeCommentRequestDto,
+    Long writeComment(final WriteCommentRequestDto writeCommentRequestDto,
                       @Nullable final Long postId, @Nullable final Long commentId,
                       final String authorization);
 }

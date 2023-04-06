@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 public class KnooExceptionHandler {
 
     @ExceptionHandler(KnooException.class)
-    public ResponseEntity<ErrorResponseDto> knooExceptionHandler(
+    protected ResponseEntity<ErrorResponseDto> knooExceptionHandler(
             KnooException exception, HttpServletRequest request
     ) {
         log.error("errorCode: {}, path: {}, message: {}", exception.getKnooError().getErrorCode(),
