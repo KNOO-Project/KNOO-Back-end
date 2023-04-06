@@ -3,6 +3,7 @@ package com.woopaca.knoo.service.impl;
 import com.woopaca.knoo.config.jwt.JwtUtils;
 import com.woopaca.knoo.controller.post.dto.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.post.dto.PostListResponseDto;
+import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Post;
@@ -10,6 +11,7 @@ import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.exception.post.impl.PostCategoryNotFoundException;
 import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
+import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.PostService;
@@ -67,6 +69,21 @@ public class BasicPostService implements PostService {
         List<Comment> comments = commentRepository.findByPost(post);
 
         return PostDetailsResponseDto.of(post, comments, authenticatedUser);
+    }
+
+    @Override
+    @Transactional
+    public void postUpdate(final String authorization,
+                           final Long postId, final UpdatePostRequestDto updatePostRequestDto) {
+        String token = jwtUtils.resolveToken(authorization);
+        User authenticatedUser = jwtUtils.getAuthenticationPrincipal(token);
+
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        if (post.getWriter() != authenticatedUser) {
+            throw new InvalidUserException();
+        }
+
+        post.update(updatePostRequestDto);
     }
 
     @Override

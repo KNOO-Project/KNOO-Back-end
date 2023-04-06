@@ -42,7 +42,7 @@ public class PostDetailsResponseDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    static class PostDetailsDto {
+    public static class PostDetailsDto {
 
         @JsonProperty(value = "post_title")
         private String postTitle;
@@ -90,7 +90,7 @@ public class PostDetailsResponseDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    static class CommentListDto {
+    public static class CommentListDto {
 
         @JsonProperty(value = "comment_id")
         private Long commentId;

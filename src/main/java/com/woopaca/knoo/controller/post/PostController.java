@@ -2,19 +2,15 @@ package com.woopaca.knoo.controller.post;
 
 import com.woopaca.knoo.controller.post.dto.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.post.dto.PostListResponseDto;
+import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -29,6 +25,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class PostController {
 
     private final PostService postService;
+
+    @Value("${server.host}")
+    String host;
 
     @PostMapping
     public ResponseEntity<String> writeNewPost(
@@ -51,9 +50,18 @@ public class PostController {
     @GetMapping("/{category}/{postId}")
     public ResponseEntity<PostDetailsResponseDto> postDetailsInfo(
             @RequestHeader(AUTHORIZATION) final String authorization,
-            @PathVariable("postId") final Long postId,
-            @PathVariable("category") String ignore) {
+            @PathVariable("postId") final Long postId, @PathVariable("category") String ignore
+    ) {
         PostDetailsResponseDto postDetails = postService.postDetails(postId, authorization);
         return ResponseEntity.ok().body(postDetails);
+    }
+
+    @PatchMapping("/{category}/{postId}")
+    public ResponseEntity<String> postContentsUpdate(
+            @RequestHeader(AUTHORIZATION) final String authorization, @PathVariable("postId") final Long postId,
+            @RequestBody @Valid final UpdatePostRequestDto updatePostRequestDto
+    ) {
+        postService.postUpdate(authorization, postId, updatePostRequestDto);
+        return ResponseEntity.ok().body("게시글 수정이 완료되었습니다.");
     }
 }
