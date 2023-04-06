@@ -56,9 +56,10 @@ public class PostController {
         return ResponseEntity.ok().body(postDetails);
     }
 
-    @PatchMapping("/{category}/{postId}")
+    @PatchMapping
     public ResponseEntity<String> postContentsUpdate(
-            @RequestHeader(AUTHORIZATION) final String authorization, @PathVariable("postId") final Long postId,
+            @RequestHeader(AUTHORIZATION) final String authorization,
+            @RequestParam("post_id") final Long postId,
             @RequestBody @Valid final UpdatePostRequestDto updatePostRequestDto
     ) {
         postService.postUpdate(authorization, postId, updatePostRequestDto);
