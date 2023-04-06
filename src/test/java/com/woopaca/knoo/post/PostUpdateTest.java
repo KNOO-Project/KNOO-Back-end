@@ -109,6 +109,7 @@ public class PostUpdateTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(content().string("게시글 수정이 완료되었습니다."));
         assertThat(updatedPost.getPostTitle()).isEqualTo("update test");
+        assertThat(updatedPost.isAnonymous()).isEqualTo(true);
     }
 
     @Test
