@@ -17,7 +17,8 @@ public enum UserError implements KnooError {
     INCORRECT_USERNAME_OR_PASSWORD(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 올바르지 않습니다.", "KN208"),
     INVALID_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "유효하지 않은 인증입니다.", "KN209"),
     INCOMPLETE_MAIL_VERIFICATION(HttpStatus.UNAUTHORIZED, "이메일 인증을 완료하지 않았습니다.", "KN210"),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다.", "KN211");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다.", "KN211"),
+    INVALID_USER(HttpStatus.UNAUTHORIZED, "유효하지 않은 회원입니다.", "KN212");
 
     private final HttpStatus httpStatus;
     private final String message;
