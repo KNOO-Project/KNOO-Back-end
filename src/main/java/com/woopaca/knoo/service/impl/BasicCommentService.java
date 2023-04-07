@@ -7,6 +7,7 @@ import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.exception.comment.impl.CommentNotFoundException;
 import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
+import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.CommentService;
@@ -30,8 +31,7 @@ public class BasicCommentService implements CommentService {
             final WriteCommentRequestDto writeCommentRequestDto, @Nullable final Long postId,
             @Nullable final Long commentId, final String authorization
     ) {
-        String token = jwtUtils.resolveToken(authorization);
-        User authenticatedUser = jwtUtils.getAuthenticationPrincipal(token);
+        User authenticatedUser = getAuthenticatedUser(authorization);
         Comment comment = Comment.from(writeCommentRequestDto);
 
         if (postId != null) {
@@ -46,7 +46,19 @@ public class BasicCommentService implements CommentService {
         return null;
     }
 
-    private Comment newComment(final Comment comment, final Long postId, final User authenticatedUser) {
+    @Transactional
+    @Override
+    public void deleteComment(final String authorization, final Long commentId) {
+        User authenticatedUser = getAuthenticatedUser(authorization);
+        Comment comment =
+                commentRepository.findById(commentId).orElseThrow((CommentNotFoundException::new));
+        validateWriterAuthority(comment, authenticatedUser);
+
+        comment.delete();
+    }
+
+    private Comment newComment(final Comment comment, final Long postId,
+                               final User authenticatedUser) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         comment.writeComment(authenticatedUser, post);
         return commentRepository.save(comment);
@@ -58,5 +70,16 @@ public class BasicCommentService implements CommentService {
                 commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         comment.reply(authenticatedUser, parentComment);
         return commentRepository.save(comment);
+    }
+
+    private User getAuthenticatedUser(final String authorization) {
+        String token = jwtUtils.resolveToken(authorization);
+        return jwtUtils.getAuthenticationPrincipal(token);
+    }
+
+    private void validateWriterAuthority(final Comment comment, final User authenticatedUser) {
+        if (comment.getWriter() != authenticatedUser) {
+            throw new InvalidUserException();
+        }
     }
 }

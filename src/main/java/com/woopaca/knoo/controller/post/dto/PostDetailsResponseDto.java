@@ -125,20 +125,20 @@ public class PostDetailsResponseDto {
         }
 
         public static CommentListDto of(final Comment comment, Post post, final User authenticatedUser) {
+            if (comment.isDeleted()) {
+                return deletedComment(comment, post, authenticatedUser);
+            }
+            return normalComment(comment, post, authenticatedUser);
+        }
+
+        private static CommentListDto normalComment(final Comment comment, final Post post,
+                                                    final User authenticatedUser) {
+            Long parentCommentId = getParentCommentId(comment);
+
             User commentWriter = comment.getWriter();
             boolean isWrittenByUser = authenticatedUser == commentWriter;
 
-            String writerName = commentWriter.getName();
-            User postWriter = post.getWriter();
-            if (postWriter == commentWriter) {
-                writerName = "글쓴이";
-            }
-
-            Comment parentComment = comment.getParentComment();
-            Long parentCommentId = null;
-            if (parentComment != null) {
-                parentCommentId = parentComment.getId();
-            }
+            String writerName = getDisplayWriterName(post, commentWriter);
 
             return CommentListDto.builder()
                     .commentId(comment.getId())
@@ -151,5 +151,39 @@ public class PostDetailsResponseDto {
                     .isWrittenByUser(isWrittenByUser)
                     .build();
         }
+
+        private static CommentListDto deletedComment(final Comment comment, final Post post,
+                                                     final User authenticatedUser) {
+            Long parentCommentId = getParentCommentId(comment);
+
+            return CommentListDto.builder()
+                    .commentId(comment.getId())
+                    .commentContent("삭제된 댓글입니다.")
+                    .commentDate(comment.getCommentDate())
+                    .isDeleted(comment.isDeleted())
+                    .parentCommentId(parentCommentId)
+                    .build();
+        }
+
+        private static Long getParentCommentId(Comment comment) {
+            Comment parentComment = comment.getParentComment();
+            Long parentCommentId = null;
+            if (parentComment != null) {
+                parentCommentId = parentComment.getId();
+            }
+
+            return parentCommentId;
+        }
+
+    }
+
+    private static String getDisplayWriterName(Post post, User commentWriter) {
+        String writerName = commentWriter.getName();
+        User postWriter = post.getWriter();
+        if (postWriter == commentWriter) {
+            writerName = "글쓴이";
+        }
+
+        return writerName;
     }
 }

@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @WithMockUser
-public class ReplyCommentWriteTest {
+public class WriteReplyTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -84,7 +84,7 @@ public class ReplyCommentWriteTest {
 
     @Test
     @DisplayName("대댓글 작성 성공")
-    void replyWriteSuccess() throws Exception {
+    void writeReplySuccess() throws Exception {
         //given
         WriteCommentRequestDto writeCommentRequestDto = new WriteCommentRequestDto("test reply");
 

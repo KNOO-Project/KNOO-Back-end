@@ -23,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .httpBasic().disable() // UI 인증이 아닌 토큰 인이기 때문에 basic disable
-                .csrf().disable() // Cross-Site Request Forgery 방지
+                .csrf().disable() // Cross-Site Request Forgery 방지 해제
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 이용 시 사용
                 .and()
                 .authorizeRequests()
