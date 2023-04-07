@@ -2,15 +2,14 @@ package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
-import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.repository.PostRepository;
+import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.service.PostService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,20 +35,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @WithMockUser
-public class PostUpdateTest {
+public class DeletePostTest {
 
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    ObjectMapper mapper;
+    ObjectMapper objectMapper;
+    @Autowired
+    JwtProvider jwtProvider;
     @Autowired
     UserRepository userRepository;
     @Autowired
     PostService postService;
-    @Autowired
-    PostRepository postRepository;
-    @Autowired
-    JwtProvider jwtProvider;
 
     private String authorizationA;
     private String authorizationB;
@@ -92,38 +88,28 @@ public class PostUpdateTest {
     }
 
     @Test
-    @DisplayName("게시글 수정 - 성공")
-    void postUpdateSuccess() throws Exception {
+    @DisplayName("게시글 삭제 - 성공")
+    void deletePostSuccess() throws Exception {
         //given
-        UpdatePostRequestDto updatePostRequestDto = UpdatePostRequestDto.builder()
-                .postTitle("update test")
-                .postContent("update test")
-                .isAnonymous(true)
-                .build();
 
         //when
-        ResultActions resultActions = resultActions(updatePostRequestDto, authorizationA, postId);
-        Post updatedPost = postRepository.findById(postId).orElse(null);
+        ResultActions resultActions = resultActions(authorizationA, postId);
 
         //then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string("게시글 수정이 완료되었습니다."));
-        assertThat(updatedPost.getPostTitle()).isEqualTo("update test");
-        assertThat(updatedPost.isAnonymous()).isEqualTo(true);
+                .andExpect(content().string("게시글 삭제가 완료되었습니다."));
+        Assertions.assertThrows(PostNotFoundException.class, () ->
+                postService.postDetails(postId, authorizationA));
+
     }
 
     @Test
-    @DisplayName("게시글 수정 실패 - 유효하지 않은 회원")
-    void postUpdateFailInvalidUser() throws Exception {
+    @DisplayName("게시글 삭제 실패 - 유효하지 않은 회원")
+    void deletePostFailInvalidUser() throws Exception {
         //given
-        UpdatePostRequestDto updatePostRequestDto = UpdatePostRequestDto.builder()
-                .postTitle("update test")
-                .postContent("update test")
-                .isAnonymous(true)
-                .build();
 
         //when
-        ResultActions resultActions = resultActions(updatePostRequestDto, authorizationB, postId);
+        ResultActions resultActions = resultActions(authorizationB, postId);
 
         //then
         resultActions.andExpect(status().isUnauthorized());
@@ -131,47 +117,23 @@ public class PostUpdateTest {
     }
 
     @Test
-    @DisplayName("게시글 수정 실패 - 공백")
-    void postUpdateFailBlank() throws Exception {
+    @DisplayName("게시글 삭제 실패 - 존재하지 않는 게시글")
+    void deletePostFailPostNonexistent() throws Exception {
         //given
-        UpdatePostRequestDto updatePostRequestDto = UpdatePostRequestDto.builder()
-                .postTitle("    ")
-                .postContent("update test")
-                .isAnonymous(true)
-                .build();
 
         //when
-        ResultActions resultActions = resultActions(updatePostRequestDto, authorizationA, postId);
-
-        //then
-        resultActions.andExpect(status().isBadRequest());
-
-    }
-
-    @Test
-    @DisplayName("게시글 수정 실패 - 존재하지 않는 게시글")
-    void postUpdateFailPostNonexistent() throws Exception {
-        //given
-        UpdatePostRequestDto updatePostRequestDto = UpdatePostRequestDto.builder()
-                .postTitle("update test")
-                .postContent("update test")
-                .isAnonymous(true)
-                .build();
-
-        //when
-        ResultActions resultActions = resultActions(updatePostRequestDto, authorizationA, 0L);
+        ResultActions resultActions = resultActions(authorizationA, 0L);
 
         //then
         resultActions.andExpect(status().isNotFound());
 
     }
 
-    private ResultActions resultActions(UpdatePostRequestDto updatePostRequestDto, String authorization, Long postId) throws Exception {
-        return mockMvc.perform(patch("/api/v1/posts")
+    private ResultActions resultActions(String authorization, Long postId) throws Exception {
+        return mockMvc.perform(delete("/api/v1/posts")
                         .param("post_id", String.valueOf(postId))
                         .header(HttpHeaders.AUTHORIZATION, authorization)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(updatePostRequestDto)))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
     }
 }

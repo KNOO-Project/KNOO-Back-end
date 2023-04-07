@@ -8,7 +8,6 @@ import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +24,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class PostController {
 
     private final PostService postService;
-
-    @Value("${server.host}")
-    String host;
 
     @PostMapping
     public ResponseEntity<String> writeNewPost(
@@ -57,12 +53,21 @@ public class PostController {
     }
 
     @PatchMapping
-    public ResponseEntity<String> postContentsUpdate(
+    public ResponseEntity<String> updatePostContents(
             @RequestHeader(AUTHORIZATION) final String authorization,
             @RequestParam("post_id") final Long postId,
             @RequestBody @Valid final UpdatePostRequestDto updatePostRequestDto
     ) {
-        postService.postUpdate(authorization, postId, updatePostRequestDto);
+        postService.updatePost(authorization, postId, updatePostRequestDto);
         return ResponseEntity.ok().body("게시글 수정이 완료되었습니다.");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteOnePost(
+            @RequestHeader(AUTHORIZATION) final String authorization,
+            @RequestParam("post_id") final Long postId
+    ) {
+        postService.deletePost(authorization, postId);
+        return ResponseEntity.ok().body("게시글 삭제가 완료되었습니다.");
     }
 }
