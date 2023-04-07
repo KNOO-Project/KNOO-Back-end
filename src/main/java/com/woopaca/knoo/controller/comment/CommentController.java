@@ -39,4 +39,13 @@ public class CommentController {
                 commentService.writeComment(writeCommentRequestDto, null, commentId, authorization);
         return ResponseEntity.created(URI.create("/reply/" + replyId)).body("대댓글 작성이 완료되었습니다.");
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteOneComment(
+            @RequestHeader(AUTHORIZATION) final String authorization,
+            @RequestParam("comment_id") final Long commentId
+    ) {
+        commentService.deleteComment(authorization, commentId);
+        return ResponseEntity.ok().body("댓글 삭제가 완료되었습니다.");
+    }
 }

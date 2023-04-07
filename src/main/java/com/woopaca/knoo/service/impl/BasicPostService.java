@@ -74,7 +74,6 @@ public class BasicPostService implements PostService {
     public void updatePost(final String authorization,
                            final Long postId, final UpdatePostRequestDto updatePostRequestDto) {
         User authenticatedUser = getAuthenticatedUser(authorization);
-
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         validateWriterAuthority(post, authenticatedUser);
 
