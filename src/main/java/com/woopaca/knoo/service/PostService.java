@@ -25,5 +25,7 @@ public interface PostService {
 
     List<PostPreviewDto> userLikePostList(final User user, final Pageable pageable);
 
-    void postUpdate(final String authorization, final Long postId, final UpdatePostRequestDto updatePostRequestDto);
+    void updatePost(final String authorization, final Long postId, final UpdatePostRequestDto updatePostRequestDto);
+
+    void deletePost(final String authorization, final Long postId);
 }

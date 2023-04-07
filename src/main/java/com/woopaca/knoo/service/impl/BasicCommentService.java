@@ -24,8 +24,8 @@ public class BasicCommentService implements CommentService {
     private final PostRepository postRepository;
     private final JwtUtils jwtUtils;
 
-    @Override
     @Transactional
+    @Override
     public Long writeComment(
             final WriteCommentRequestDto writeCommentRequestDto, @Nullable final Long postId,
             @Nullable final Long commentId, final String authorization

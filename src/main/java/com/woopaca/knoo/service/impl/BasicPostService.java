@@ -33,11 +33,10 @@ public class BasicPostService implements PostService {
     private final CommentRepository commentRepository;
     private final JwtUtils jwtUtils;
 
-    @Override
     @Transactional
+    @Override
     public Long writePost(final String authorization, final WritePostRequestDto writePostRequestDto) {
-        String token = jwtUtils.resolveToken(authorization);
-        User authentcatedUser = jwtUtils.getAuthenticationPrincipal(token);
+        User authentcatedUser = getAuthenticatedUser(authorization);
 
         Post post = Post.from(writePostRequestDto);
         post.writePost(authentcatedUser);
@@ -62,8 +61,7 @@ public class BasicPostService implements PostService {
 
     @Override
     public PostDetailsResponseDto postDetails(final Long postId, final String authorization) {
-        String token = jwtUtils.resolveToken(authorization);
-        User authenticatedUser = jwtUtils.getAuthenticationPrincipal(token);
+        User authenticatedUser = getAuthenticatedUser(authorization);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         List<Comment> comments = commentRepository.findByPost(post);
@@ -71,19 +69,27 @@ public class BasicPostService implements PostService {
         return PostDetailsResponseDto.of(post, comments, authenticatedUser);
     }
 
-    @Override
     @Transactional
-    public void postUpdate(final String authorization,
+    @Override
+    public void updatePost(final String authorization,
                            final Long postId, final UpdatePostRequestDto updatePostRequestDto) {
-        String token = jwtUtils.resolveToken(authorization);
-        User authenticatedUser = jwtUtils.getAuthenticationPrincipal(token);
+        User authenticatedUser = getAuthenticatedUser(authorization);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        if (post.getWriter() != authenticatedUser) {
-            throw new InvalidUserException();
-        }
+        validateWriterAuthority(post, authenticatedUser);
 
         post.update(updatePostRequestDto);
+    }
+
+    @Transactional
+    @Override
+    public void deletePost(final String authorization, final Long postId) {
+        User authenticatedUser = getAuthenticatedUser(authorization);
+
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        validateWriterAuthority(post, authenticatedUser);
+
+        postRepository.delete(post);
     }
 
     @Override
@@ -114,6 +120,17 @@ public class BasicPostService implements PostService {
         for (Post post : posts) {
             PostPreviewDto postPreviewDto = PostPreviewDto.of(post.getId(), post.getPostTitle());
             postPreviewList.add(postPreviewDto);
+        }
+    }
+
+    private User getAuthenticatedUser(final String authorization) {
+        String token = jwtUtils.resolveToken(authorization);
+        return jwtUtils.getAuthenticationPrincipal(token);
+    }
+
+    private void validateWriterAuthority(final Post post, final User authenticatedUser) {
+        if (post.getWriter() != authenticatedUser) {
+            throw new InvalidUserException();
         }
     }
 }

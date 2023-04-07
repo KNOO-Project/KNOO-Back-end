@@ -27,8 +27,8 @@ public class BasicAuthService implements AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
     @Transactional
+    @Override
     public Long signUp(final SignUpRequestDto signUpRequestDto) {
         authValidator.validateSignUpUser(signUpRequestDto);
 
@@ -40,8 +40,8 @@ public class BasicAuthService implements AuthService {
         return joinUser.getId();
     }
 
-    @Override
     @Transactional
+    @Override
     public void mailVerify(final String code) {
         User user = userRepository.findByVerificationCode(code)
                 .orElseThrow(() -> new VerificationNotFoundException());
