@@ -14,11 +14,15 @@ import java.util.List;
 public class UserInfoResponseDto {
 
     private String name;
+
     private String email;
+
     @JsonProperty(value = "write_posts")
     private List<PostPreviewDto> writePosts;
+
     @JsonProperty(value = "comment_posts")
     private List<PostPreviewDto> commentPosts;
+
     @JsonProperty(value = "like_posts")
     private List<PostPreviewDto> likePosts;
 

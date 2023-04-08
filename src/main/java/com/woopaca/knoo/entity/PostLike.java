@@ -24,6 +24,7 @@ public class PostLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_like_id")
     private Long id;
+
     @Column(nullable = false)
     private String postLikeDate;
 

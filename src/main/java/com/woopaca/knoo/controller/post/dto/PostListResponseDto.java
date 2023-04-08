@@ -13,12 +13,16 @@ public class PostListResponseDto {
 
     @JsonProperty(value = "post_id")
     private Long postId;
+
     @JsonProperty(value = "post_title")
     private String postTitle;
+
     @JsonProperty(value = "post_content")
     private String postContent;
+
     @JsonProperty(value = "post_date")
     private String postDate;
+
     @JsonProperty(value = "writer_name")
     private String writerName;
 

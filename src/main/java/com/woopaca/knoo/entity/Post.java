@@ -7,7 +7,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,19 +32,26 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
+
     @Column(nullable = false)
     private String postTitle;
+
     @Column(nullable = false)
     private String postContent;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private PostCategory postCategory;
+
     @Column(nullable = false)
     private String postDate;
+
     @Column(name = "anonymous", nullable = false)
     private boolean isAnonymous;
+
     @Column(nullable = false)
     private int commentsCount;
+
     @Column(nullable = false)
     private int likesCount;
 

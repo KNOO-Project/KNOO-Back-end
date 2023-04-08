@@ -18,6 +18,7 @@ public class PostDetailsResponseDto {
 
     @JsonProperty(value = "post")
     private PostDetailsDto postDetailsDto;
+
     private List<CommentListDto> comments;
 
     @Builder
@@ -46,16 +47,22 @@ public class PostDetailsResponseDto {
 
         @JsonProperty(value = "post_title")
         private String postTitle;
+
         @JsonProperty(value = "post_content")
         private String postContent;
+
         @JsonProperty(value = "post_date")
         private String postDate;
+
         @JsonProperty(value = "writer_name")
         private String writerName;
+
         @JsonProperty(value = "comments_count")
         private int commentsCount;
+
         @JsonProperty(value = "likes_count")
         private int likesCount;
+
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
@@ -94,18 +101,25 @@ public class PostDetailsResponseDto {
 
         @JsonProperty(value = "comment_id")
         private Long commentId;
+
         @JsonProperty(value = "comment_content")
         private String commentContent;
+
         @JsonProperty(value = "comment_date")
         private String commentDate;
+
         @JsonProperty(value = "writer_name")
         private String writerName;
+
         @JsonProperty(value = "deleted")
         private Boolean isDeleted;
+
         @JsonProperty(value = "parent_comment_id")
         private Long parentCommentId;
+
         @JsonProperty(value = "likes_count")
         private int likesCount;
+
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
