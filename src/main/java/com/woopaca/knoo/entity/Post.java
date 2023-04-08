@@ -33,26 +33,26 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "post_title", nullable = false)
     private String postTitle;
 
-    @Column(nullable = false)
+    @Column(name = "post_content", nullable = false)
     private String postContent;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "post_category", nullable = false)
     private PostCategory postCategory;
 
-    @Column(nullable = false)
+    @Column(name = "post_date", nullable = false)
     private String postDate;
 
     @Column(name = "anonymous", nullable = false)
     private boolean isAnonymous;
 
-    @Column(nullable = false)
+    @Column(name = "comments_count", nullable = false)
     private int commentsCount;
 
-    @Column(nullable = false)
+    @Column(name = "likes_count", nullable = false)
     private int likesCount;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -30,13 +30,13 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "comment_content", nullable = false)
     private String commentContent;
 
-    @Column(nullable = false)
+    @Column(name = "comment_date", nullable = false)
     private String commentDate;
 
-    @Column(nullable = false)
+    @Column(name = "likes_count", nullable = false)
     private int likesCount;
 
     @Column(name = "deleted", nullable = false)

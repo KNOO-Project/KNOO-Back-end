@@ -25,7 +25,7 @@ public class PostLike {
     @Column(name = "post_like_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "post_like_date", nullable = false)
     private String postLikeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

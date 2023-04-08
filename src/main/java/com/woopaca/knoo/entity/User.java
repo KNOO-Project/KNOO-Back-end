@@ -42,30 +42,32 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "join_date", nullable = false)
     private String joinDate;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "email_verify", nullable = false)
     private EmailVerify emailVerify;
 
-    @Column(nullable = false)
+    @Column(name = "verification_code", nullable = false)
     private String verificationCode;
 
+    @Column(name = "campus")
     private String campus;
 
+    @Column(name = "major")
     private String major;
 
     @OneToMany(mappedBy = "writer")
