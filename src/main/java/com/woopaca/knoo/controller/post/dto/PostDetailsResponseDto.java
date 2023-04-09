@@ -174,8 +174,10 @@ public class PostDetailsResponseDto {
                     .commentId(comment.getId())
                     .commentContent("삭제된 댓글입니다.")
                     .commentDate(comment.getCommentDate())
+                    .writerName("")
                     .isDeleted(comment.isDeleted())
                     .parentCommentId(parentCommentId)
+                    .isWrittenByUser(false)
                     .build();
         }
 
@@ -189,15 +191,14 @@ public class PostDetailsResponseDto {
             return parentCommentId;
         }
 
-    }
+        private static String getDisplayWriterName(Post post, User commentWriter) {
+            String writerName = commentWriter.getName();
+            User postWriter = post.getWriter();
+            if (postWriter == commentWriter) {
+                writerName = "글쓴이";
+            }
 
-    private static String getDisplayWriterName(Post post, User commentWriter) {
-        String writerName = commentWriter.getName();
-        User postWriter = post.getWriter();
-        if (postWriter == commentWriter) {
-            writerName = "글쓴이";
+            return writerName;
         }
-
-        return writerName;
     }
 }
