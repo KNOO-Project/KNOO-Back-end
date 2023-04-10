@@ -173,7 +173,7 @@ public class PostDetailsResponseDto {
             return CommentListDto.builder()
                     .commentId(comment.getId())
                     .commentContent("삭제된 댓글입니다.")
-                    .commentDate(comment.getCommentDate())
+                    .commentDate("")
                     .writerName("")
                     .isDeleted(comment.isDeleted())
                     .parentCommentId(parentCommentId)
