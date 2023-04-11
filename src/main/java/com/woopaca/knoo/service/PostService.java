@@ -6,7 +6,7 @@ import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.service.dto.PostPreviewDto;
+import com.woopaca.knoo.controller.user.dto.PostPreviewDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

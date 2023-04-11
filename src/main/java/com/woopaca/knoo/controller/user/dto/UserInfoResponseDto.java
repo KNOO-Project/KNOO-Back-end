@@ -1,7 +1,6 @@
 package com.woopaca.knoo.controller.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.woopaca.knoo.service.dto.PostPreviewDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

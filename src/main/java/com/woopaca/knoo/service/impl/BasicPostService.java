@@ -5,6 +5,7 @@ import com.woopaca.knoo.controller.post.dto.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.post.dto.PostListResponseDto;
 import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.user.dto.PostPreviewDto;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
@@ -15,7 +16,6 @@ import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.PostService;
-import com.woopaca.knoo.service.dto.PostPreviewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -117,7 +117,8 @@ public class BasicPostService implements PostService {
 
     private void postsToPostPreviewList(List<Post> posts, List<PostPreviewDto> postPreviewList) {
         for (Post post : posts) {
-            PostPreviewDto postPreviewDto = PostPreviewDto.of(post.getId(), post.getPostTitle());
+            PostPreviewDto postPreviewDto =
+                    PostPreviewDto.of(post.getId(), post.getPostTitle(), post.getPostCategory());
             postPreviewList.add(postPreviewDto);
         }
     }

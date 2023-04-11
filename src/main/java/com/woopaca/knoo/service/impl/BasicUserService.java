@@ -7,7 +7,7 @@ import com.woopaca.knoo.exception.user.impl.UserNotFoundException;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.service.PostService;
 import com.woopaca.knoo.service.UserService;
-import com.woopaca.knoo.service.dto.PostPreviewDto;
+import com.woopaca.knoo.controller.user.dto.PostPreviewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
