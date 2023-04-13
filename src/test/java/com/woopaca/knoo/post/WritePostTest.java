@@ -2,7 +2,7 @@ package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;

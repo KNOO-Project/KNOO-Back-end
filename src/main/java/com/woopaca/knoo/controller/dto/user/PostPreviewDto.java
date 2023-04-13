@@ -1,4 +1,4 @@
-package com.woopaca.knoo.controller.user.dto;
+package com.woopaca.knoo.controller.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.PostCategory;

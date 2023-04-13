@@ -1,7 +1,7 @@
 package com.woopaca.knoo.validator;
 
-import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;
-import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
 import org.springframework.security.core.Authentication;
 

@@ -1,6 +1,6 @@
 package com.woopaca.knoo.entity;
 
-import com.woopaca.knoo.controller.comment.dto.WriteCommentRequestDto;
+import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -2,8 +2,9 @@ package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
@@ -88,7 +89,12 @@ public class UpdatePostTest {
                 .postCategory(PostCategory.FREE)
                 .isAnonymous(false)
                 .build();
-        postId = postService.writePost(authorizationA, writePostRequestDto);
+
+        SignInUser signInUser = SignInUser.builder()
+                .id(userA.getId())
+                .username(userA.getUsername())
+                .build();
+        postId = postService.writePost(signInUser, writePostRequestDto);
     }
 
     @Test

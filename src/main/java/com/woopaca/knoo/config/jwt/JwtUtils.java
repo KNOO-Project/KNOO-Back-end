@@ -1,6 +1,6 @@
 package com.woopaca.knoo.config.jwt;
 
-import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -53,12 +53,12 @@ public class JwtUtils {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsernameInToken(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsernameByToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "",
                 userDetails.getAuthorities());
     }
 
-    public String getUsernameInToken(String token) {
+    public String getUsernameByToken(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
@@ -66,8 +66,17 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    public User getAuthenticationPrincipal(String token) {
-        String username = getUsernameInToken(token);
-        return (User) userDetailsService.loadUserByUsername(username);
+    public SignInUser getSignInUserByToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+        Long id = Long.parseLong(claims.get("id").toString());
+        String username = claims.getSubject();
+
+        return SignInUser.builder()
+                .id(id)
+                .username(username)
+                .build();
     }
 }

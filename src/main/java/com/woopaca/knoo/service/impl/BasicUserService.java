@@ -1,13 +1,12 @@
 package com.woopaca.knoo.service.impl;
 
-import com.woopaca.knoo.config.jwt.JwtUtils;
-import com.woopaca.knoo.controller.user.dto.UserInfoResponseDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.user.PostPreviewDto;
+import com.woopaca.knoo.controller.dto.user.UserInfoResponseDto;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.exception.user.impl.UserNotFoundException;
-import com.woopaca.knoo.repository.UserRepository;
+import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.PostService;
 import com.woopaca.knoo.service.UserService;
-import com.woopaca.knoo.controller.user.dto.PostPreviewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,16 +19,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class BasicUserService implements UserService {
 
-    private final UserRepository userRepository;
-    private final JwtUtils jwtUtils;
+    private final AuthService authService;
     private final PostService postService;
 
     @Override
-    public UserInfoResponseDto userInfo(final String authorization) {
-        String token = jwtUtils.resolveToken(authorization);
-        String username = jwtUtils.getUsernameInToken(token);
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
-                new UserNotFoundException());
+    public UserInfoResponseDto userInfo(final SignInUser signInUser) {
+        User user = authService.getAuthenticatedUser(signInUser);
 
         List<PostPreviewDto> writePostList = postService.userWritePostList(user, PageRequest.of(0, 5));
         List<PostPreviewDto> commentPostList = postService.userCommentPostList(user, PageRequest.of(0, 5));

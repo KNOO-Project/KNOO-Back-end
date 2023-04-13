@@ -1,4 +1,4 @@
-package com.woopaca.knoo.controller.comment.dto;
+package com.woopaca.knoo.controller.dto.comment;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AccessLevel;

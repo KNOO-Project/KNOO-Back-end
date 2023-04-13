@@ -1,7 +1,7 @@
-package com.woopaca.knoo.controller.auth;
+package com.woopaca.knoo.controller;
 
-import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;
-import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignUpRequestDto;
 import com.woopaca.knoo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
