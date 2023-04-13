@@ -2,8 +2,9 @@ package com.woopaca.knoo.comment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.comment.dto.WriteCommentRequestDto;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.PostCategory;
@@ -16,6 +17,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,6 +62,8 @@ public class DeleteCommentTest {
     private Long postId;
     private Long commentId;
 
+    Logger log = LoggerFactory.getLogger(getClass());
+
     @BeforeEach
     void beforeEach() {
         User userA = User.builder()
@@ -82,6 +87,8 @@ public class DeleteCommentTest {
         userRepository.save(userA);
         userRepository.save(userB);
 
+        log.info("userA.id = {}", userA.getId());
+
         authorizationA = "Bearer " + jwtProvider.createToken(userA, 10);
         authorizationB = "Bearer " + jwtProvider.createToken(userB, 10);
 
@@ -91,12 +98,17 @@ public class DeleteCommentTest {
                 .postCategory(PostCategory.FREE)
                 .isAnonymous(false)
                 .build();
-        postId = postService.writePost(authorizationA, writePostRequestDto);
+
+        SignInUser signInUser = SignInUser.builder()
+                .id(userA.getId())
+                .username(userA.getUsername())
+                .build();
+        postId = postService.writePost(signInUser, writePostRequestDto);
 
         WriteCommentRequestDto writeCommentRequestDto =
                 new WriteCommentRequestDto("test comment");
         commentId =
-                commentService.writeComment(writeCommentRequestDto, postId, null, authorizationA);
+                commentService.writeComment(signInUser, writeCommentRequestDto, postId, null);
     }
 
     @Test

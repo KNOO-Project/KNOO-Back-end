@@ -2,8 +2,9 @@ package com.woopaca.knoo.comment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.comment.dto.WriteCommentRequestDto;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
@@ -71,7 +72,12 @@ public class WriteCommentTest {
                 .postCategory(PostCategory.FREE)
                 .isAnonymous(false)
                 .build();
-        postId = postService.writePost(authorization, writePostRequestDto);
+
+        SignInUser signInUser = SignInUser.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .build();
+        postId = postService.writePost(signInUser, writePostRequestDto);
     }
 
     @Test

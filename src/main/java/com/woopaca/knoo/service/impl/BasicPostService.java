@@ -1,11 +1,11 @@
 package com.woopaca.knoo.service.impl;
 
-import com.woopaca.knoo.config.jwt.JwtUtils;
-import com.woopaca.knoo.controller.post.dto.PostDetailsResponseDto;
-import com.woopaca.knoo.controller.post.dto.PostListResponseDto;
-import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
-import com.woopaca.knoo.controller.user.dto.PostPreviewDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
+import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.user.PostPreviewDto;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
@@ -15,6 +15,7 @@ import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
 import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.PostRepository;
+import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -29,14 +30,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class BasicPostService implements PostService {
 
+    private final AuthService authService;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final JwtUtils jwtUtils;
 
     @Transactional
     @Override
-    public Long writePost(final String authorization, final WritePostRequestDto writePostRequestDto) {
-        User authentcatedUser = getAuthenticatedUser(authorization);
+    public Long writePost(final SignInUser signInUser, final WritePostRequestDto writePostRequestDto) {
+        User authentcatedUser = authService.getAuthenticatedUser(signInUser);
 
         Post post = Post.from(writePostRequestDto);
         post.writePost(authentcatedUser);
@@ -60,8 +61,8 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public PostDetailsResponseDto postDetails(final Long postId, final String authorization) {
-        User authenticatedUser = getAuthenticatedUser(authorization);
+    public PostDetailsResponseDto postDetails(final SignInUser signInUser, final Long postId) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         List<Comment> comments = commentRepository.findByPost(post);
@@ -71,9 +72,9 @@ public class BasicPostService implements PostService {
 
     @Transactional
     @Override
-    public void updatePost(final String authorization,
+    public void updatePost(final SignInUser signInUser,
                            final Long postId, final UpdatePostRequestDto updatePostRequestDto) {
-        User authenticatedUser = getAuthenticatedUser(authorization);
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         validateWriterAuthority(post, authenticatedUser);
 
@@ -82,8 +83,8 @@ public class BasicPostService implements PostService {
 
     @Transactional
     @Override
-    public void deletePost(final String authorization, final Long postId) {
-        User authenticatedUser = getAuthenticatedUser(authorization);
+    public void deletePost(final SignInUser signInUser, final Long postId) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         validateWriterAuthority(post, authenticatedUser);
@@ -121,11 +122,6 @@ public class BasicPostService implements PostService {
                     PostPreviewDto.of(post.getId(), post.getPostTitle(), post.getPostCategory());
             postPreviewList.add(postPreviewDto);
         }
-    }
-
-    private User getAuthenticatedUser(final String authorization) {
-        String token = jwtUtils.resolveToken(authorization);
-        return jwtUtils.getAuthenticationPrincipal(token);
     }
 
     private void validateWriterAuthority(final Post post, final User authenticatedUser) {

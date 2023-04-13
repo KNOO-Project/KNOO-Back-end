@@ -2,7 +2,8 @@ package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
@@ -50,6 +51,7 @@ public class DeletePostTest {
     private String authorizationA;
     private String authorizationB;
     private Long postId;
+    private SignInUser signInUser;
 
     @BeforeEach
     void beforeEach() {
@@ -83,7 +85,12 @@ public class DeletePostTest {
                 .postCategory(PostCategory.FREE)
                 .isAnonymous(false)
                 .build();
-        postId = postService.writePost(authorizationA, writePostRequestDto);
+
+        signInUser = SignInUser.builder()
+                .id(userA.getId())
+                .username(userA.getUsername())
+                .build();
+        postId = postService.writePost(signInUser, writePostRequestDto);
     }
 
     @Test
@@ -98,7 +105,7 @@ public class DeletePostTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(content().string("게시글 삭제가 완료되었습니다."));
         Assertions.assertThrows(PostNotFoundException.class, () ->
-                postService.postDetails(postId, authorizationA));
+                postService.postDetails(signInUser, postId));
 
     }
 

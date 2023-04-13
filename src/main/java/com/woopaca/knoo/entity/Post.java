@@ -1,7 +1,7 @@
 package com.woopaca.knoo.entity;
 
-import com.woopaca.knoo.controller.post.dto.UpdatePostRequestDto;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

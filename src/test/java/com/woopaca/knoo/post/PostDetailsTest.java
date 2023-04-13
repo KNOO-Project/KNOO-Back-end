@@ -2,7 +2,8 @@ package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.post.dto.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
@@ -45,6 +46,7 @@ public class PostDetailsTest {
     JwtProvider jwtProvider;
 
     private String authorization;
+    private SignInUser signInUser;
 
     @BeforeEach
     void beforeEach() {
@@ -60,6 +62,11 @@ public class PostDetailsTest {
         userRepository.save(user);
 
         authorization = "Bearer " + jwtProvider.createToken(user, 10);
+
+        signInUser = SignInUser.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .build();
     }
 
     @Test
@@ -72,7 +79,8 @@ public class PostDetailsTest {
                 .postCategory(PostCategory.FREE)
                 .isAnonymous(true)
                 .build();
-        Long postId = postService.writePost(authorization, writePostRequestDto);
+
+        Long postId = postService.writePost(signInUser, writePostRequestDto);
 
         //when
         ResultActions resultActions = resultActions(postId);

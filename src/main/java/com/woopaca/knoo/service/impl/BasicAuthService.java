@@ -1,10 +1,12 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.auth.dto.SignInRequestDto;
-import com.woopaca.knoo.controller.auth.dto.SignUpRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.auth.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.exception.user.impl.InvalidAuthenticationException;
+import com.woopaca.knoo.exception.user.impl.UserNotFoundException;
 import com.woopaca.knoo.exception.user.impl.VerificationNotFoundException;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.service.AuthService;
@@ -26,6 +28,11 @@ public class BasicAuthService implements AuthService {
     private final MailService mailService;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public User getAuthenticatedUser(final SignInUser signInUser) {
+        return userRepository.findById(signInUser.getId()).orElseThrow(UserNotFoundException::new);
+    }
 
     @Transactional
     @Override

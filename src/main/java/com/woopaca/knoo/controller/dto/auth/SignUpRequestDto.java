@@ -1,4 +1,4 @@
-package com.woopaca.knoo.controller.auth.dto;
+package com.woopaca.knoo.controller.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;

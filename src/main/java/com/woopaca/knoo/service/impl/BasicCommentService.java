@@ -1,7 +1,7 @@
 package com.woopaca.knoo.service.impl;
 
-import com.woopaca.knoo.config.jwt.JwtUtils;
-import com.woopaca.knoo.controller.comment.dto.WriteCommentRequestDto;
+import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.User;
@@ -10,6 +10,7 @@ import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
 import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.PostRepository;
+import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -21,17 +22,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class BasicCommentService implements CommentService {
 
+    private final AuthService authService;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final JwtUtils jwtUtils;
 
     @Transactional
     @Override
     public Long writeComment(
-            final WriteCommentRequestDto writeCommentRequestDto, @Nullable final Long postId,
-            @Nullable final Long commentId, final String authorization
+            final SignInUser signInUser, final WriteCommentRequestDto writeCommentRequestDto,
+            @Nullable final Long postId, @Nullable final Long commentId
     ) {
-        User authenticatedUser = getAuthenticatedUser(authorization);
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Comment comment = Comment.from(writeCommentRequestDto);
 
         if (postId != null) {
@@ -48,8 +49,8 @@ public class BasicCommentService implements CommentService {
 
     @Transactional
     @Override
-    public void deleteComment(final String authorization, final Long commentId) {
-        User authenticatedUser = getAuthenticatedUser(authorization);
+    public void deleteComment(final SignInUser signInUser, final Long commentId) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Comment comment =
                 commentRepository.findById(commentId).orElseThrow((CommentNotFoundException::new));
         validateWriterAuthority(comment, authenticatedUser);
@@ -70,11 +71,6 @@ public class BasicCommentService implements CommentService {
                 commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         comment.reply(authenticatedUser, parentComment);
         return commentRepository.save(comment);
-    }
-
-    private User getAuthenticatedUser(final String authorization) {
-        String token = jwtUtils.resolveToken(authorization);
-        return jwtUtils.getAuthenticationPrincipal(token);
     }
 
     private void validateWriterAuthority(final Comment comment, final User authenticatedUser) {
