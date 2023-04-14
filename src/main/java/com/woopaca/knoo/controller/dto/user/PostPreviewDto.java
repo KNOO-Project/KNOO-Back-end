@@ -1,6 +1,7 @@
 package com.woopaca.knoo.controller.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,10 @@ public class PostPreviewDto {
     @JsonProperty(value = "post_category")
     private String postCategory;
 
-    public static PostPreviewDto of(Long postId, String postTitle, PostCategory postCategory) {
-        return new PostPreviewDto(postId, postTitle, postCategory.getCategoryName());
+    public static PostPreviewDto from(Post post) {
+        PostCategory postCategory = post.getPostCategory();
+        return new PostPreviewDto(
+                post.getId(), post.getPostTitle(), postCategory.getCategoryName()
+        );
     }
 }

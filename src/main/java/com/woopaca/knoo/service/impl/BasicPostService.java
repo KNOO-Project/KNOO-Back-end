@@ -38,9 +38,9 @@ public class BasicPostService implements PostService {
     @Override
     public Long writePost(final SignInUser signInUser, final WritePostRequestDto writePostRequestDto) {
         User authentcatedUser = authService.getAuthenticatedUser(signInUser);
-
         Post post = Post.from(writePostRequestDto);
         post.writePost(authentcatedUser);
+
         Post savedPost = postRepository.save(post);
         return savedPost.getId();
     }
@@ -63,7 +63,6 @@ public class BasicPostService implements PostService {
     @Override
     public PostDetailsResponseDto postDetails(final SignInUser signInUser, final Long postId) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
-
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         List<Comment> comments = commentRepository.findByPost(post);
 
@@ -85,7 +84,6 @@ public class BasicPostService implements PostService {
     @Override
     public void deletePost(final SignInUser signInUser, final Long postId) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
-
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         validateWriterAuthority(post, authenticatedUser);
 
@@ -118,8 +116,7 @@ public class BasicPostService implements PostService {
 
     private void postsToPostPreviewList(List<Post> posts, List<PostPreviewDto> postPreviewList) {
         for (Post post : posts) {
-            PostPreviewDto postPreviewDto =
-                    PostPreviewDto.of(post.getId(), post.getPostTitle(), post.getPostCategory());
+            PostPreviewDto postPreviewDto = PostPreviewDto.from(post);
             postPreviewList.add(postPreviewDto);
         }
     }
