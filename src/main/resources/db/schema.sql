@@ -1,4 +1,4 @@
-CREATE TABLE user
+CREATE TABLE IF NOT EXISTS user
 (
     user_id           BIGINT       NOT NULL AUTO_INCREMENT,
     username          VARCHAR(20)  NOT NULL UNIQUE,
@@ -13,7 +13,7 @@ CREATE TABLE user
     PRIMARY KEY (user_id)
 );
 
-CREATE TABLE role
+CREATE TABLE IF NOT EXISTS role
 (
     user_id   BIGINT      NOT NULL,
     role_name VARCHAR(50) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE role
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE post
+CREATE TABLE IF NOT EXISTS post
 (
     post_id        BIGINT        NOT NULL AUTO_INCREMENT,
     post_title     VARCHAR(50)   NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE post
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE post_like
+CREATE TABLE IF NOT EXISTS post_like
 (
     post_like_id   BIGINT      NOT NULL AUTO_INCREMENT,
     post_like_date VARCHAR(50) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE post_like
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE
 );
 
-CREATE TABLE comment
+CREATE TABLE IF NOT EXISTS comment
 (
     comment_id        BIGINT       NOT NULL AUTO_INCREMENT,
     comment_content   VARCHAR(500) NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE comment
     FOREIGN KEY (parent_comment_id) REFERENCES comment (comment_id)
 );
 
-CREATE TABLE comment_like
+CREATE TABLE IF NOT EXISTS comment_like
 (
     comment_like_id BIGINT NOT NULL AUTO_INCREMENT,
     user_id         BIGINT,
@@ -73,7 +73,7 @@ CREATE TABLE comment_like
     FOREIGN KEY (comment_id) REFERENCES comment (comment_id) ON DELETE CASCADE
 );
 
-CREATE TABLE image
+CREATE TABLE IF NOT EXISTS image
 (
     image_id   BIGINT       NOT NULL AUTO_INCREMENT,
     image_name VARCHAR(100) NOT NULL,
