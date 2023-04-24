@@ -106,6 +106,10 @@ public class User implements UserDetails {
     }
 
     public static User join(final SignUpRequestDto signUpRequestDto) {
+        return createDefaultUser(signUpRequestDto);
+    }
+
+    private static User createDefaultUser(SignUpRequestDto signUpRequestDto) {
         User user = User.builder()
                 .username(signUpRequestDto.getUsername())
                 .password((signUpRequestDto.getPassword()))

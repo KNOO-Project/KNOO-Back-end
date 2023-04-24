@@ -58,10 +58,10 @@ public class BasicCommentService implements CommentService {
         comment.delete();
     }
 
-    private Comment newComment(final Comment comment, final Long postId,
-                               final User authenticatedUser) {
+    private Comment newComment(final Comment comment, final Long postId, final User authenticatedUser) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        comment.writeComment(authenticatedUser, post);
+        comment.writtenBy(authenticatedUser);
+        comment.writeOn(post);
         return commentRepository.save(comment);
     }
 
@@ -69,6 +69,7 @@ public class BasicCommentService implements CommentService {
                              final User authenticatedUser) {
         Comment parentComment =
                 commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        comment.writtenBy(authenticatedUser);
         comment.reply(authenticatedUser, parentComment);
         return commentRepository.save(comment);
     }

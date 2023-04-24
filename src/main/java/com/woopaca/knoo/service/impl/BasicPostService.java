@@ -39,7 +39,7 @@ public class BasicPostService implements PostService {
     public Long writePost(final SignInUser signInUser, final WritePostRequestDto writePostRequestDto) {
         User authentcatedUser = authService.getAuthenticatedUser(signInUser);
         Post post = Post.from(writePostRequestDto);
-        post.writePost(authentcatedUser);
+        post.writtenBy(authentcatedUser);
 
         Post savedPost = postRepository.save(post);
         return savedPost.getId();

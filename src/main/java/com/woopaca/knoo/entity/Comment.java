@@ -72,24 +72,22 @@ public class Comment {
                 .build();
     }
 
-    public void writeComment(User writer, Post post) {
+    public void writtenBy(User writer) {
         this.writer = writer;
-        this.post = post;
         writer.getComments().add(this);
-        post.getComments().add(this);
-        post.commentWritten();
+    }
+
+    public void writeOn(Post post) {
+        this.post = post;
+        post.commentWritten(this);
     }
 
     public void reply(final User writer, final Comment parentComment) {
         this.parentComment = parentComment;
-        this.writer = writer;
-        writer.getComments().add(this);
 
         Post post = parentComment.getPost();
         this.post = post;
-        post.getComments().add(this);
-
-        post.commentWritten();
+        post.commentWritten(this);
     }
 
     public void delete() {

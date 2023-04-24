@@ -38,20 +38,23 @@ public class BasicAuthService implements AuthService {
     @Override
     public Long signUp(final SignUpRequestDto signUpRequestDto) {
         authValidator.validateSignUpUser(signUpRequestDto);
-
-        User joinUser = User.join(signUpRequestDto);
-        joinUser.encodePassword(passwordEncoder);
-        userRepository.save(joinUser);
+        User joinUser = getJoinUser(signUpRequestDto);
 
         mailService.sendAuthMail(joinUser.getEmail(), joinUser.getVerificationCode());
         return joinUser.getId();
     }
 
+    private User getJoinUser(SignUpRequestDto signUpRequestDto) {
+        User joinUser = User.join(signUpRequestDto);
+        joinUser.encodePassword(passwordEncoder);
+        userRepository.save(joinUser);
+        return joinUser;
+    }
+
     @Transactional
     @Override
     public void mailVerify(final String code) {
-        User user = userRepository.findByVerificationCode(code)
-                .orElseThrow(() -> new VerificationNotFoundException());
+        User user = userRepository.findByVerificationCode(code).orElseThrow(VerificationNotFoundException::new);
         authValidator.validateAlreadyMailVerifiedUser(user);
         user.verify();
     }
