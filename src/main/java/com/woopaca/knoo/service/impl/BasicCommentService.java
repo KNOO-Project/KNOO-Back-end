@@ -59,7 +59,7 @@ public class BasicCommentService implements CommentService {
     }
 
     private Comment newComment(final Comment comment, final Long postId, final User authenticatedUser) {
-        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        Post post = getPostWithLock(postId);
         comment.writtenBy(authenticatedUser);
         comment.writeOn(post);
         return commentRepository.save(comment);
@@ -69,9 +69,15 @@ public class BasicCommentService implements CommentService {
                              final User authenticatedUser) {
         Comment parentComment =
                 commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        Post parentCommentPost = parentComment.getPost();
+        Post post = getPostWithLock(parentCommentPost.getId());
         comment.writtenBy(authenticatedUser);
-        comment.reply(authenticatedUser, parentComment);
+        comment.reply(parentComment, post);
         return commentRepository.save(comment);
+    }
+
+    private Post getPostWithLock(Long postId) {
+        return postRepository.findPostById(postId).orElseThrow(PostNotFoundException::new);
     }
 
     private void validateWriterAuthority(final Comment comment, final User authenticatedUser) {

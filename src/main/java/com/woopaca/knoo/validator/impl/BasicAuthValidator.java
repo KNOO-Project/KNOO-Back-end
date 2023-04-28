@@ -5,14 +5,7 @@ import com.woopaca.knoo.controller.dto.auth.SignInRequestDto;
 import com.woopaca.knoo.controller.dto.auth.SignUpRequestDto;
 import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.exception.user.impl.AlreadyMailVerifiedException;
-import com.woopaca.knoo.exception.user.impl.DuplicateEmailException;
-import com.woopaca.knoo.exception.user.impl.DuplicateNameException;
-import com.woopaca.knoo.exception.user.impl.DuplicateUsernameException;
-import com.woopaca.knoo.exception.user.impl.IncompleteMailVerificationException;
-import com.woopaca.knoo.exception.user.impl.InconsistentPasswordCheck;
-import com.woopaca.knoo.exception.user.impl.IncorrectUsernameOrPasswordException;
-import com.woopaca.knoo.exception.user.impl.InvalidEmailDomainException;
+import com.woopaca.knoo.exception.user.impl.*;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.validator.AuthValidator;
 import lombok.RequiredArgsConstructor;
@@ -89,6 +82,11 @@ public class BasicAuthValidator implements AuthValidator {
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username, password);
+        return validateAuthentication(authenticationToken);
+    }
+
+    private Authentication validateAuthentication(
+            final UsernamePasswordAuthenticationToken authenticationToken) {
         try {
             return authenticationManagerBuilder.getObject()
                     .authenticate(authenticationToken);
