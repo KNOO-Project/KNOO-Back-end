@@ -5,11 +5,14 @@ import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.LockModeType;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -26,4 +29,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p LEFT JOIN p.postLikes pl " +
             "WHERE pl.user = :user ORDER BY pl.id DESC")
     List<Post> findByLikeUser(@Param("user") User user, Pageable pageable);
+
+    @Lock(value = LockModeType.PESSIMISTIC_WRITE)
+    Optional<Post> findPostById(Long postId);
 }

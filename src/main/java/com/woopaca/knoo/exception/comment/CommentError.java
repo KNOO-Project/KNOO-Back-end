@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 public enum CommentError implements KnooError {
+
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글이 존재하지 않습니다.", "KN401");
 
     private final HttpStatus httpStatus;
