@@ -45,7 +45,7 @@ public class PostController {
 
     @GetMapping("/{category}/{postId}")
     public ResponseEntity<PostDetailsResponseDto> postDetailsInfo(
-            @SignIn final SignInUser signInUser,
+            @SignIn final SignInUser signInUser,sdfsdfsdfsef
             @PathVariable("postId") final Long postId, @PathVariable("category") String ignore
     ) {
         PostDetailsResponseDto postDetails = postService.postDetails(signInUser, postId);
