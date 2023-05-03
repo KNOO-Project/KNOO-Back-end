@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,9 +59,18 @@ public class CommonExceptionHandler {
     protected ResponseEntity<ErrorResponseDto> requestParameterExceptionHandler(
             HttpServletRequest request
     ) {
-        log.error("요청 파라미터가 올바르지 않습니다.");
+        log.error("요청 파라미터가 누락되었습니다.");
         return createResponseEntity(HttpStatus.BAD_REQUEST,
-                "요청 파라미터가 올바르지 않습니다.", request, "KN105");
+                "요청 파라미터가 누락되었습니다.", request, "KN105");
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<ErrorResponseDto> typeMismatchExceptionHandler(
+            HttpServletRequest request
+    ) {
+        log.error("요청 파라미터 형식이 올바르지 않습니다.");
+        return createResponseEntity(HttpStatus.BAD_REQUEST,
+                "요청 파라미터 형식이 올바르지 않습니다.", request, "KN106");
     }
 
     private ResponseEntity<ErrorResponseDto> createResponseEntity(
