@@ -61,7 +61,8 @@ public class BasicPostService implements PostService {
             throw new InvalidPostPageException();
         }
 
-        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("postDate"));
+        PageRequest pageRequest =
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
         Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
         if (postPage.getTotalPages() <= page) {
             throw new PageCountExceededException();

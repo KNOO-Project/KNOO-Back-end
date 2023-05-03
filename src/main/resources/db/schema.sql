@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS users
 (
     user_id           BIGINT       NOT NULL AUTO_INCREMENT,
     username          VARCHAR(20)  NOT NULL UNIQUE,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS role
     user_id   BIGINT      NOT NULL,
     role_name VARCHAR(50) NOT NULL,
     PRIMARY KEY (user_id, role_name),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS post
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS post
     likes_count    INT           NOT NULL DEFAULT 0,
     user_id        BIGINT,
     PRIMARY KEY (post_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS post_like
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS post_like
     user_id        BIGINT,
     post_id        BIGINT      NOT NULL,
     PRIMARY KEY (post_like_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS comment
     user_id           BIGINT,
     post_id           BIGINT       NOT NULL,
     PRIMARY KEY (comment_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE,
     FOREIGN KEY (parent_comment_id) REFERENCES comment (comment_id)
 );
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS comment_like
     user_id         BIGINT,
     comment_id      BIGINT NOT NULL,
     PRIMARY KEY (comment_like_id),
-    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE SET NULL,
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
     FOREIGN KEY (comment_id) REFERENCES comment (comment_id) ON DELETE CASCADE
 );
 
