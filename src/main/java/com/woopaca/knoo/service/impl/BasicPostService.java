@@ -76,7 +76,7 @@ public class BasicPostService implements PostService {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         List<Comment> comments =
-                commentRepository.findByPost(post, Sort.by(Sort.Direction.DESC, "id"));
+                commentRepository.findByPost(post);
 
         return PostDetailsResponseDto.of(post, comments, authenticatedUser);
     }
