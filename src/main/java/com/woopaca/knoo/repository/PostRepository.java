@@ -3,6 +3,7 @@ package com.woopaca.knoo.repository;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    List<Post> findByPostCategoryOrderByPostDate(PostCategory postCategory);
+    Page<Post> findByPostCategory(PostCategory postCategory, Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE p.writer = :user ORDER BY p.id DESC")
     List<Post> findByWriter(@Param("user") User user, Pageable pageable);

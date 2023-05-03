@@ -22,8 +22,7 @@ public class PostDetailsResponseDto {
     private List<CommentListDto> comments;
 
     @Builder
-    public PostDetailsResponseDto(PostDetailsDto postDetailsDto,
-                                  List<CommentListDto> comments) {
+    public PostDetailsResponseDto(PostDetailsDto postDetailsDto, List<CommentListDto> comments) {
         this.postDetailsDto = postDetailsDto;
         this.comments = comments;
     }
