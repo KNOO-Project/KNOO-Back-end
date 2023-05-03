@@ -10,6 +10,8 @@ import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.exception.post.impl.InvalidPostPageException;
+import com.woopaca.knoo.exception.post.impl.PageCountExceededException;
 import com.woopaca.knoo.exception.post.impl.PostCategoryNotFoundException;
 import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
 import com.woopaca.knoo.exception.user.impl.InvalidUserException;
@@ -18,7 +20,10 @@ import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +34,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class BasicPostService implements PostService {
+
+    public static final int PAGE_SIZE = 20;
 
     private final AuthService authService;
     private final PostRepository postRepository;
@@ -46,18 +53,21 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public List<PostListResponseDto> postList(final PostCategory postCategory) {
+    public PostListResponseDto postList(final PostCategory postCategory, final int page) {
         if (postCategory == null) {
             throw new PostCategoryNotFoundException();
         }
-
-        List<PostListResponseDto> postList = new ArrayList<>();
-        List<Post> posts = postRepository.findByPostCategoryOrderByPostDate(postCategory);
-        for (Post post : posts) {
-            postList.add(PostListResponseDto.from(post));
+        if (page < 0) {
+            throw new InvalidPostPageException();
         }
 
-        return postList;
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("postDate"));
+        Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
+        if (postPage.getTotalPages() <= page) {
+            throw new PageCountExceededException();
+        }
+
+        return PostListResponseDto.from(postPage);
     }
 
     @Override

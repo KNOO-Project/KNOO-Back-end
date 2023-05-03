@@ -16,7 +16,7 @@ public interface PostService {
 
     Long writePost(final SignInUser signInUser, final WritePostRequestDto writePostRequestDto);
 
-    List<PostListResponseDto> postList(final PostCategory postCategory);
+    PostListResponseDto postList(final PostCategory postCategory, final int page);
 
     PostDetailsResponseDto postDetails(final SignInUser signInUser, final Long postId);
 
