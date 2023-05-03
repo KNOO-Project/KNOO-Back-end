@@ -62,7 +62,7 @@ public class BasicPostService implements PostService {
         }
 
         PageRequest pageRequest =
-                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
         Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
         if (postPage.getTotalPages() <= page) {
             throw new PageCountExceededException();
@@ -75,7 +75,8 @@ public class BasicPostService implements PostService {
     public PostDetailsResponseDto postDetails(final SignInUser signInUser, final Long postId) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        List<Comment> comments = commentRepository.findByPost(post);
+        List<Comment> comments =
+                commentRepository.findByPost(post, Sort.by(Sort.Direction.DESC, "id"));
 
         return PostDetailsResponseDto.of(post, comments, authenticatedUser);
     }
