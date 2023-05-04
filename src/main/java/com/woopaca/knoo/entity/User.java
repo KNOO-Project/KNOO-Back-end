@@ -10,25 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -55,7 +39,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "join_date", nullable = false)
-    private String joinDate;
+    private LocalDateTime joinDate;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "email_verify", nullable = false)
@@ -89,7 +73,7 @@ public class User implements UserDetails {
 
     @Builder
     public User(String username, String password, String name, String email,
-                String joinDate, EmailVerify emailVerify, String verificationCode, String campus, String major) {
+                LocalDateTime joinDate, EmailVerify emailVerify, String verificationCode, String campus, String major) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -115,7 +99,7 @@ public class User implements UserDetails {
                 .password((signUpRequestDto.getPassword()))
                 .name(signUpRequestDto.getName())
                 .email(signUpRequestDto.getEmail())
-                .joinDate(LocalDateTime.now().toString())
+                .joinDate(LocalDateTime.now())
                 .emailVerify(EmailVerify.DISABLE)
                 .verificationCode(UUID.randomUUID().toString())
                 .build();

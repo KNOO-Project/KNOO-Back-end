@@ -4,16 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -26,7 +18,7 @@ public class PostLike {
     private Long id;
 
     @Column(name = "post_like_date", nullable = false)
-    private String postLikeDate;
+    private LocalDateTime postLikeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -36,16 +28,14 @@ public class PostLike {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public PostLike(String postLikeDate, User user, Post post) {
+    public PostLike(LocalDateTime postLikeDate, User user, Post post) {
         this.postLikeDate = postLikeDate;
         this.user = user;
         this.post = post;
     }
 
     public static PostLike userLikePost(User user, Post post) {
-        String postLikeDate = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-        PostLike postLike = new PostLike(postLikeDate, user, post);
+        PostLike postLike = new PostLike(LocalDateTime.now(), user, post);
         user.getPostLikes().add(postLike);
         post.getPostLikes().add(postLike);
         return postLike;
