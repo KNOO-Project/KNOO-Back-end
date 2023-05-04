@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,11 +70,13 @@ public class PostListResponseDto {
                 contentPreview = post.getPostContent().substring(0, 19);
             }
 
+            String formattedDate =
+                    post.getPostDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
             return PostListDto.builder()
                     .postId(post.getId())
                     .postTitle(post.getPostTitle())
                     .postContent(contentPreview)
-                    .postDate(post.getPostDate())
+                    .postDate(formattedDate)
                     .writerName(post.isAnonymous() ? "KNOOER" : post.getWriter().getName())
                     .build();
         }

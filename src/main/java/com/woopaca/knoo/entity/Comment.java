@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class Comment {
     private String commentContent;
 
     @Column(name = "comment_date", nullable = false)
-    private String commentDate;
+    private LocalDateTime commentDate;
 
     @Column(name = "likes_count", nullable = false)
     private int likesCount;
@@ -50,17 +49,15 @@ public class Comment {
     private List<CommentLike> commentLikes = new ArrayList<>();
 
     @Builder
-    public Comment(String commentContent, String commentDate) {
+    public Comment(String commentContent, LocalDateTime commentDate) {
         this.commentContent = commentContent;
         this.commentDate = commentDate;
     }
 
     public static Comment from(final WriteCommentRequestDto writeCommentRequestDto) {
-        String commentDate = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
         return Comment.builder()
                 .commentContent(writeCommentRequestDto.getCommentContent())
-                .commentDate(commentDate)
+                .commentDate(LocalDateTime.now())
                 .build();
     }
 

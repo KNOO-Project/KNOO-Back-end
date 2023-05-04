@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,11 +82,12 @@ public class PostDetailsResponseDto {
             User writer = post.getWriter();
             String writerName = post.isAnonymous() ? "KNOOER" : writer.getName();
             boolean isWrittenByUser = writer == authenticatedUser;
-
+            String formattedDate =
+                    post.getPostDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
             return PostDetailsDto.builder()
                     .postTitle(post.getPostTitle())
                     .postContent(post.getPostContent())
-                    .postDate(post.getPostDate())
+                    .postDate(formattedDate)
                     .writerName(writerName)
                     .commentsCount(post.getCommentsCount())
                     .likesCount(post.getLikesCount())
@@ -150,13 +152,14 @@ public class PostDetailsResponseDto {
 
             User commentWriter = comment.getWriter();
             boolean isWrittenByUser = authenticatedUser == commentWriter;
-
             String writerName = getDisplayWriterName(post, commentWriter);
 
+            String formattedDate =
+                    comment.getCommentDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
             return CommentListDto.builder()
                     .commentId(comment.getId())
                     .commentContent(comment.getCommentContent())
-                    .commentDate(comment.getCommentDate())
+                    .commentDate(formattedDate)
                     .writerName(writerName)
                     .isDeleted(comment.isDeleted())
                     .parentCommentId(parentCommentId)

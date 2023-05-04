@@ -7,20 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +33,7 @@ public class Post {
     private PostCategory postCategory;
 
     @Column(name = "post_date", nullable = false)
-    private String postDate;
+    private LocalDateTime postDate;
 
     @Column(name = "anonymous", nullable = false)
     private boolean isAnonymous;
@@ -68,7 +56,7 @@ public class Post {
 
     @Builder
     public Post(String postTitle, String postContent, PostCategory postCategory,
-                String postDate, boolean isAnonymous) {
+                LocalDateTime postDate, boolean isAnonymous) {
         this.postTitle = postTitle;
         this.postContent = postContent;
         this.postCategory = postCategory;
@@ -77,13 +65,11 @@ public class Post {
     }
 
     public static Post from(final WritePostRequestDto writePostRequestDto) {
-        String postDate = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
         return Post.builder()
                 .postTitle(writePostRequestDto.getPostTitle())
                 .postContent(writePostRequestDto.getPostContent())
                 .postCategory(writePostRequestDto.getPostCategory())
-                .postDate(postDate)
+                .postDate(LocalDateTime.now())
                 .isAnonymous(writePostRequestDto.getIsAnonymous())
                 .build();
     }
