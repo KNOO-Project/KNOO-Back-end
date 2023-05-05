@@ -93,6 +93,7 @@ public class BasicCommentService implements CommentService {
         }
     }
 
+    @Transactional
     @Override
     public CommentLikeResponseDto changeLikesOnComment(final SignInUser signInUser, final Long commentId) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);

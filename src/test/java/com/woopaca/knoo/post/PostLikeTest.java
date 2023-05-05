@@ -98,7 +98,7 @@ public class PostLikeTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json("{'post_id': " + postId + ",'liked': true, 'likes': 1}"));
+                .andExpect(content().json("{'post_id': " + postId + ",'liked': true, 'likes_count': 1}"));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class PostLikeTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json("{'post_id': " + postId + ",'liked': false, 'likes': 0}"));
+                .andExpect(content().json("{'post_id': " + postId + ",'liked': false, 'likes_count': 0}"));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class PostLikeTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json("{'post_id': " + postId + ",'liked': true, 'likes': 2}"));
+                .andExpect(content().json("{'post_id': " + postId + ",'liked': true, 'likes_count': 2}"));
     }
 
     @Test
