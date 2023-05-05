@@ -14,21 +14,22 @@ public class PostLikeResponseDto {
     @JsonProperty(value = "post_id")
     private Long postId;
 
-    private int likes;
+    @JsonProperty(value = "likes_count")
+    private int likesCount;
 
     private Boolean liked;
 
     @Builder
-    public PostLikeResponseDto(Long postId, int likes, Boolean liked) {
+    public PostLikeResponseDto(Long postId, int likesCount, Boolean liked) {
         this.postId = postId;
-        this.likes = likes;
+        this.likesCount = likesCount;
         this.liked = liked;
     }
 
     public static PostLikeResponseDto ofLike(final Post post) {
         return PostLikeResponseDto.builder()
                 .postId(post.getId())
-                .likes(post.getLikesCount())
+                .likesCount(post.getLikesCount())
                 .liked(true)
                 .build();
     }
@@ -36,7 +37,7 @@ public class PostLikeResponseDto {
     public static PostLikeResponseDto ofUnlike(final Post post) {
         return PostLikeResponseDto.builder()
                 .postId(post.getId())
-                .likes(post.getLikesCount())
+                .likesCount(post.getLikesCount())
                 .liked(false)
                 .build();
     }
