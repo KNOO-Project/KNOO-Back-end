@@ -34,7 +34,7 @@ public class PostLike {
         this.post = post;
     }
 
-    public static PostLike userLikePost(User user, Post post) {
+    public static PostLike userLikePost(Post post, User user) {
         PostLike postLike = new PostLike(LocalDateTime.now(), user, post);
         user.getPostLikes().add(postLike);
         post.getPostLikes().add(postLike);

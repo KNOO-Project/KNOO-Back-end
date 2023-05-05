@@ -1,6 +1,7 @@
 package com.woopaca.knoo.controller;
 
 import com.woopaca.knoo.annotation.SignIn;
+import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
@@ -77,5 +78,14 @@ public class PostController {
     ) {
         postService.deletePost(signInUser, postId);
         return ResponseEntity.ok().body("게시글 삭제가 완료되었습니다.");
+    }
+
+    @PostMapping("/likes")
+    public ResponseEntity<PostLikeResponseDto> PostLikesOrUnlikes(
+            @SignIn final SignInUser signInUser,
+            @RequestParam("post_id") final Long postId
+    ) {
+        PostLikeResponseDto postLikeResponseDto = postService.changeLikesOnPost(signInUser, postId);
+        return ResponseEntity.ok().body(postLikeResponseDto);
     }
 }

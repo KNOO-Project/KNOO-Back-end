@@ -13,12 +13,9 @@ import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.service.CommentService;
 import com.woopaca.knoo.service.PostService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @WithMockUser
-public class DeleteCommentTest {
+public class CommentLikeTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -60,8 +58,6 @@ public class DeleteCommentTest {
     private String authorizationB;
     private Long postId;
     private Long commentId;
-
-    Logger log = LoggerFactory.getLogger(getClass());
 
     @BeforeEach
     void beforeEach() {
@@ -86,8 +82,6 @@ public class DeleteCommentTest {
         userRepository.save(userA);
         userRepository.save(userB);
 
-        log.info("userA.id = {}", userA.getId());
-
         authorizationA = "Bearer " + jwtProvider.createToken(userA, 10);
         authorizationB = "Bearer " + jwtProvider.createToken(userB, 10);
 
@@ -111,37 +105,82 @@ public class DeleteCommentTest {
     }
 
     @Test
-    @DisplayName("댓글 삭제 - 성공")
-    void deleteCommentSuccess() throws Exception {
-        //given
+    @DisplayName("댓글 좋아요 - 성공")
+    void likesCommentSuccess() throws Exception {
+        // given
 
-        //when
-        ResultActions resultActions = resultActions(authorizationA, commentId);
+        // when
+        ResultActions resultActions = resultActions(commentId, authorizationA);
 
-        //then
+        // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string("댓글 삭제가 완료되었습니다."));
-
-        Comment comment = commentRepository.findById(commentId).orElse(null);
-        assert comment != null;
-        Assertions.assertThat(comment.isDeleted()).isEqualTo(true);
+                .andExpect(content().json("{'comment_id': " + commentId + ", 'liked': true, 'likes_count': 1}"));
     }
 
     @Test
-    @DisplayName("댓글 삭제 실패 - 유효하지 않은 회원")
-    void deleteCommentFailInvalidUser() throws Exception {
-        //given
+    @DisplayName("댓글 좋아요 취소 - 성공")
+    void unlikesCommentSuccess() throws Exception {
+        // given
+        resultActions(commentId, authorizationA);
+        Comment comment = commentRepository.findById(commentId).get();
 
-        //when
-        ResultActions resultActions = resultActions(authorizationB, commentId);
+        assert comment.getLikesCount() == 1;
 
-        //then
-        resultActions.andExpect(status().isUnauthorized());
+        // when
+        ResultActions resultActions = resultActions(commentId, authorizationA);
 
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json("{'comment_id': " + commentId + ", 'liked': false, 'likes_count': 0}"));
     }
 
-    private ResultActions resultActions(String authorization, Long commentId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/comments")
+    @Test
+    @DisplayName("댓글 좋아요 여러명 - 성공")
+    void likesCommentMultipleUserSuccess() throws Exception {
+        // given
+
+        // when
+        resultActions(commentId, authorizationA);
+        ResultActions resultActions = resultActions(commentId, authorizationB);
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json("{'comment_id': " + commentId + ", 'liked': true, 'likes_count': 2}"));
+    }
+
+    @Test
+    @DisplayName("게시글 좋아요 실패 - 삭제된 댓글")
+    void likesPostFailDeletedComment() throws Exception {
+        // given
+        mockMvc.perform(delete("/api/v1/comments")
+                        .param("comment_id", String.valueOf(commentId))
+                        .header(HttpHeaders.AUTHORIZATION, authorizationA))
+                .andDo(print());
+        Comment comment = commentRepository.findById(commentId).get();
+
+        assert comment.isDeleted();
+
+        // when
+        ResultActions resultActions = resultActions(commentId, authorizationA);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("댓글 좋아요 실패 - 존재하지 않는 댓글")
+    void likesPostFailNonexistentComment() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = resultActions(0L, authorizationA);
+
+        // then
+        resultActions.andExpect(status().isNotFound());
+    }
+
+    private ResultActions resultActions(Long commentId, String authorization) throws Exception {
+        return mockMvc.perform(post("/api/v1/comments/likes")
                         .param("comment_id", String.valueOf(commentId))
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());

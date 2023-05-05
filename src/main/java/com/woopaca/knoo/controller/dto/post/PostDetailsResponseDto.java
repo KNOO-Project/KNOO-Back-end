@@ -2,7 +2,9 @@ package com.woopaca.knoo.controller.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.Comment;
+import com.woopaca.knoo.entity.CommentLike;
 import com.woopaca.knoo.entity.Post;
+import com.woopaca.knoo.entity.PostLike;
 import com.woopaca.knoo.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -66,9 +68,11 @@ public class PostDetailsResponseDto {
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
+        private Boolean liked;
+
         @Builder
         public PostDetailsDto(String postTitle, String postContent, String postDate, String writerName,
-                              int commentsCount, int likesCount, Boolean isWrittenByUser) {
+                              int commentsCount, int likesCount, Boolean isWrittenByUser, Boolean liked) {
             this.postTitle = postTitle;
             this.postContent = postContent;
             this.postDate = postDate;
@@ -76,12 +80,23 @@ public class PostDetailsResponseDto {
             this.commentsCount = commentsCount;
             this.likesCount = likesCount;
             this.isWrittenByUser = isWrittenByUser;
+            this.liked = liked;
         }
 
         public static PostDetailsDto of(final Post post, final User authenticatedUser) {
             User writer = post.getWriter();
             String writerName = post.isAnonymous() ? "KNOOER" : writer.getName();
             boolean isWrittenByUser = writer == authenticatedUser;
+
+            boolean liked = false;
+            List<PostLike> postLikeList = post.getPostLikes();
+            for (PostLike postLike : postLikeList) {
+                if (postLike.getUser() == authenticatedUser) {
+                    liked = true;
+                    break;
+                }
+            }
+
             String formattedDate =
                     post.getPostDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
             return PostDetailsDto.builder()
@@ -92,6 +107,7 @@ public class PostDetailsResponseDto {
                     .commentsCount(post.getCommentsCount())
                     .likesCount(post.getLikesCount())
                     .isWrittenByUser(isWrittenByUser)
+                    .liked(liked)
                     .build();
         }
     }
@@ -124,10 +140,12 @@ public class PostDetailsResponseDto {
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
+        private Boolean liked;
+
         @Builder
         public CommentListDto(
                 Long commentId, String commentContent, String commentDate, String writerName,
-                Boolean isDeleted, Long parentCommentId, int likesCount, Boolean isWrittenByUser
+                Boolean isDeleted, Long parentCommentId, int likesCount, Boolean isWrittenByUser, Boolean liked
         ) {
             this.commentId = commentId;
             this.commentContent = commentContent;
@@ -137,6 +155,7 @@ public class PostDetailsResponseDto {
             this.parentCommentId = parentCommentId;
             this.likesCount = likesCount;
             this.isWrittenByUser = isWrittenByUser;
+            this.liked = liked;
         }
 
         public static CommentListDto of(final Comment comment, Post post, final User authenticatedUser) {
@@ -154,6 +173,15 @@ public class PostDetailsResponseDto {
             boolean isWrittenByUser = authenticatedUser == commentWriter;
             String writerName = getDisplayWriterName(post, commentWriter);
 
+            boolean liked = false;
+            List<CommentLike> commentLikeList = comment.getCommentLikes();
+            for (CommentLike commentLike : commentLikeList) {
+                if (commentLike.getUser() == authenticatedUser) {
+                    liked = true;
+                    break;
+                }
+            }
+
             String formattedDate =
                     comment.getCommentDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
             return CommentListDto.builder()
@@ -165,6 +193,7 @@ public class PostDetailsResponseDto {
                     .parentCommentId(parentCommentId)
                     .likesCount(comment.getLikesCount())
                     .isWrittenByUser(isWrittenByUser)
+                    .liked(liked)
                     .build();
         }
 

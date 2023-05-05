@@ -54,14 +54,22 @@ public class PostListResponseDto {
         @JsonProperty(value = "writer_name")
         private String writerName;
 
+        @JsonProperty(value = "comments_count")
+        private int commentsCount;
+
+        @JsonProperty(value = "likes_count")
+        private int likesCount;
+
         @Builder
         public PostListDto(Long postId, String postTitle, String postContent,
-                           String postDate, String writerName) {
+                           String postDate, String writerName, int commentsCount, int likesCount) {
             this.postId = postId;
             this.postTitle = postTitle;
             this.postContent = postContent;
             this.postDate = postDate;
             this.writerName = writerName;
+            this.commentsCount = commentsCount;
+            this.likesCount = likesCount;
         }
 
         public static PostListDto from(final Post post) {
@@ -78,6 +86,8 @@ public class PostListResponseDto {
                     .postContent(contentPreview)
                     .postDate(formattedDate)
                     .writerName(post.isAnonymous() ? "KNOOER" : post.getWriter().getName())
+                    .commentsCount(post.getCommentsCount())
+                    .likesCount(post.getLikesCount())
                     .build();
         }
     }

@@ -2,6 +2,7 @@ package com.woopaca.knoo.controller;
 
 import com.woopaca.knoo.annotation.SignIn;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.comment.CommentLikeResponseDto;
 import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
 import com.woopaca.knoo.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,15 @@ public class CommentController {
     ) {
         commentService.deleteComment(signInUser, commentId);
         return ResponseEntity.ok().body("댓글 삭제가 완료되었습니다.");
+    }
+
+    @PostMapping("/likes")
+    public ResponseEntity<CommentLikeResponseDto> commentLikesOrUnlikes(
+            @SignIn final SignInUser signInUser,
+            @RequestParam("comment_id") final Long commentId
+    ) {
+        CommentLikeResponseDto commentLikeResponseDto =
+                commentService.changeLikesOnComment(signInUser, commentId);
+        return ResponseEntity.ok().body(commentLikeResponseDto);
     }
 }

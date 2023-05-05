@@ -89,4 +89,12 @@ public class Post {
         postContent = updatePostRequestDto.getPostContent();
         isAnonymous = updatePostRequestDto.getIsAnonymous();
     }
+
+    public void likes() {
+        likesCount++;
+    }
+
+    public void unlikes() {
+        likesCount--;
+    }
 }

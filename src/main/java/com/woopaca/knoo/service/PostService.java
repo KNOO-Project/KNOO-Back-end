@@ -2,6 +2,7 @@ package com.woopaca.knoo.service;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
@@ -20,13 +21,15 @@ public interface PostService {
 
     PostDetailsResponseDto postDetails(final SignInUser signInUser, final Long postId);
 
+    void updatePost(final SignInUser signInUser, final Long postId, final UpdatePostRequestDto updatePostRequestDto);
+
+    void deletePost(final SignInUser signInUser, final Long postId);
+
+    PostLikeResponseDto changeLikesOnPost(final SignInUser signInUser, final Long postId);
+
     List<PostPreviewDto> userWritePostList(final User user, final Pageable pageable);
 
     List<PostPreviewDto> userCommentPostList(final User user, final Pageable pageable);
 
     List<PostPreviewDto> userLikePostList(final User user, final Pageable pageable);
-
-    void updatePost(final SignInUser signInUser, final Long postId, final UpdatePostRequestDto updatePostRequestDto);
-
-    void deletePost(final SignInUser signInUser, final Long postId);
 }

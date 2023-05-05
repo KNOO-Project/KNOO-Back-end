@@ -29,7 +29,7 @@ public class CommentLike {
         this.comment = comment;
     }
 
-    public static CommentLike userLikeComment(User user, Comment comment) {
+    public static CommentLike userLikeComment(final Comment comment, final User user) {
         CommentLike commentLike = new CommentLike(user, comment);
         user.getCommentLikes().add(commentLike);
         comment.getCommentLikes().add(commentLike);
