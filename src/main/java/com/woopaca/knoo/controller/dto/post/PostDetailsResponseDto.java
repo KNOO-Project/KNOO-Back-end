@@ -3,6 +3,7 @@ package com.woopaca.knoo.controller.dto.post;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Post;
+import com.woopaca.knoo.entity.PostLike;
 import com.woopaca.knoo.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -66,9 +67,11 @@ public class PostDetailsResponseDto {
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
+        private Boolean liked;
+
         @Builder
         public PostDetailsDto(String postTitle, String postContent, String postDate, String writerName,
-                              int commentsCount, int likesCount, Boolean isWrittenByUser) {
+                              int commentsCount, int likesCount, Boolean isWrittenByUser, Boolean liked) {
             this.postTitle = postTitle;
             this.postContent = postContent;
             this.postDate = postDate;
@@ -76,12 +79,23 @@ public class PostDetailsResponseDto {
             this.commentsCount = commentsCount;
             this.likesCount = likesCount;
             this.isWrittenByUser = isWrittenByUser;
+            this.liked = liked;
         }
 
         public static PostDetailsDto of(final Post post, final User authenticatedUser) {
             User writer = post.getWriter();
             String writerName = post.isAnonymous() ? "KNOOER" : writer.getName();
             boolean isWrittenByUser = writer == authenticatedUser;
+
+            boolean liked = false;
+            List<PostLike> postLikeList = post.getPostLikes();
+            for (PostLike postLike : postLikeList) {
+                if (postLike.getUser() == authenticatedUser) {
+                    liked = true;
+                    break;
+                }
+            }
+
             String formattedDate =
                     post.getPostDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
             return PostDetailsDto.builder()
@@ -92,6 +106,7 @@ public class PostDetailsResponseDto {
                     .commentsCount(post.getCommentsCount())
                     .likesCount(post.getLikesCount())
                     .isWrittenByUser(isWrittenByUser)
+                    .liked(liked)
                     .build();
         }
     }
