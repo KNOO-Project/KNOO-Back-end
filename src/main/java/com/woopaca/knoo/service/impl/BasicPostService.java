@@ -2,6 +2,7 @@ package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
@@ -9,6 +10,7 @@ import com.woopaca.knoo.controller.dto.user.PostPreviewDto;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostCategory;
+import com.woopaca.knoo.entity.PostLike;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.exception.post.impl.InvalidPostPageException;
 import com.woopaca.knoo.exception.post.impl.PageCountExceededException;
@@ -16,6 +18,7 @@ import com.woopaca.knoo.exception.post.impl.PostCategoryNotFoundException;
 import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
 import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentRepository;
+import com.woopaca.knoo.repository.PostLikeRepository;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.PostService;
@@ -29,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +44,7 @@ public class BasicPostService implements PostService {
     private final AuthService authService;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     @Override
@@ -102,6 +107,40 @@ public class BasicPostService implements PostService {
         postRepository.delete(post);
     }
 
+    private void validateWriterAuthority(final Post post, final User authenticatedUser) {
+        if (post.getWriter() != authenticatedUser) {
+            throw new InvalidUserException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public PostLikeResponseDto changeLikesOnPost(final SignInUser signInUser, final Long postId) {
+        User authentcatedUser = authService.getAuthenticatedUser(signInUser);
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        Optional<PostLike> postLikeOptional =
+                postLikeRepository.findByPostAndUser(post, authentcatedUser);
+
+        if (postLikeOptional.isPresent()) {
+            unlikesPost(post, postLikeOptional);
+            return PostLikeResponseDto.ofUnlike(post);
+        }
+
+        likesPost(post, authentcatedUser);
+        return PostLikeResponseDto.ofLike(post);
+    }
+
+    private void likesPost(Post post, User authentcatedUser) {
+        postLikeRepository.save(PostLike.userLikePost(post, authentcatedUser));
+        post.likes();
+    }
+
+    private void unlikesPost(Post post, Optional<PostLike> postLikeOptional) {
+        PostLike postLike = postLikeOptional.get();
+        postLikeRepository.delete(postLike);
+        post.unlikes();
+    }
+
     @Override
     public List<PostPreviewDto> userWritePostList(final User user, final Pageable pageable) {
         List<PostPreviewDto> userWritePosts = new ArrayList<>();
@@ -130,12 +169,6 @@ public class BasicPostService implements PostService {
         for (Post post : posts) {
             PostPreviewDto postPreviewDto = PostPreviewDto.from(post);
             postPreviewList.add(postPreviewDto);
-        }
-    }
-
-    private void validateWriterAuthority(final Post post, final User authenticatedUser) {
-        if (post.getWriter() != authenticatedUser) {
-            throw new InvalidUserException();
         }
     }
 }

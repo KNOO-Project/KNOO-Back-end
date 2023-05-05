@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -62,7 +61,7 @@ public class DeletePostTest {
                 .name("test")
                 .emailVerify(EmailVerify.ENABLE)
                 .verificationCode("test")
-                .joinDate(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm").format(LocalDateTime.now()))
+                .joinDate(LocalDateTime.now())
                 .build();
         User userB = User.builder()
                 .username("test1")
@@ -71,7 +70,7 @@ public class DeletePostTest {
                 .name("test1")
                 .emailVerify(EmailVerify.ENABLE)
                 .verificationCode("test1")
-                .joinDate(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm").format(LocalDateTime.now()))
+                .joinDate(LocalDateTime.now())
                 .build();
         userRepository.save(userA);
         userRepository.save(userB);

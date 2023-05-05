@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,7 +62,7 @@ public class WriteReplyTest {
                 .name("test")
                 .emailVerify(EmailVerify.ENABLE)
                 .verificationCode("test")
-                .joinDate(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm").format(LocalDateTime.now()))
+                .joinDate(LocalDateTime.now())
                 .build();
         userRepository.save(user);
 
