@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS comment
     PRIMARY KEY (comment_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE,
-    FOREIGN KEY (parent_comment_id) REFERENCES comment (comment_id)
+    FOREIGN KEY (parent_comment_id) REFERENCES comment (comment_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS comment_like
