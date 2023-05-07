@@ -47,6 +47,17 @@ CREATE TABLE IF NOT EXISTS post_like
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS scrap
+(
+    scrap_id   BIGINT   NOT NULL AUTO_INCREMENT,
+    scrap_date DATETIME NOT NULL,
+    user_id    BIGINT,
+    post_id    BIGINT   NOT NULL,
+    PRIMARY KEY (scrap_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
+    FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS comment
 (
     comment_id        BIGINT       NOT NULL AUTO_INCREMENT,
