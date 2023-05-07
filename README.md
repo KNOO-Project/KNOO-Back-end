@@ -110,7 +110,7 @@
 
 # DB 설계
 
-<img width="100%" alt="스크린샷 2023-03-21 18 55 49" src="https://user-images.githubusercontent.com/69714701/226572690-2b135d44-2c86-4e18-9fc7-708077c33221.png">
+<img width="100%" alt="스크린샷 2023-03-21 18 55 49" src="https://user-images.githubusercontent.com/69714701/236654669-1094c6fd-063e-42d5-9184-41aaaac0d00a.png">
 
 # API 명세서
 
