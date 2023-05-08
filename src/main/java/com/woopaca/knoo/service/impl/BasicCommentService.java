@@ -9,6 +9,7 @@ import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.exception.comment.impl.CommentNotFoundException;
 import com.woopaca.knoo.exception.comment.impl.DeletedCommentException;
+import com.woopaca.knoo.exception.comment.impl.InvalidReplyException;
 import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
 import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentLikeRepository;
@@ -54,6 +55,27 @@ public class BasicCommentService implements CommentService {
         return null;
     }
 
+    private Comment newComment(final Comment comment, final Long postId, final User authenticatedUser) {
+        Post post = getPostWithLock(postId);
+        comment.writtenBy(authenticatedUser);
+        comment.writeOn(post);
+        return commentRepository.save(comment);
+    }
+
+    private Comment newReply(final Comment comment, final Long commentId, final User authenticatedUser) {
+        Comment parentComment =
+                commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        if (parentComment.getParentComment() != null) {
+            throw new InvalidReplyException();
+        }
+
+        Post parentCommentPost = parentComment.getPost();
+        Post post = getPostWithLock(parentCommentPost.getId());
+        comment.writtenBy(authenticatedUser);
+        comment.reply(parentComment, post);
+        return commentRepository.save(comment);
+    }
+
     @Transactional
     @Override
     public void deleteComment(final SignInUser signInUser, final Long commentId) {
@@ -63,24 +85,6 @@ public class BasicCommentService implements CommentService {
         validateWriterAuthority(comment, authenticatedUser);
 
         comment.delete();
-    }
-
-    private Comment newComment(final Comment comment, final Long postId, final User authenticatedUser) {
-        Post post = getPostWithLock(postId);
-        comment.writtenBy(authenticatedUser);
-        comment.writeOn(post);
-        return commentRepository.save(comment);
-    }
-
-    private Comment newReply(final Comment comment, final Long commentId,
-                             final User authenticatedUser) {
-        Comment parentComment =
-                commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        Post parentCommentPost = parentComment.getPost();
-        Post post = getPostWithLock(parentCommentPost.getId());
-        comment.writtenBy(authenticatedUser);
-        comment.reply(parentComment, post);
-        return commentRepository.save(comment);
     }
 
     private Post getPostWithLock(Long postId) {
