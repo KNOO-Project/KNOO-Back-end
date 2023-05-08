@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 public enum CommentError implements KnooError {
 
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글이 존재하지 않습니다.", "KN401"),
-    DELETED_COMMENT(HttpStatus.BAD_REQUEST, "삭제된 댓글입니다.", "KN402");
+    DELETED_COMMENT(HttpStatus.BAD_REQUEST, "삭제된 댓글입니다.", "KN402"),
+    INVALID_REPLY(HttpStatus.BAD_REQUEST, "유효하지 않은 대댓글입니다.", "KN403");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -52,6 +52,7 @@ public class WriteReplyTest {
 
     private String authorization;
     private Long commentId;
+    private SignInUser signInUser;
 
     @BeforeEach
     void beforeEach() {
@@ -75,7 +76,7 @@ public class WriteReplyTest {
                 .isAnonymous(false)
                 .build();
 
-        SignInUser signInUser = SignInUser.builder()
+        signInUser = SignInUser.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .build();
@@ -94,7 +95,7 @@ public class WriteReplyTest {
         WriteCommentRequestDto writeCommentRequestDto = new WriteCommentRequestDto("test reply");
 
         //when
-        ResultActions resultActions = resultActions(writeCommentRequestDto);
+        ResultActions resultActions = resultActions(writeCommentRequestDto, commentId);
 
         //then
         resultActions.andExpect(status().isCreated())
@@ -102,9 +103,25 @@ public class WriteReplyTest {
 
     }
 
-    private ResultActions resultActions(WriteCommentRequestDto writeCommentRequestDto) throws Exception {
+    @Test
+    @DisplayName("대댓글 작성 실패 - 유효하지 않은 대댓글 (대댓글에 대댓글 작성)")
+    void writeReplyFailInvalidReply() throws Exception {
+        //given
+        WriteCommentRequestDto writeCommentRequestDto = new WriteCommentRequestDto("test reply");
+        Long parentCommentId =
+                commentService.writeComment(signInUser, writeCommentRequestDto, null, commentId);
+
+        //when
+        ResultActions resultActions = resultActions(writeCommentRequestDto, parentCommentId);
+
+        //then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(content().json("{'error_code': 'KN403'}"));
+    }
+
+    private ResultActions resultActions(WriteCommentRequestDto writeCommentRequestDto, Long commentId) throws Exception {
         return mockMvc.perform(post("/api/v1/comments/reply")
-                        .param("comment_id", commentId.toString())
+                        .param("comment_id", String.valueOf(commentId))
                         .header(HttpHeaders.AUTHORIZATION, authorization)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(writeCommentRequestDto)))
