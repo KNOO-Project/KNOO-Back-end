@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users
     password          VARCHAR(255) NOT NULL,
     name              VARCHAR(20)  NOT NULL UNIQUE,
     email             VARCHAR(30)  NOT NULL UNIQUE,
-    join_date         DATETIME(6)     NOT NULL,
+    join_date         DATETIME(6)  NOT NULL,
     email_verify      VARCHAR(15)  NOT NULL,
     verification_code VARCHAR(50)  NOT NULL,
     campus            VARCHAR(20),
@@ -27,10 +27,11 @@ CREATE TABLE IF NOT EXISTS post
     post_title     VARCHAR(50)   NOT NULL,
     post_content   VARCHAR(4096) NOT NULL,
     post_category  VARCHAR(50)   NOT NULL,
-    post_date      DATETIME(6)      NOT NULL,
+    post_date      DATETIME(6)   NOT NULL,
     anonymous      BOOLEAN       NOT NULL,
     comments_count INT           NOT NULL DEFAULT 0,
     likes_count    INT           NOT NULL DEFAULT 0,
+    scraps_count   INT           NOT NULL DEFAULT 0,
     user_id        BIGINT,
     PRIMARY KEY (post_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
@@ -38,10 +39,10 @@ CREATE TABLE IF NOT EXISTS post
 
 CREATE TABLE IF NOT EXISTS post_like
 (
-    post_like_id   BIGINT   NOT NULL AUTO_INCREMENT,
+    post_like_id   BIGINT      NOT NULL AUTO_INCREMENT,
     post_like_date DATETIME(6) NOT NULL,
     user_id        BIGINT,
-    post_id        BIGINT   NOT NULL,
+    post_id        BIGINT      NOT NULL,
     PRIMARY KEY (post_like_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE
@@ -49,10 +50,10 @@ CREATE TABLE IF NOT EXISTS post_like
 
 CREATE TABLE IF NOT EXISTS scrap
 (
-    scrap_id   BIGINT   NOT NULL AUTO_INCREMENT,
+    scrap_id   BIGINT      NOT NULL AUTO_INCREMENT,
     scrap_date DATETIME(6) NOT NULL,
     user_id    BIGINT,
-    post_id    BIGINT   NOT NULL,
+    post_id    BIGINT      NOT NULL,
     PRIMARY KEY (scrap_id),
     FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS comment
 (
     comment_id        BIGINT       NOT NULL AUTO_INCREMENT,
     comment_content   VARCHAR(500) NOT NULL,
-    comment_date      DATETIME(6)     NOT NULL,
+    comment_date      DATETIME(6)  NOT NULL,
     likes_count       INT          NOT NULL DEFAULT 0,
     deleted           BIT          NOT NULL DEFAULT FALSE,
     parent_comment_id BIGINT,
