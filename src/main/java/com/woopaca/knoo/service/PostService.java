@@ -15,6 +15,8 @@ public interface PostService {
 
     PostListResponseDto postList(final PostCategory postCategory, final int page);
 
+    PostListResponseDto scrapPostList(final SignInUser signInUser, final int page);
+
     PostDetailsResponseDto postDetails(final SignInUser signInUser, final Long postId);
 
     void updatePost(final SignInUser signInUser, final Long postId, final UpdatePostRequestDto updatePostRequestDto);
@@ -23,11 +25,11 @@ public interface PostService {
 
     PostLikeResponseDto changePostLike(final SignInUser signInUser, final Long postId);
 
+    PostScrapResponseDto changePostScrap(final SignInUser signInUser, final Long postId);
+
     List<PostPreviewDto> userWritePostList(final User user, final Pageable pageable);
 
     List<PostPreviewDto> userCommentPostList(final User user, final Pageable pageable);
 
     List<PostPreviewDto> userLikePostList(final User user, final Pageable pageable);
-
-    PostScrapResponseDto changePostScrap(final SignInUser signInUser, final Long postId);
 }

@@ -54,21 +54,43 @@ public class BasicPostService implements PostService {
 
     @Override
     public PostListResponseDto postList(final PostCategory postCategory, final int page) {
+        validateArgument(postCategory, page);
+
+        PageRequest pageRequest =
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+        Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
+        validatePage(page, postPage);
+
+        return PostListResponseDto.from(postPage);
+    }
+
+    @Override
+    public PostListResponseDto scrapPostList(final SignInUser signInUser, final int page) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        if (page < 0) {
+            throw new InvalidPostPageException();
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        Page<Post> postPage = postRepository.findUserScrapPosts(authenticatedUser, pageRequest);
+        validatePage(page, postPage);
+
+        return PostListResponseDto.from(postPage);
+    }
+
+    private static void validatePage(int page, Page<Post> postPage) {
+        if (postPage.getTotalPages() != 0 && postPage.getTotalPages() <= page) {
+            throw new PageCountExceededException();
+        }
+    }
+
+    private static void validateArgument(PostCategory postCategory, int page) {
         if (postCategory == null) {
             throw new PostCategoryNotFoundException();
         }
         if (page < 0) {
             throw new InvalidPostPageException();
         }
-
-        PageRequest pageRequest =
-                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
-        if (postPage.getTotalPages() <= page) {
-            throw new PageCountExceededException();
-        }
-
-        return PostListResponseDto.from(postPage);
     }
 
     @Override
@@ -179,14 +201,14 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public List<PostPreviewDto> userLikePostList(User user, final Pageable pageable) {
+    public List<PostPreviewDto> userLikePostList(final User user, final Pageable pageable) {
         List<PostPreviewDto> userLikePosts = new ArrayList<>();
         List<Post> postListFive = postRepository.findByLikeUser(user, pageable);
         postsToPostPreviewList(postListFive, userLikePosts);
         return userLikePosts;
     }
 
-    private void postsToPostPreviewList(List<Post> posts, List<PostPreviewDto> postPreviewList) {
+    private void postsToPostPreviewList(final List<Post> posts, final List<PostPreviewDto> postPreviewList) {
         for (Post post : posts) {
             PostPreviewDto postPreviewDto = PostPreviewDto.from(post);
             postPreviewList.add(postPreviewDto);

@@ -60,9 +60,12 @@ public class PostListResponseDto {
         @JsonProperty(value = "likes_count")
         private int likesCount;
 
+        @JsonProperty(value = "scraps_count")
+        private int scrapsCount;
+
         @Builder
-        public PostListDto(Long postId, String postTitle, String postContent,
-                           String postDate, String writerName, int commentsCount, int likesCount) {
+        public PostListDto(Long postId, String postTitle, String postContent, String postDate,
+                           String writerName, int commentsCount, int likesCount, int scrapsCount) {
             this.postId = postId;
             this.postTitle = postTitle;
             this.postContent = postContent;
@@ -70,6 +73,7 @@ public class PostListResponseDto {
             this.writerName = writerName;
             this.commentsCount = commentsCount;
             this.likesCount = likesCount;
+            this.scrapsCount = scrapsCount;
         }
 
         public static PostListDto from(final Post post) {
@@ -88,6 +92,7 @@ public class PostListResponseDto {
                     .writerName(post.isAnonymous() ? "KNOOER" : post.getWriter().getName())
                     .commentsCount(post.getCommentsCount())
                     .likesCount(post.getLikesCount())
+                    .scrapsCount(post.getScrapsCount())
                     .build();
         }
     }

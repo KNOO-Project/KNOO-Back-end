@@ -1,15 +1,17 @@
 package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.woopaca.knoo.entity.attr.EmailVerify;
 import com.woopaca.knoo.entity.Post;
-import com.woopaca.knoo.entity.attr.PostCategory;
 import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.entity.attr.EmailVerify;
+import com.woopaca.knoo.entity.attr.PostCategory;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -72,6 +74,19 @@ public class PostListTest {
     }
 
     @Test
+    @DisplayName("빈 게시글 리스트 조회 - 성공")
+    void getEmptyPostListSuccess() throws Exception {
+        //given
+
+        //when
+        ResultActions resultActions = resultActions("free", 1);
+
+        //then
+        resultActions.andExpect(status().isOk());
+
+    }
+
+    @Test
     @DisplayName("게시글 리스트 조회 실패 - 페이지 수 초과")
     void getPostListFailOutOfPages() throws Exception {
         //given
@@ -87,16 +102,17 @@ public class PostListTest {
 
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1})
     @DisplayName("게시글 리스트 조회 실패 - 유효하지 않은 페이지")
-    void getPostListFailInvalidPage() throws Exception {
+    void getPostListFailInvalidPage(int page) throws Exception {
         //given
         for (int i = 0; i < 30; i++) {
             writeDummyPost();
         }
 
         //when
-        ResultActions resultActions = resultActions("free", -1);
+        ResultActions resultActions = resultActions("free", page);
 
         //then
         resultActions.andExpect(status().isBadRequest());
