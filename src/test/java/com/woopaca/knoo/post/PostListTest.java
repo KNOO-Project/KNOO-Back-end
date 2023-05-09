@@ -1,9 +1,9 @@
 package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.woopaca.knoo.entity.EmailVerify;
+import com.woopaca.knoo.entity.attr.EmailVerify;
 import com.woopaca.knoo.entity.Post;
-import com.woopaca.knoo.entity.PostCategory;
+import com.woopaca.knoo.entity.attr.PostCategory;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.repository.UserRepository;

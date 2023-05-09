@@ -99,7 +99,7 @@ public class BasicCommentService implements CommentService {
 
     @Transactional
     @Override
-    public CommentLikeResponseDto changeLikesOnComment(final SignInUser signInUser, final Long commentId) {
+    public CommentLikeResponseDto changeCommentLike(final SignInUser signInUser, final Long commentId) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
         validateDeletedComment(comment);
@@ -108,23 +108,23 @@ public class BasicCommentService implements CommentService {
                 commentLikeRepository.findByCommentAndUser(comment, authenticatedUser);
 
         if (commentLikeOptional.isPresent()) {
-            unlikesComment(comment, commentLikeOptional);
-            return CommentLikeResponseDto.ofUnlike(comment);
+            cancelLikeComment(comment, commentLikeOptional);
+            return CommentLikeResponseDto.ofCancelLike(comment);
         }
 
-        likesComment(authenticatedUser, comment);
+        likecomment(authenticatedUser, comment);
         return CommentLikeResponseDto.ofLike(comment);
     }
 
-    private void likesComment(User authenticatedUser, Comment comment) {
+    private void likecomment(User authenticatedUser, Comment comment) {
         commentLikeRepository.save(CommentLike.userLikeComment(comment, authenticatedUser));
-        comment.likes();
+        comment.like();
     }
 
-    private void unlikesComment(Comment comment, Optional<CommentLike> commentLikeOptional) {
+    private void cancelLikeComment(Comment comment, Optional<CommentLike> commentLikeOptional) {
         CommentLike commentLike = commentLikeOptional.get();
         commentLikeRepository.delete(commentLike);
-        comment.unlikes();
+        comment.cancelLike();
     }
 
     private void validateDeletedComment(final Comment comment) {

@@ -1,6 +1,7 @@
 package com.woopaca.knoo.entity;
 
 import com.woopaca.knoo.controller.dto.auth.SignUpRequestDto;
+import com.woopaca.knoo.entity.attr.EmailVerify;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

@@ -2,10 +2,10 @@ package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.entity.EmailVerify;
 import com.woopaca.knoo.entity.Post;
-import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.entity.attr.EmailVerify;
+import com.woopaca.knoo.entity.attr.PostCategory;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.service.PostService;
@@ -90,7 +90,7 @@ public class PostLikeTest {
 
     @Test
     @DisplayName("게시글 좋아요 - 성공")
-    void likesPostSuccess() throws Exception {
+    void likePostSuccess() throws Exception {
         // given
 
         // when
@@ -103,7 +103,7 @@ public class PostLikeTest {
 
     @Test
     @DisplayName("게시글 좋아요 취소 - 성공")
-    void unlikesPostSuccess() throws Exception {
+    void cancelLikePostSuccess() throws Exception {
         // given
         resultActions(postId, authorizationA);
         Post post = postRepository.findById(postId).get();
@@ -120,7 +120,7 @@ public class PostLikeTest {
 
     @Test
     @DisplayName("게시글 좋아요 여러명 - 성공")
-    void likesPostMultipleUserSuccess() throws Exception {
+    void likePostMultipleUserSuccess() throws Exception {
         // given
 
         // when
@@ -134,7 +134,7 @@ public class PostLikeTest {
 
     @Test
     @DisplayName("게시글 좋아요 실패 - 존재하지 않는 게시글")
-    void likesPostFail() throws Exception {
+    void likePostFail() throws Exception {
         // given
 
         // when

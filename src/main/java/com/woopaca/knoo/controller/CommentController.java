@@ -51,12 +51,12 @@ public class CommentController {
     }
 
     @PostMapping("/likes")
-    public ResponseEntity<CommentLikeResponseDto> commentLikesOrUnlikes(
+    public ResponseEntity<CommentLikeResponseDto> commentLikeOrCancelLike(
             @SignIn final SignInUser signInUser,
             @RequestParam("comment_id") final Long commentId
     ) {
         CommentLikeResponseDto commentLikeResponseDto =
-                commentService.changeLikesOnComment(signInUser, commentId);
+                commentService.changeCommentLike(signInUser, commentId);
         return ResponseEntity.ok().body(commentLikeResponseDto);
     }
 }

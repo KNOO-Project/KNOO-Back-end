@@ -83,11 +83,11 @@ public class Comment {
         isDeleted = true;
     }
 
-    public void likes() {
+    public void like() {
         likesCount++;
     }
 
-    public void unlikes() {
+    public void cancelLike() {
         likesCount--;
     }
 }
