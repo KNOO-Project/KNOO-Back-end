@@ -1,24 +1,17 @@
-package com.woopaca.knoo.comment;
+package com.woopaca.knoo.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woopaca.knoo.config.jwt.JwtProvider;
-import com.woopaca.knoo.controller.dto.auth.SignInUser;
-import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
-import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
-import com.woopaca.knoo.entity.Comment;
+import com.woopaca.knoo.entity.Post;
+import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.entity.attr.EmailVerify;
 import com.woopaca.knoo.entity.attr.PostCategory;
-import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.repository.CommentRepository;
+import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.repository.UserRepository;
-import com.woopaca.knoo.service.CommentService;
 import com.woopaca.knoo.service.PostService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,38 +23,33 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 @WithMockUser
-public class DeleteCommentTest {
+@Transactional
+public class ScrapTest {
 
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper mapper;
     @Autowired
-    JwtProvider jwtProvider;
-    @Autowired
-    UserRepository userRepository;
+    PostRepository postRepository;
     @Autowired
     PostService postService;
     @Autowired
-    CommentService commentService;
+    UserRepository userRepository;
     @Autowired
-    CommentRepository commentRepository;
+    JwtProvider jwtProvider;
 
+    private Long postId;
     private String authorizationA;
     private String authorizationB;
-    private Long postId;
-    private Long commentId;
-
-    Logger log = LoggerFactory.getLogger(getClass());
 
     @BeforeEach
     void beforeEach() {
@@ -86,63 +74,81 @@ public class DeleteCommentTest {
         userRepository.save(userA);
         userRepository.save(userB);
 
-        log.info("userA.id = {}", userA.getId());
-
         authorizationA = "Bearer " + jwtProvider.createToken(userA, 10);
         authorizationB = "Bearer " + jwtProvider.createToken(userB, 10);
 
-        WritePostRequestDto writePostRequestDto = WritePostRequestDto.builder()
+        Post post = Post.builder()
                 .postTitle("test")
                 .postContent("test")
                 .postCategory(PostCategory.FREE)
-                .isAnonymous(false)
+                .postDate(LocalDateTime.now())
                 .build();
-
-        SignInUser signInUser = SignInUser.builder()
-                .id(userA.getId())
-                .username(userA.getUsername())
-                .build();
-        postId = postService.writePost(signInUser, writePostRequestDto);
-
-        WriteCommentRequestDto writeCommentRequestDto =
-                new WriteCommentRequestDto("test comment");
-        commentId =
-                commentService.writeComment(signInUser, writeCommentRequestDto, postId, null);
+        post.writtenBy(userA);
+        postRepository.save(post);
+        postId = post.getId();
     }
 
     @Test
-    @DisplayName("댓글 삭제 - 성공")
-    void deleteCommentSuccess() throws Exception {
-        //given
+    @DisplayName("게시글 스크랩 - 성공")
+    void scrapPostSuccess() throws Exception {
+        // given
 
-        //when
-        ResultActions resultActions = resultActions(authorizationA, commentId);
+        // when
+        ResultActions resultActions = resultActions(postId, authorizationA);
 
-        //then
+        // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().string("댓글 삭제가 완료되었습니다."));
-
-        Comment comment = commentRepository.findById(commentId).orElse(null);
-        assert comment != null;
-        Assertions.assertThat(comment.isDeleted()).isEqualTo(true);
+                .andExpect(content().json("{'post_id': " + postId + ",'scrapped': true, 'scraps_count': 1}"));
     }
 
     @Test
-    @DisplayName("댓글 삭제 실패 - 유효하지 않은 회원")
-    void deleteCommentFailInvalidUser() throws Exception {
-        //given
+    @DisplayName("게시글 스크랩 취소 - 성공")
+    void cancelScrapPostSuccess() throws Exception {
+        // given
+        resultActions(postId, authorizationA);
+        Post post = postRepository.findById(postId).get();
 
-        //when
-        ResultActions resultActions = resultActions(authorizationB, commentId);
+        assert post.getScrapsCount() == 1;
 
-        //then
-        resultActions.andExpect(status().isUnauthorized());
+        // when
+        ResultActions resultActions = resultActions(postId, authorizationA);
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json("{'post_id': " + postId + ",'scrapped': false, 'scraps_count': 0}"));
+    }
+
+    @Test
+    @DisplayName("게시글 스크랩 여러명 - 성공")
+    void scrapPostMultipleUserSuccess() throws Exception {
+        // given
+
+        // when
+        resultActions(postId, authorizationB);
+        ResultActions resultActions = resultActions(postId, authorizationA);
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json("{'post_id': " + postId + ",'scrapped': true, 'scraps_count': 2}"));
 
     }
 
-    private ResultActions resultActions(String authorization, Long commentId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/comments")
-                        .param("comment_id", String.valueOf(commentId))
+    @Test
+    @DisplayName("게시글 스크랩 실패 - 존재하지 않는 게시글")
+    void scrapPostFail() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = resultActions(0L, authorizationA);
+
+        // then
+        resultActions.andExpect(status().isNotFound())
+                .andExpect(content().json("{'error_code': 'KN302'}"));
+    }
+
+    private ResultActions resultActions(Long postId, String authorization) throws Exception {
+        return mockMvc.perform(post("/api/v1/posts/scraps")
+                        .param("post_id", String.valueOf(postId))
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());
     }

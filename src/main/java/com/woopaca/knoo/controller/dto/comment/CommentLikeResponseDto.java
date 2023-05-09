@@ -34,7 +34,7 @@ public class CommentLikeResponseDto {
                 .build();
     }
 
-    public static CommentLikeResponseDto ofUnlike(final Comment comment) {
+    public static CommentLikeResponseDto ofCancelLike(final Comment comment) {
         return CommentLikeResponseDto.builder()
                 .commentId(comment.getId())
                 .likesCount(comment.getLikesCount())

@@ -1,17 +1,10 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
-import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
-import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
-import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
-import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
-import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
+import com.woopaca.knoo.controller.dto.post.*;
 import com.woopaca.knoo.controller.dto.user.PostPreviewDto;
-import com.woopaca.knoo.entity.Comment;
-import com.woopaca.knoo.entity.Post;
-import com.woopaca.knoo.entity.PostCategory;
-import com.woopaca.knoo.entity.PostLike;
-import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.entity.*;
+import com.woopaca.knoo.entity.attr.PostCategory;
 import com.woopaca.knoo.exception.post.impl.InvalidPostPageException;
 import com.woopaca.knoo.exception.post.impl.PageCountExceededException;
 import com.woopaca.knoo.exception.post.impl.PostCategoryNotFoundException;
@@ -20,6 +13,7 @@ import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.PostLikeRepository;
 import com.woopaca.knoo.repository.PostRepository;
+import com.woopaca.knoo.repository.ScrapRepository;
 import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +39,7 @@ public class BasicPostService implements PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
+    private final ScrapRepository scrapRepository;
 
     @Transactional
     @Override
@@ -59,21 +54,43 @@ public class BasicPostService implements PostService {
 
     @Override
     public PostListResponseDto postList(final PostCategory postCategory, final int page) {
+        validateArgument(postCategory, page);
+
+        PageRequest pageRequest =
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+        Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
+        validatePage(page, postPage);
+
+        return PostListResponseDto.from(postPage);
+    }
+
+    @Override
+    public PostListResponseDto scrapPostList(final SignInUser signInUser, final int page) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        if (page < 0) {
+            throw new InvalidPostPageException();
+        }
+
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        Page<Post> postPage = postRepository.findUserScrapPosts(authenticatedUser, pageRequest);
+        validatePage(page, postPage);
+
+        return PostListResponseDto.from(postPage);
+    }
+
+    private static void validatePage(int page, Page<Post> postPage) {
+        if (postPage.getTotalPages() != 0 && postPage.getTotalPages() <= page) {
+            throw new PageCountExceededException();
+        }
+    }
+
+    private static void validateArgument(PostCategory postCategory, int page) {
         if (postCategory == null) {
             throw new PostCategoryNotFoundException();
         }
         if (page < 0) {
             throw new InvalidPostPageException();
         }
-
-        PageRequest pageRequest =
-                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
-        if (postPage.getTotalPages() <= page) {
-            throw new PageCountExceededException();
-        }
-
-        return PostListResponseDto.from(postPage);
     }
 
     @Override
@@ -115,30 +132,56 @@ public class BasicPostService implements PostService {
 
     @Transactional
     @Override
-    public PostLikeResponseDto changeLikesOnPost(final SignInUser signInUser, final Long postId) {
-        User authentcatedUser = authService.getAuthenticatedUser(signInUser);
-        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        Optional<PostLike> postLikeOptional =
-                postLikeRepository.findByPostAndUser(post, authentcatedUser);
+    public PostLikeResponseDto changePostLike(final SignInUser signInUser, final Long postId) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        Post post = postRepository.findPostById(postId).orElseThrow(PostNotFoundException::new);
+        Optional<PostLike> postLikeOptional = postLikeRepository.findByPostAndUser(post, authenticatedUser);
 
         if (postLikeOptional.isPresent()) {
-            unlikesPost(post, postLikeOptional);
-            return PostLikeResponseDto.ofUnlike(post);
+            return cancelLikePost(post, postLikeOptional);
         }
 
-        likesPost(post, authentcatedUser);
+        return likePost(post, authenticatedUser);
+    }
+
+    private PostLikeResponseDto likePost(Post post, User authentcatedUser) {
+        postLikeRepository.save(PostLike.userLikePost(post, authentcatedUser));
+        post.like();
         return PostLikeResponseDto.ofLike(post);
     }
 
-    private void likesPost(Post post, User authentcatedUser) {
-        postLikeRepository.save(PostLike.userLikePost(post, authentcatedUser));
-        post.likes();
-    }
-
-    private void unlikesPost(Post post, Optional<PostLike> postLikeOptional) {
+    private PostLikeResponseDto cancelLikePost(Post post, Optional<PostLike> postLikeOptional) {
         PostLike postLike = postLikeOptional.get();
         postLikeRepository.delete(postLike);
-        post.unlikes();
+        post.cancelLike();
+        return PostLikeResponseDto.ofCancelLike(post);
+    }
+
+    @Transactional
+    @Override
+    public PostScrapResponseDto changePostScrap(final SignInUser signInUser, final Long postId) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        Post post = postRepository.findPostById(postId).orElseThrow(PostNotFoundException::new);
+        Optional<Scrap> scrapOptional = scrapRepository.findByPostAndUser(post, authenticatedUser);
+
+        if (scrapOptional.isPresent()) {
+            return cancelScrapPost(post, scrapOptional);
+        }
+
+        return scrapPost(post, authenticatedUser);
+    }
+
+    private PostScrapResponseDto scrapPost(final Post post, final User authenticatedUser) {
+        scrapRepository.save(Scrap.userScrapPost(post, authenticatedUser));
+        post.scrap();
+        return PostScrapResponseDto.ofScrap(post);
+    }
+
+    private PostScrapResponseDto cancelScrapPost(final Post post, final Optional<Scrap> scrapOptional) {
+        Scrap scrap = scrapOptional.get();
+        scrapRepository.delete(scrap);
+        post.cancelScrap();
+        return PostScrapResponseDto.ofCancelScrap(post);
     }
 
     @Override
@@ -158,14 +201,14 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public List<PostPreviewDto> userLikePostList(User user, final Pageable pageable) {
+    public List<PostPreviewDto> userLikePostList(final User user, final Pageable pageable) {
         List<PostPreviewDto> userLikePosts = new ArrayList<>();
         List<Post> postListFive = postRepository.findByLikeUser(user, pageable);
         postsToPostPreviewList(postListFive, userLikePosts);
         return userLikePosts;
     }
 
-    private void postsToPostPreviewList(List<Post> posts, List<PostPreviewDto> postPreviewList) {
+    private void postsToPostPreviewList(final List<Post> posts, final List<PostPreviewDto> postPreviewList) {
         for (Post post : posts) {
             PostPreviewDto postPreviewDto = PostPreviewDto.from(post);
             postPreviewList.add(postPreviewDto);

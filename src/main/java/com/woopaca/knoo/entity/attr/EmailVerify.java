@@ -1,4 +1,4 @@
-package com.woopaca.knoo.entity;
+package com.woopaca.knoo.entity.attr;
 
 public enum EmailVerify {
 

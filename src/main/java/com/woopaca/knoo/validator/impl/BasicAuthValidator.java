@@ -3,7 +3,7 @@ package com.woopaca.knoo.validator.impl;
 import com.woopaca.knoo.annotation.Validator;
 import com.woopaca.knoo.controller.dto.auth.SignInRequestDto;
 import com.woopaca.knoo.controller.dto.auth.SignUpRequestDto;
-import com.woopaca.knoo.entity.EmailVerify;
+import com.woopaca.knoo.entity.attr.EmailVerify;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.exception.user.impl.*;
 import com.woopaca.knoo.repository.UserRepository;

@@ -1,8 +1,8 @@
 package com.woopaca.knoo.repository;
 
 import com.woopaca.knoo.entity.Post;
-import com.woopaca.knoo.entity.PostCategory;
 import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.entity.attr.PostCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,4 +33,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     Optional<Post> findPostById(Long postId);
+
+    @Query("SELECT p FROM Post p LEFT JOIN p.scraps s WHERE s.user = :user ORDER BY s.scrapDate DESC")
+    Page<Post> findUserScrapPosts(@Param("user") User user, Pageable pageable);
 }

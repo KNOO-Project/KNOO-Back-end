@@ -12,5 +12,5 @@ public interface CommentService {
 
     void deleteComment(final SignInUser signInUser, final Long commentId);
 
-    CommentLikeResponseDto changeLikesOnComment(final SignInUser signInUser, final Long commentId);
+    CommentLikeResponseDto changeCommentLike(final SignInUser signInUser, final Long commentId);
 }

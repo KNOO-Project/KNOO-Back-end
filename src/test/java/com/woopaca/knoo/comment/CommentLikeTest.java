@@ -6,8 +6,8 @@ import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.Comment;
-import com.woopaca.knoo.entity.EmailVerify;
-import com.woopaca.knoo.entity.PostCategory;
+import com.woopaca.knoo.entity.attr.EmailVerify;
+import com.woopaca.knoo.entity.attr.PostCategory;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.repository.CommentRepository;
 import com.woopaca.knoo.repository.UserRepository;
@@ -106,7 +106,7 @@ public class CommentLikeTest {
 
     @Test
     @DisplayName("댓글 좋아요 - 성공")
-    void likesCommentSuccess() throws Exception {
+    void likeCommentSuccess() throws Exception {
         // given
 
         // when
@@ -119,7 +119,7 @@ public class CommentLikeTest {
 
     @Test
     @DisplayName("댓글 좋아요 취소 - 성공")
-    void unlikesCommentSuccess() throws Exception {
+    void cancelLikeCommentSuccess() throws Exception {
         // given
         resultActions(commentId, authorizationA);
         Comment comment = commentRepository.findById(commentId).get();
@@ -136,7 +136,7 @@ public class CommentLikeTest {
 
     @Test
     @DisplayName("댓글 좋아요 여러명 - 성공")
-    void likesCommentMultipleUserSuccess() throws Exception {
+    void likeCommentMultipleUserSuccess() throws Exception {
         // given
 
         // when
@@ -150,7 +150,7 @@ public class CommentLikeTest {
 
     @Test
     @DisplayName("게시글 좋아요 실패 - 삭제된 댓글")
-    void likesPostFailDeletedComment() throws Exception {
+    void likePostFailDeletedComment() throws Exception {
         // given
         mockMvc.perform(delete("/api/v1/comments")
                         .param("comment_id", String.valueOf(commentId))
@@ -169,7 +169,7 @@ public class CommentLikeTest {
 
     @Test
     @DisplayName("댓글 좋아요 실패 - 존재하지 않는 댓글")
-    void likesPostFailNonexistentComment() throws Exception {
+    void likePostFailNonexistentComment() throws Exception {
         // given
 
         // when

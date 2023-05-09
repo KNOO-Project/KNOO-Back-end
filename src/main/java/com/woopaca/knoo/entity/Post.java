@@ -2,6 +2,7 @@ package com.woopaca.knoo.entity;
 
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
+import com.woopaca.knoo.entity.attr.PostCategory;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "post")
 public class Post {
 
     @Id
@@ -44,6 +46,9 @@ public class Post {
     @Column(name = "likes_count", nullable = false)
     private int likesCount;
 
+    @Column(name = "scraps_count", nullable = false)
+    private int scrapsCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User writer;
@@ -54,14 +59,18 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Scrap> scraps = new ArrayList<>();
+
     @Builder
     public Post(String postTitle, String postContent, PostCategory postCategory,
-                LocalDateTime postDate, boolean isAnonymous) {
+                LocalDateTime postDate, boolean isAnonymous, int scrapsCount) {
         this.postTitle = postTitle;
         this.postContent = postContent;
         this.postCategory = postCategory;
         this.postDate = postDate;
         this.isAnonymous = isAnonymous;
+        this.scrapsCount = scrapsCount;
     }
 
     public static Post from(final WritePostRequestDto writePostRequestDto) {
@@ -90,11 +99,19 @@ public class Post {
         isAnonymous = updatePostRequestDto.getIsAnonymous();
     }
 
-    public void likes() {
+    public void like() {
         likesCount++;
     }
 
-    public void unlikes() {
+    public void cancelLike() {
         likesCount--;
+    }
+
+    public void scrap() {
+        scrapsCount++;
+    }
+
+    public void cancelScrap() {
+        scrapsCount--;
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "comment")
 public class Comment {
 
     @Id
@@ -82,11 +83,11 @@ public class Comment {
         isDeleted = true;
     }
 
-    public void likes() {
+    public void like() {
         likesCount++;
     }
 
-    public void unlikes() {
+    public void cancelLike() {
         likesCount--;
     }
 }

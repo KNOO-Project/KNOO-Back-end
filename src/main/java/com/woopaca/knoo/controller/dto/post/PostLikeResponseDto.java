@@ -34,7 +34,7 @@ public class PostLikeResponseDto {
                 .build();
     }
 
-    public static PostLikeResponseDto ofUnlike(final Post post) {
+    public static PostLikeResponseDto ofCancelLike(final Post post) {
         return PostLikeResponseDto.builder()
                 .postId(post.getId())
                 .likesCount(post.getLikesCount())
