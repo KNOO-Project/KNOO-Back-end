@@ -1,11 +1,7 @@
 package com.woopaca.knoo.controller.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.woopaca.knoo.entity.Comment;
-import com.woopaca.knoo.entity.CommentLike;
-import com.woopaca.knoo.entity.Post;
-import com.woopaca.knoo.entity.PostLike;
-import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.entity.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,9 +66,11 @@ public class PostDetailsResponseDto {
 
         private Boolean liked;
 
+        private Boolean scrapped;
+
         @Builder
         public PostDetailsDto(String postTitle, String postContent, String postDate, String writerName,
-                              int commentsCount, int likesCount, Boolean isWrittenByUser, Boolean liked) {
+                              int commentsCount, int likesCount, Boolean isWrittenByUser, Boolean liked, Boolean scrapped) {
             this.postTitle = postTitle;
             this.postContent = postContent;
             this.postDate = postDate;
@@ -81,6 +79,7 @@ public class PostDetailsResponseDto {
             this.likesCount = likesCount;
             this.isWrittenByUser = isWrittenByUser;
             this.liked = liked;
+            this.scrapped = scrapped;
         }
 
         public static PostDetailsDto of(final Post post, final User authenticatedUser) {
@@ -88,14 +87,8 @@ public class PostDetailsResponseDto {
             String writerName = post.isAnonymous() ? "KNOOER" : writer.getName();
             boolean isWrittenByUser = writer == authenticatedUser;
 
-            boolean liked = false;
-            List<PostLike> postLikeList = post.getPostLikes();
-            for (PostLike postLike : postLikeList) {
-                if (postLike.getUser() == authenticatedUser) {
-                    liked = true;
-                    break;
-                }
-            }
+            boolean liked = isLiked(post, authenticatedUser);
+            boolean scrapped = isScrapped(post, authenticatedUser);
 
             String formattedDate =
                     post.getPostDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
@@ -108,7 +101,32 @@ public class PostDetailsResponseDto {
                     .likesCount(post.getLikesCount())
                     .isWrittenByUser(isWrittenByUser)
                     .liked(liked)
+                    .scrapped(scrapped)
                     .build();
+        }
+
+        private static boolean isLiked(Post post, User authenticatedUser) {
+            boolean liked = false;
+            List<PostLike> postLikeList = post.getPostLikes();
+            for (PostLike postLike : postLikeList) {
+                if (postLike.getUser() == authenticatedUser) {
+                    liked = true;
+                    break;
+                }
+            }
+            return liked;
+        }
+
+        private static boolean isScrapped(Post post, User authenticatedUser) {
+            boolean scrapped = false;
+            List<Scrap> scrapList = post.getScraps();
+            for (Scrap scrap : scrapList) {
+                if (scrap.getUser() == authenticatedUser) {
+                    scrapped = true;
+                    break;
+                }
+            }
+            return scrapped;
         }
     }
 
