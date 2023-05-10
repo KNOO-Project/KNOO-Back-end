@@ -61,6 +61,9 @@ public class PostDetailsResponseDto {
         @JsonProperty(value = "likes_count")
         private int likesCount;
 
+        @JsonProperty(value = "scraps_count")
+        private int scrapsCount;
+
         @JsonProperty(value = "is_written_by_user")
         private Boolean isWrittenByUser;
 
@@ -70,13 +73,14 @@ public class PostDetailsResponseDto {
 
         @Builder
         public PostDetailsDto(String postTitle, String postContent, String postDate, String writerName,
-                              int commentsCount, int likesCount, Boolean isWrittenByUser, Boolean liked, Boolean scrapped) {
+                              int commentsCount, int likesCount, int scrapsCount, Boolean isWrittenByUser, Boolean liked, Boolean scrapped) {
             this.postTitle = postTitle;
             this.postContent = postContent;
             this.postDate = postDate;
             this.writerName = writerName;
             this.commentsCount = commentsCount;
             this.likesCount = likesCount;
+            this.scrapsCount = scrapsCount;
             this.isWrittenByUser = isWrittenByUser;
             this.liked = liked;
             this.scrapped = scrapped;
@@ -99,6 +103,7 @@ public class PostDetailsResponseDto {
                     .writerName(writerName)
                     .commentsCount(post.getCommentsCount())
                     .likesCount(post.getLikesCount())
+                    .scrapsCount(post.getScrapsCount())
                     .isWrittenByUser(isWrittenByUser)
                     .liked(liked)
                     .scrapped(scrapped)
