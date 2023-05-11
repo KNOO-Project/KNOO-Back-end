@@ -25,8 +25,7 @@ import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -129,7 +128,9 @@ public class PostLikeTest {
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().json("{'post_id': " + postId + ",'liked': true, 'likes_count': 2}"));
+                .andExpect(jsonPath("post_id").value(postId))
+                .andExpect(jsonPath("liked").value(true))
+                .andExpect(jsonPath("likes_count").value(2));
     }
 
     @Test
