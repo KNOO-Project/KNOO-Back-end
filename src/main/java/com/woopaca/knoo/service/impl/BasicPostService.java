@@ -1,9 +1,18 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
-import com.woopaca.knoo.controller.dto.post.*;
-import com.woopaca.knoo.controller.dto.user.PostPreviewDto;
-import com.woopaca.knoo.entity.*;
+import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostListDto;
+import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
+import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
+import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
+import com.woopaca.knoo.entity.Comment;
+import com.woopaca.knoo.entity.Post;
+import com.woopaca.knoo.entity.PostLike;
+import com.woopaca.knoo.entity.Scrap;
+import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.entity.attr.PostCategory;
 import com.woopaca.knoo.exception.post.impl.InvalidPostPageException;
 import com.woopaca.knoo.exception.post.impl.PageCountExceededException;
@@ -185,33 +194,33 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public List<PostPreviewDto> userWritePostList(final User user, final Pageable pageable) {
-        List<PostPreviewDto> userWritePosts = new ArrayList<>();
+    public List<PostListDto> userWritePostList(final User user, final Pageable pageable) {
+        List<PostListDto> userWritePosts = new ArrayList<>();
         List<Post> postListFive = postRepository.findByWriter(user, pageable);
         postsToPostPreviewList(postListFive, userWritePosts);
         return userWritePosts;
     }
 
     @Override
-    public List<PostPreviewDto> userCommentPostList(final User user, final Pageable pageable) {
-        List<PostPreviewDto> userCommentPosts = new ArrayList<>();
+    public List<PostListDto> userCommentPostList(final User user, final Pageable pageable) {
+        List<PostListDto> userCommentPosts = new ArrayList<>();
         List<Post> postListFive = postRepository.findByCommentWriter(user, pageable);
         postsToPostPreviewList(postListFive, userCommentPosts);
         return userCommentPosts;
     }
 
     @Override
-    public List<PostPreviewDto> userLikePostList(final User user, final Pageable pageable) {
-        List<PostPreviewDto> userLikePosts = new ArrayList<>();
+    public List<PostListDto> userLikePostList(final User user, final Pageable pageable) {
+        List<PostListDto> userLikePosts = new ArrayList<>();
         List<Post> postListFive = postRepository.findByLikeUser(user, pageable);
         postsToPostPreviewList(postListFive, userLikePosts);
         return userLikePosts;
     }
 
-    private void postsToPostPreviewList(final List<Post> posts, final List<PostPreviewDto> postPreviewList) {
+    private void postsToPostPreviewList(final List<Post> posts, final List<PostListDto> postPreviewList) {
         for (Post post : posts) {
-            PostPreviewDto postPreviewDto = PostPreviewDto.from(post);
-            postPreviewList.add(postPreviewDto);
+            PostListDto postListDto = PostListDto.from(post);
+            postPreviewList.add(postListDto);
         }
     }
 }
