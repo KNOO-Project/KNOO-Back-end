@@ -1,7 +1,12 @@
 package com.woopaca.knoo.controller.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.woopaca.knoo.entity.*;
+import com.woopaca.knoo.entity.Comment;
+import com.woopaca.knoo.entity.CommentLike;
+import com.woopaca.knoo.entity.Post;
+import com.woopaca.knoo.entity.PostLike;
+import com.woopaca.knoo.entity.Scrap;
+import com.woopaca.knoo.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

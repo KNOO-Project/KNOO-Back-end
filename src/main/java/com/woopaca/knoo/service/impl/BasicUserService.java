@@ -1,7 +1,7 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
-import com.woopaca.knoo.controller.dto.user.PostPreviewDto;
+import com.woopaca.knoo.controller.dto.post.PostListDto;
 import com.woopaca.knoo.controller.dto.user.UserInfoResponseDto;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.service.AuthService;
@@ -26,9 +26,9 @@ public class BasicUserService implements UserService {
     public UserInfoResponseDto userInfo(final SignInUser signInUser) {
         User user = authService.getAuthenticatedUser(signInUser);
 
-        List<PostPreviewDto> writePostList = postService.userWritePostList(user, PageRequest.of(0, 5));
-        List<PostPreviewDto> commentPostList = postService.userCommentPostList(user, PageRequest.of(0, 5));
-        List<PostPreviewDto> likePostList = postService.userLikePostList(user, PageRequest.of(0, 5));
+        List<PostListDto> writePostList = postService.userWritePostList(user, PageRequest.of(0, 5));
+        List<PostListDto> commentPostList = postService.userCommentPostList(user, PageRequest.of(0, 5));
+        List<PostListDto> likePostList = postService.userLikePostList(user, PageRequest.of(0, 5));
 
         return UserInfoResponseDto.builder()
                 .name(user.getName())
