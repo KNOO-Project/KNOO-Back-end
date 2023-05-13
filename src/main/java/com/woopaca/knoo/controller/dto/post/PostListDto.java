@@ -17,6 +17,9 @@ public class PostListDto {
     @JsonProperty(value = "post_content")
     private String postContent;
 
+    @JsonProperty(value = "post_category")
+    private String postCategory;
+
     @JsonProperty(value = "post_date")
     private String postDate;
 
@@ -33,11 +36,12 @@ public class PostListDto {
     private int scrapsCount;
 
     @Builder
-    public PostListDto(Long postId, String postTitle, String postContent, String postDate,
+    public PostListDto(Long postId, String postTitle, String postContent, String postCategory, String postDate,
                        String writerName, int commentsCount, int likesCount, int scrapsCount) {
         this.postId = postId;
         this.postTitle = postTitle;
         this.postContent = postContent;
+        this.postCategory = postCategory;
         this.postDate = postDate;
         this.writerName = writerName;
         this.commentsCount = commentsCount;
@@ -57,6 +61,7 @@ public class PostListDto {
                 .postId(post.getId())
                 .postTitle(post.getPostTitle())
                 .postContent(contentPreview)
+                .postCategory(post.getPostCategory().getCategoryName())
                 .postDate(formattedDate)
                 .writerName(post.isAnonymous() ? "KNOOER" : post.getWriter().getName())
                 .commentsCount(post.getCommentsCount())

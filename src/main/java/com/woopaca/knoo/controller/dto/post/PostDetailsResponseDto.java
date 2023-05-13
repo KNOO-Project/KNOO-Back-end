@@ -54,6 +54,9 @@ public class PostDetailsResponseDto {
         @JsonProperty(value = "post_content")
         private String postContent;
 
+        @JsonProperty(value = "post_category")
+        private String postCategory;
+
         @JsonProperty(value = "post_date")
         private String postDate;
 
@@ -77,10 +80,11 @@ public class PostDetailsResponseDto {
         private Boolean scrapped;
 
         @Builder
-        public PostDetailsDto(String postTitle, String postContent, String postDate, String writerName,
+        public PostDetailsDto(String postTitle, String postContent, String postCategory, String postDate, String writerName,
                               int commentsCount, int likesCount, int scrapsCount, Boolean isWrittenByUser, Boolean liked, Boolean scrapped) {
             this.postTitle = postTitle;
             this.postContent = postContent;
+            this.postCategory = postCategory;
             this.postDate = postDate;
             this.writerName = writerName;
             this.commentsCount = commentsCount;
@@ -104,6 +108,7 @@ public class PostDetailsResponseDto {
             return PostDetailsDto.builder()
                     .postTitle(post.getPostTitle())
                     .postContent(post.getPostContent())
+                    .postCategory(post.getPostCategory().getCategoryName())
                     .postDate(formattedDate)
                     .writerName(writerName)
                     .commentsCount(post.getCommentsCount())
