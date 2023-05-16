@@ -80,8 +80,11 @@ public class PostDetailsResponseDto {
         private Boolean scrapped;
 
         @Builder
-        public PostDetailsDto(String postTitle, String postContent, String postCategory, String postDate, String writerName,
-                              int commentsCount, int likesCount, int scrapsCount, Boolean isWrittenByUser, Boolean liked, Boolean scrapped) {
+        public PostDetailsDto(
+                String postTitle, String postContent, String postCategory, String postDate,
+                String writerName, int commentsCount, int likesCount, int scrapsCount,
+                Boolean isWrittenByUser, Boolean liked, Boolean scrapped
+        ) {
             this.postTitle = postTitle;
             this.postContent = postContent;
             this.postCategory = postCategory;
