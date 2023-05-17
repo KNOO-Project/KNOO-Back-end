@@ -22,6 +22,6 @@ public enum SearchCondition {
             }
         }
 
-        return null;
+        throw new IllegalArgumentException("유효하지 않은 검색 조건입니다.");
     }
 }

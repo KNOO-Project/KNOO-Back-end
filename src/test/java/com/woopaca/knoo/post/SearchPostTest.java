@@ -242,6 +242,31 @@ public class SearchPostTest {
                 .andExpect(jsonPath("error_code").value("KN304"));
     }
 
+    @Test
+    @DisplayName("게시글 검색 실패 - 검색 조건 파라미터 매핑 실패")
+    void searchPostFailInvalidSearchCondition() throws Exception {
+        // given
+        for (int i = 1; i <= 10; i++) {
+            PostCategory[] values = PostCategory.values();
+            int length = values.length;
+            int index = (int) (Math.random() * length);
+            Post post = createPost(i + "번째 게시글", values[index]);
+            post.writtenBy(user);
+            postRepository.save(post);
+        }
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/posts/search")
+                        .param("condition", "invalid")
+                        .param("keyword", "10")
+                        .param("page", "1"))
+                .andDo(print());
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("error_code").value("KN106"));
+    }
+
     private static User createUser(String signature) {
         return User.builder()
                 .username(signature)
