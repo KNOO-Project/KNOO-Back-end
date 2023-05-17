@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 @Slf4j
@@ -23,9 +25,28 @@ public class CommonExceptionHandler {
     protected ResponseEntity<ErrorResponseDto> fieldInvalidExceptionHandler(
             MethodArgumentNotValidException exception, HttpServletRequest request
     ) {
-        log.error("필드 검증 예외 -> {}", exception.getFieldError().getDefaultMessage());
-        return createResponseEntity(HttpStatus.BAD_REQUEST,
-                exception.getFieldError().getDefaultMessage(), request, "KN101");
+        String message = exception.getFieldError().getDefaultMessage();
+        log.error("필드 검증 예외 -> {}", message);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, message, request, "KN101");
+    }
+
+    @ExceptionHandler(BindException.class)
+    protected ResponseEntity<ErrorResponseDto> bindExceptionHandler(
+            BindException exception, HttpServletRequest request
+    ) {
+        String[] split = exception.getFieldError().getDefaultMessage().split(": ");
+        String message = split[split.length - 1];
+        log.error("필드 검증 예외 -> {}", message);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, message, request, "KN101");
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ErrorResponseDto> constraintViolationExceptionHandler(
+            ConstraintViolationException exception, HttpServletRequest request
+    ) {
+        String message = exception.getMessage().split(": ")[1];
+        log.error("필드 검증 예외 -> {}", message);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, message, request, "KN101");
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

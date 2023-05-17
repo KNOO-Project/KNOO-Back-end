@@ -275,16 +275,13 @@ public class BasicPostService implements PostService {
 
     @Override
     public PostListResponseDto searchUserScrapPosts(
-            final SignInUser signInUser, final SearchCondition searchCondition, final String keyword, final int page
-    ) {
-        if (page < 0) {
-            throw new InvalidPostPageException();
-        }
-
+            final SignInUser signInUser, final PostSearchRequestDto postSearchRequestDto) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        final int page = postSearchRequestDto.getPage() - 1;
         PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
 
-        Page<Post> postPage = searchInUserScrapPosts(searchCondition, keyword, authenticatedUser, pageRequest);
+        Page<Post> postPage = searchInUserScrapPosts(
+                postSearchRequestDto.getCondition(), postSearchRequestDto.getKeyword(), authenticatedUser, pageRequest);
         assert postPage != null;
         validatePage(page, postPage);
 
@@ -306,7 +303,10 @@ public class BasicPostService implements PostService {
     }
 
     private static void validatePage(final int page, final Page<Post> postPage) {
-        if (postPage.getTotalPages() != 0 && postPage.getTotalPages() <= page) {
+        if (postPage.getTotalPages() == 0 && page == 0) {
+            return;
+        }
+        if (postPage.getTotalPages() <= page) {
             throw new PageCountExceededException();
         }
     }

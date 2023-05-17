@@ -80,7 +80,7 @@ public class SearchUserScrapListTest {
 
         // when
         ResultActions resultActionsA = resultActions(SearchCondition.ALL, "10", 1);
-        ResultActions resultActionsB = resultActions(SearchCondition.ALL, "9", 1);
+        ResultActions resultActionsB = resultActions(SearchCondition.ALL, "11", 1);
 
         // then
         resultActionsA.andExpect(status().isOk())
@@ -122,6 +122,19 @@ public class SearchUserScrapListTest {
                 .andExpect(content().json("{posts: [{}, {}, {}, {}, {}], total_pages: 1}"));
         resultActionsB.andExpect(status().isOk())
                 .andExpect(content().json("{posts: [], total_pages: 0}"));
+    }
+
+    @Test
+    @DisplayName("게시글 검색 실패 - 검색어 글자수 부족")
+    void searchPostFailInsufficientKeywordCharacterCount() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = resultActions(SearchCondition.ALL, "1", 1);
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("error_code").value("KN101"));
     }
 
     private static User createUser(String signature) {

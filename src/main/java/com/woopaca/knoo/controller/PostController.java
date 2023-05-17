@@ -14,6 +14,7 @@ import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,12 +26,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 
-@RestController
+@Slf4j
+@Validated
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
-@Slf4j
+@RestController
 public class PostController {
 
     private final PostService postService;
@@ -48,7 +51,7 @@ public class PostController {
     @GetMapping("/{category}")
     public ResponseEntity<PostListResponseDto> writtenPostList(
             @PathVariable("category") final PostCategory postCategory,
-            @RequestParam("page") final int page
+            @RequestParam("page") @Positive(message = "유효하지 않은 페이지입니다.") final int page
     ) {
         PostListResponseDto postListResponseDto = postService.postList(postCategory, page - 1);
         return ResponseEntity.ok().body(postListResponseDto);

@@ -226,34 +226,19 @@ public class SearchPostTest {
     @DisplayName("게시글 검색 실패 - 유효하지 않은 페이지")
     void searchPostFailInvalidPage() throws Exception {
         // given
-        PostCategory[] values = PostCategory.values();
-        int length = values.length;
-        for (int i = 1; i <= length * 2; i++) {
-            Post post = createPost(i + "번째 게시글", values[(i - 1) % length]);
-            post.writtenBy(user);
-            postRepository.save(post);
-        }
 
         // when
         ResultActions resultActionsA = resultActions(null, SearchCondition.ALL, "onten", 0);
 
         // then
         resultActionsA.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("error_code").value("KN304"));
+                .andExpect(jsonPath("error_code").value("KN101"));
     }
 
     @Test
-    @DisplayName("게시글 검색 실패 - 검색 조건 파라미터 매핑 실패")
+    @DisplayName("게시글 검색 실패 - 유효하지 않은 검색 조건")
     void searchPostFailInvalidSearchCondition() throws Exception {
         // given
-        for (int i = 1; i <= 10; i++) {
-            PostCategory[] values = PostCategory.values();
-            int length = values.length;
-            int index = (int) (Math.random() * length);
-            Post post = createPost(i + "번째 게시글", values[index]);
-            post.writtenBy(user);
-            postRepository.save(post);
-        }
 
         // when
         ResultActions resultActions = mockMvc.perform(get("/api/v1/posts/search")
@@ -264,7 +249,20 @@ public class SearchPostTest {
 
         // then
         resultActions.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("error_code").value("KN106"));
+                .andExpect(jsonPath("error_code").value("KN101"));
+    }
+
+    @Test
+    @DisplayName("게시글 검색 실패 - 검색어 글자수 부족")
+    void searchPostFailInsufficientKeywordCharacterCount() throws Exception {
+        // given
+
+        // when
+        ResultActions resultActions = resultActions(null, SearchCondition.ALL, "1", 1);
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("error_code").value("KN101"));
     }
 
     private static User createUser(String signature) {
