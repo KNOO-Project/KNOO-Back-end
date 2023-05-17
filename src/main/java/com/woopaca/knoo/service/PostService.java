@@ -41,4 +41,7 @@ public interface PostService {
 
     PostListResponseDto searchPosts(
             final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page);
+
+    PostListResponseDto searchUserScrapPosts(
+            final SignInUser signInUser, final SearchCondition searchCondition, final String keyword, final int page);
 }

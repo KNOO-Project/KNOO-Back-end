@@ -264,7 +264,6 @@ public class BasicPostService implements PostService {
             final String keyword, final PageRequest pageRequest
     ) {
         if (searchCondition == SearchCondition.ALL) {
-            System.out.println("BasicPostService.searchInSpecificCategory");
             return postRepository.searchByTitleAndContentInCategory(keyword, postCategory, pageRequest);
         }
         if (searchCondition == SearchCondition.TITLE) {
@@ -276,7 +275,39 @@ public class BasicPostService implements PostService {
         return null;
     }
 
-    private static void validatePage(int page, Page<Post> postPage) {
+    @Override
+    public PostListResponseDto searchUserScrapPosts(
+            final SignInUser signInUser, final SearchCondition searchCondition, final String keyword, final int page
+    ) {
+        if (page < 0) {
+            throw new InvalidPostPageException();
+        }
+
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+
+        Page<Post> postPage = searchInUserScrapPosts(searchCondition, keyword, authenticatedUser, pageRequest);
+        assert postPage != null;
+        validatePage(page, postPage);
+
+        return PostListResponseDto.from(postPage);
+    }
+
+    private Page<Post> searchInUserScrapPosts(final SearchCondition searchCondition, final String keyword,
+                                              final User authenticatedUser, final PageRequest pageRequest) {
+        if (searchCondition == SearchCondition.ALL) {
+            return postRepository.searchByTitleAndContentInUserScrap(keyword, authenticatedUser, pageRequest);
+        }
+        if (searchCondition == SearchCondition.TITLE) {
+            return postRepository.searchByTitleInUserScrap(keyword, authenticatedUser, pageRequest);
+        }
+        if (searchCondition == SearchCondition.CONTENT) {
+            return postRepository.searchByContentInUserScrap(keyword, authenticatedUser, pageRequest);
+        }
+        return null;
+    }
+
+    private static void validatePage(final int page, final Page<Post> postPage) {
         if (postPage.getTotalPages() != 0 && postPage.getTotalPages() <= page) {
             throw new PageCountExceededException();
         }

@@ -4,6 +4,7 @@ import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.entity.attr.PostCategory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -58,4 +59,22 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.postContent LIKE %:keyword% AND p.postCategory = :postCategory")
     Page<Post> searchByContentInCategory(@Param("keyword") String keyword, @Param("postCategory") PostCategory postCategory,
                                          Pageable pageable);
+
+    @Query("SELECT p FROM Post p LEFT JOIN p.scraps s WHERE s.user = :user " +
+            "AND (p.postTitle LIKE %:keyword% OR p.postContent LIKE %:keyword%) " +
+            "ORDER BY s.scrapDate DESC")
+    Page<Post> searchByTitleAndContentInUserScrap(@Param("keyword") String keyword, @Param("user") User authenticatedUser,
+                                                  PageRequest pageRequest);
+
+    @Query("SELECT p FROM Post p LEFT JOIN p.scraps s WHERE s.user = :user " +
+            "AND p.postTitle LIKE %:keyword% " +
+            "ORDER BY s.scrapDate DESC")
+    Page<Post> searchByTitleInUserScrap(@Param("keyword") String keyword, @Param("user") User authenticatedUser,
+                                        PageRequest pageRequest);
+
+    @Query("SELECT p FROM Post p LEFT JOIN p.scraps s WHERE s.user = :user " +
+            "AND p.postContent LIKE %:keyword% " +
+            "ORDER BY s.scrapDate DESC")
+    Page<Post> searchByContentInUserScrap(@Param("keyword") String keyword, @Param("user") User authenticatedUser,
+                                          PageRequest pageRequest);
 }

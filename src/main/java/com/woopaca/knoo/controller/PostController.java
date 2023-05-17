@@ -101,7 +101,7 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<PostListResponseDto> searchPostAllOrSpecificCategory(
+    public ResponseEntity<PostListResponseDto> searchPostsAllOrSpecificCategory(
             @RequestParam(name = "category", required = false) final PostCategory postCategory,
             @RequestParam(name = "condition") final SearchCondition searchCondition,
             @RequestParam(name = "keyword") final String keyword,
