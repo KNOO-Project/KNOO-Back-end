@@ -3,6 +3,7 @@ package com.woopaca.knoo.controller;
 import com.woopaca.knoo.annotation.SignIn;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.user.UserInfoResponseDto;
 import com.woopaca.knoo.service.PostService;
 import com.woopaca.knoo.service.UserService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -32,6 +35,13 @@ public class UserController {
             @SignIn final SignInUser signInUser, @RequestParam("page") final int page
     ) {
         PostListResponseDto postListResponseDto = postService.scrapPostList(signInUser, page - 1);
+        return ResponseEntity.ok().body(postListResponseDto);
+    }
+
+    @GetMapping("/scraps/search")
+    public ResponseEntity<PostListResponseDto> searchUserScrapPosts(
+            @SignIn final SignInUser signInUser, @Valid final PostSearchRequestDto postSearchRequestDto) {
+        PostListResponseDto postListResponseDto = postService.searchUserScrapPosts(signInUser, postSearchRequestDto);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 }

@@ -6,6 +6,8 @@ import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
+import com.woopaca.knoo.controller.dto.post.SearchCondition;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.Comment;
@@ -85,12 +87,6 @@ public class BasicPostService implements PostService {
         validatePage(page, postPage);
 
         return PostListResponseDto.from(postPage);
-    }
-
-    private static void validatePage(int page, Page<Post> postPage) {
-        if (postPage.getTotalPages() != 0 && postPage.getTotalPages() <= page) {
-            throw new PageCountExceededException();
-        }
     }
 
     private static void validateArgument(PostCategory postCategory, int page) {
@@ -221,6 +217,97 @@ public class BasicPostService implements PostService {
         for (Post post : posts) {
             PostListDto postListDto = PostListDto.from(post);
             postPreviewList.add(postListDto);
+        }
+    }
+
+    @Override
+    public PostListResponseDto searchPosts(final PostSearchRequestDto postSearchRequestDto) {
+        final int page = postSearchRequestDto.getPage() - 1;
+        Page<Post> postPage = searchByCondition(
+                postSearchRequestDto.getCategory(), postSearchRequestDto.getCondition(),
+                postSearchRequestDto.getKeyword(), page);
+        validatePage(page, postPage);
+        return PostListResponseDto.from(postPage);
+    }
+
+    private Page<Post> searchByCondition(
+            final PostCategory postCategory, final SearchCondition searchCondition,
+            final String keyword, final int page
+    ) {
+        PageRequest pageRequest =
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+        if (postCategory == null) {
+            return searchInAllCategory(searchCondition, keyword, pageRequest);
+        }
+        return searchInSpecificCategory(postCategory, searchCondition, keyword, pageRequest);
+    }
+
+    private Page<Post> searchInAllCategory(
+            final SearchCondition searchCondition, final String keyword, final PageRequest pageRequest
+    ) {
+        if (searchCondition == SearchCondition.ALL) {
+            return postRepository.searchByTitleAndContent(keyword, pageRequest);
+        }
+        if (searchCondition == SearchCondition.TITLE) {
+            return postRepository.searchByTitle(keyword, pageRequest);
+        }
+        if (searchCondition == SearchCondition.CONTENT) {
+            return postRepository.searchByContent(keyword, pageRequest);
+        }
+        return null;
+    }
+
+    private Page<Post> searchInSpecificCategory(
+            final PostCategory postCategory, final SearchCondition searchCondition,
+            final String keyword, final PageRequest pageRequest
+    ) {
+        if (searchCondition == SearchCondition.ALL) {
+            return postRepository.searchByTitleAndContentInCategory(keyword, postCategory, pageRequest);
+        }
+        if (searchCondition == SearchCondition.TITLE) {
+            return postRepository.searchByTitleInCategory(keyword, postCategory, pageRequest);
+        }
+        if (searchCondition == SearchCondition.CONTENT) {
+            return postRepository.searchByContentInCategory(keyword, postCategory, pageRequest);
+        }
+        return null;
+    }
+
+    @Override
+    public PostListResponseDto searchUserScrapPosts(
+            final SignInUser signInUser, final PostSearchRequestDto postSearchRequestDto) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        final int page = postSearchRequestDto.getPage() - 1;
+        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+
+        Page<Post> postPage = searchInUserScrapPosts(
+                postSearchRequestDto.getCondition(), postSearchRequestDto.getKeyword(), authenticatedUser, pageRequest);
+        assert postPage != null;
+        validatePage(page, postPage);
+
+        return PostListResponseDto.from(postPage);
+    }
+
+    private Page<Post> searchInUserScrapPosts(final SearchCondition searchCondition, final String keyword,
+                                              final User authenticatedUser, final PageRequest pageRequest) {
+        if (searchCondition == SearchCondition.ALL) {
+            return postRepository.searchByTitleAndContentInUserScrap(keyword, authenticatedUser, pageRequest);
+        }
+        if (searchCondition == SearchCondition.TITLE) {
+            return postRepository.searchByTitleInUserScrap(keyword, authenticatedUser, pageRequest);
+        }
+        if (searchCondition == SearchCondition.CONTENT) {
+            return postRepository.searchByContentInUserScrap(keyword, authenticatedUser, pageRequest);
+        }
+        return null;
+    }
+
+    private static void validatePage(final int page, final Page<Post> postPage) {
+        if (postPage.getTotalPages() == 0 && page == 0) {
+            return;
+        }
+        if (postPage.getTotalPages() <= page) {
+            throw new PageCountExceededException();
         }
     }
 }
