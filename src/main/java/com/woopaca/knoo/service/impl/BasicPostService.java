@@ -226,28 +226,53 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public PostListResponseDto searchPostAll(final SearchCondition searchCondition, final String keyword, int page) {
-        PageRequest pageRequest =
-                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
-        Page<Post> postPage = null;
-
-        if (searchCondition == SearchCondition.ALL) {
-            postPage = postRepository.searchByTitleAndContent(keyword, pageRequest);
-        }
-        if (searchCondition == SearchCondition.TITLE) {
-            postPage = postRepository.searchByTitle(keyword, pageRequest);
-        }
-        if (searchCondition == SearchCondition.CONTENT) {
-            postPage = postRepository.searchByContent(keyword, pageRequest);
-        }
-
+    public PostListResponseDto searchPosts(
+            final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page
+    ) {
+        Page<Post> postPage = searchByCondition(postCategory, searchCondition, keyword, page);
         return PostListResponseDto.from(postPage);
     }
 
-    @Override
-    public PostListResponseDto searchPostSpecificCategory(
-            final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page
+    private Page<Post> searchByCondition(
+            final PostCategory postCategory, final SearchCondition searchCondition,
+            final String keyword, final int page
     ) {
+        PageRequest pageRequest =
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+        if (postCategory == null) {
+            return searchInAllCategory(searchCondition, keyword, pageRequest);
+        }
+        return searchInSpecificCategory(postCategory, searchCondition, keyword, pageRequest);
+    }
+
+    private Page<Post> searchInAllCategory(
+            final SearchCondition searchCondition, final String keyword, final PageRequest pageRequest
+    ) {
+        if (searchCondition == SearchCondition.ALL) {
+            return postRepository.searchByTitleAndContent(keyword, pageRequest);
+        }
+        if (searchCondition == SearchCondition.TITLE) {
+            return postRepository.searchByTitle(keyword, pageRequest);
+        }
+        if (searchCondition == SearchCondition.CONTENT) {
+            return postRepository.searchByContent(keyword, pageRequest);
+        }
+        return null;
+    }
+
+    private Page<Post> searchInSpecificCategory(
+            final PostCategory postCategory, final SearchCondition searchCondition,
+            final String keyword, final PageRequest pageRequest
+    ) {
+        if (searchCondition == SearchCondition.ALL) {
+            return postRepository.searchByTitleAndContentInCategory(keyword, postCategory, pageRequest);
+        }
+        if (searchCondition == SearchCondition.TITLE) {
+            return postRepository.searchByTitleInCategory(keyword, postCategory, pageRequest);
+        }
+        if (searchCondition == SearchCondition.CONTENT) {
+            return postRepository.searchByContentInCategory(keyword, postCategory, pageRequest);
+        }
         return null;
     }
 }

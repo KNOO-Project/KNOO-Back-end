@@ -108,13 +108,7 @@ public class PostController {
             @RequestParam(name = "page") final int page
     ) {
         PostListResponseDto postListResponseDto = null;
-        if (postCategory == null) {
-            postListResponseDto = postService.searchPostAll(searchCondition, keyword, page);
-        }
-        if (postCategory != null) {
-            postListResponseDto = postService.searchPostSpecificCategory(postCategory, searchCondition, keyword, page);
-        }
-
+        postListResponseDto = postService.searchPosts(postCategory, searchCondition, keyword, page);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 }

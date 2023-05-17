@@ -39,8 +39,6 @@ public interface PostService {
 
     List<PostListDto> userLikePostList(final User user, final Pageable pageable);
 
-    PostListResponseDto searchPostAll(final SearchCondition searchCondition, final String keyword, int page);
-
-    PostListResponseDto searchPostSpecificCategory(
+    PostListResponseDto searchPosts(
             final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page);
 }
