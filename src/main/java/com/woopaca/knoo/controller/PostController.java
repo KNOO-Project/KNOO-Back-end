@@ -107,8 +107,8 @@ public class PostController {
             @RequestParam(name = "keyword") final String keyword,
             @RequestParam(name = "page") final int page
     ) {
-        PostListResponseDto postListResponseDto = null;
-        postListResponseDto = postService.searchPosts(postCategory, searchCondition, keyword, page);
+        PostListResponseDto postListResponseDto =
+                postService.searchPosts(postCategory, searchCondition, keyword, page - 1);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 }

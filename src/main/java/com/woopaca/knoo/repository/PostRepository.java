@@ -37,7 +37,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p LEFT JOIN p.scraps s WHERE s.user = :user ORDER BY s.scrapDate DESC")
     Page<Post> findUserScrapPosts(@Param("user") User user, Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword% AND p.postContent LIKE %:keyword%")
+    @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword% OR p.postContent LIKE %:keyword%")
     Page<Post> searchByTitleAndContent(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword%")
@@ -46,16 +46,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p FROM Post p WHERE p.postContent LIKE %:keyword%")
     Page<Post> searchByContent(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword% AND p.postContent LIKE %:keyword% " +
+    @Query("SELECT p FROM Post p WHERE (p.postTitle LIKE %:keyword% OR p.postContent LIKE %:keyword%) " +
             "AND p.postCategory = :postCategory")
     Page<Post> searchByTitleAndContentInCategory(@Param("keyword") String keyword,
                                                  @Param("postCategory") PostCategory postCategory, Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword% AND p.postCategory = :postCategory")
     Page<Post> searchByTitleInCategory(@Param("keyword") String keyword, @Param("postCategory") PostCategory postCategory,
-                             Pageable pageable);
+                                       Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE p.postContent LIKE %:keyword% AND p.postCategory = :postCategory")
     Page<Post> searchByContentInCategory(@Param("keyword") String keyword, @Param("postCategory") PostCategory postCategory,
-                               Pageable pageable);
+                                         Pageable pageable);
 }

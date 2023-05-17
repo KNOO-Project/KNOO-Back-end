@@ -88,12 +88,6 @@ public class BasicPostService implements PostService {
         return PostListResponseDto.from(postPage);
     }
 
-    private static void validatePage(int page, Page<Post> postPage) {
-        if (postPage.getTotalPages() != 0 && postPage.getTotalPages() <= page) {
-            throw new PageCountExceededException();
-        }
-    }
-
     private static void validateArgument(PostCategory postCategory, int page) {
         if (postCategory == null) {
             throw new PostCategoryNotFoundException();
@@ -229,7 +223,12 @@ public class BasicPostService implements PostService {
     public PostListResponseDto searchPosts(
             final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page
     ) {
+        if (page < 0) {
+            throw new InvalidPostPageException();
+        }
+
         Page<Post> postPage = searchByCondition(postCategory, searchCondition, keyword, page);
+        validatePage(page, postPage);
         return PostListResponseDto.from(postPage);
     }
 
@@ -265,6 +264,7 @@ public class BasicPostService implements PostService {
             final String keyword, final PageRequest pageRequest
     ) {
         if (searchCondition == SearchCondition.ALL) {
+            System.out.println("BasicPostService.searchInSpecificCategory");
             return postRepository.searchByTitleAndContentInCategory(keyword, postCategory, pageRequest);
         }
         if (searchCondition == SearchCondition.TITLE) {
@@ -274,5 +274,11 @@ public class BasicPostService implements PostService {
             return postRepository.searchByContentInCategory(keyword, postCategory, pageRequest);
         }
         return null;
+    }
+
+    private static void validatePage(int page, Page<Post> postPage) {
+        if (postPage.getTotalPages() != 0 && postPage.getTotalPages() <= page) {
+            throw new PageCountExceededException();
+        }
     }
 }
