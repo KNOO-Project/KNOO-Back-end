@@ -6,6 +6,7 @@ import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
+import com.woopaca.knoo.controller.dto.post.SearchCondition;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.Comment;
@@ -222,5 +223,31 @@ public class BasicPostService implements PostService {
             PostListDto postListDto = PostListDto.from(post);
             postPreviewList.add(postListDto);
         }
+    }
+
+    @Override
+    public PostListResponseDto searchPostAll(final SearchCondition searchCondition, final String keyword, int page) {
+        PageRequest pageRequest =
+                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+        Page<Post> postPage = null;
+
+        if (searchCondition == SearchCondition.ALL) {
+            postPage = postRepository.searchByTitleAndContent(keyword, pageRequest);
+        }
+        if (searchCondition == SearchCondition.TITLE) {
+            postPage = postRepository.searchByTitle(keyword, pageRequest);
+        }
+        if (searchCondition == SearchCondition.CONTENT) {
+            postPage = postRepository.searchByContent(keyword, pageRequest);
+        }
+
+        return PostListResponseDto.from(postPage);
+    }
+
+    @Override
+    public PostListResponseDto searchPostSpecificCategory(
+            final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page
+    ) {
+        return null;
     }
 }

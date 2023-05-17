@@ -36,4 +36,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p LEFT JOIN p.scraps s WHERE s.user = :user ORDER BY s.scrapDate DESC")
     Page<Post> findUserScrapPosts(@Param("user") User user, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword% AND p.postContent LIKE %:keyword%")
+    Page<Post> searchByTitleAndContent(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword%")
+    Page<Post> searchByTitle(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.postContent LIKE %:keyword%")
+    Page<Post> searchByContent(@Param("keyword") String keyword, Pageable pageable);
 }

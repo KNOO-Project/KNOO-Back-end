@@ -6,6 +6,7 @@ import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
+import com.woopaca.knoo.controller.dto.post.SearchCondition;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.User;
@@ -37,4 +38,9 @@ public interface PostService {
     List<PostListDto> userCommentPostList(final User user, final Pageable pageable);
 
     List<PostListDto> userLikePostList(final User user, final Pageable pageable);
+
+    PostListResponseDto searchPostAll(final SearchCondition searchCondition, final String keyword, int page);
+
+    PostListResponseDto searchPostSpecificCategory(
+            final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page);
 }

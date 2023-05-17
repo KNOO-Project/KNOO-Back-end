@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SearchCondition {
 
+    ALL("all"),
     TITLE("title"),
     CONTENT("content");
 

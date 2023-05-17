@@ -6,6 +6,7 @@ import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
+import com.woopaca.knoo.controller.dto.post.SearchCondition;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.attr.PostCategory;
@@ -97,5 +98,23 @@ public class PostController {
     ) {
         PostScrapResponseDto postScrapResponseDto = postService.changePostScrap(signInUser, postId);
         return ResponseEntity.ok().body(postScrapResponseDto);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<PostListResponseDto> searchPostAllOrSpecificCategory(
+            @RequestParam(name = "category", required = false) final PostCategory postCategory,
+            @RequestParam(name = "condition") final SearchCondition searchCondition,
+            @RequestParam(name = "keyword") final String keyword,
+            @RequestParam(name = "page") final int page
+    ) {
+        PostListResponseDto postListResponseDto = null;
+        if (postCategory == null) {
+            postListResponseDto = postService.searchPostAll(searchCondition, keyword, page);
+        }
+        if (postCategory != null) {
+            postListResponseDto = postService.searchPostSpecificCategory(postCategory, searchCondition, keyword, page);
+        }
+
+        return ResponseEntity.ok().body(postListResponseDto);
     }
 }
