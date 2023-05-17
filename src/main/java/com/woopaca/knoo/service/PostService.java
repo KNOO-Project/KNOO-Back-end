@@ -6,6 +6,7 @@ import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.SearchCondition;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
@@ -39,8 +40,7 @@ public interface PostService {
 
     List<PostListDto> userLikePostList(final User user, final Pageable pageable);
 
-    PostListResponseDto searchPosts(
-            final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page);
+    PostListResponseDto searchPosts(final PostSearchRequestDto postSearchRequestDto);
 
     PostListResponseDto searchUserScrapPosts(
             final SignInUser signInUser, final SearchCondition searchCondition, final String keyword, final int page);

@@ -6,7 +6,7 @@ import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
-import com.woopaca.knoo.controller.dto.post.SearchCondition;
+import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.attr.PostCategory;
@@ -102,13 +102,9 @@ public class PostController {
 
     @GetMapping("/search")
     public ResponseEntity<PostListResponseDto> searchPostsAllOrSpecificCategory(
-            @RequestParam(name = "category", required = false) final PostCategory postCategory,
-            @RequestParam(name = "condition") final SearchCondition searchCondition,
-            @RequestParam(name = "keyword") final String keyword,
-            @RequestParam(name = "page") final int page
-    ) {
+            @Valid final PostSearchRequestDto postSearchRequestDto) {
         PostListResponseDto postListResponseDto =
-                postService.searchPosts(postCategory, searchCondition, keyword, page - 1);
+                postService.searchPosts(postSearchRequestDto);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 }

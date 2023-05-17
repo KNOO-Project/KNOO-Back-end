@@ -6,6 +6,7 @@ import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.SearchCondition;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
@@ -220,14 +221,11 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public PostListResponseDto searchPosts(
-            final PostCategory postCategory, final SearchCondition searchCondition, final String keyword, int page
-    ) {
-        if (page < 0) {
-            throw new InvalidPostPageException();
-        }
-
-        Page<Post> postPage = searchByCondition(postCategory, searchCondition, keyword, page);
+    public PostListResponseDto searchPosts(final PostSearchRequestDto postSearchRequestDto) {
+        final int page = postSearchRequestDto.getPage() - 1;
+        Page<Post> postPage = searchByCondition(
+                postSearchRequestDto.getCategory(), postSearchRequestDto.getCondition(),
+                postSearchRequestDto.getKeyword(), page);
         validatePage(page, postPage);
         return PostListResponseDto.from(postPage);
     }
