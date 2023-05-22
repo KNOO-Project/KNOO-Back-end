@@ -219,7 +219,7 @@ public class SearchPostTest {
 
         // then
         resultActionsA.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("error_code").value("KN303"));
+                .andExpect(jsonPath("message").value("페이지 수를 초과하였습니다."));
     }
 
     @Test
@@ -232,7 +232,7 @@ public class SearchPostTest {
 
         // then
         resultActionsA.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("error_code").value("KN101"));
+                .andExpect(jsonPath("message").value("유효하지 않은 페이지입니다."));
     }
 
     @Test
