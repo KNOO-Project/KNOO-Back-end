@@ -2,6 +2,7 @@ package com.woopaca.knoo.config;
 
 import com.woopaca.knoo.config.converter.PostCategoryConverter;
 import com.woopaca.knoo.config.converter.SearchConditionConverter;
+import com.woopaca.knoo.config.converter.UserPostsKindConverter;
 import com.woopaca.knoo.config.jwt.JwtUtils;
 import com.woopaca.knoo.controller.auth.SignInUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new PostCategoryConverter());
         registry.addConverter(new SearchConditionConverter());
+        registry.addConverter(new UserPostsKindConverter());
     }
 
     @Override

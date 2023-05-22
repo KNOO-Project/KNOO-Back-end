@@ -3,7 +3,6 @@ package com.woopaca.knoo.service.impl;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
-import com.woopaca.knoo.controller.dto.post.PostListDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
@@ -30,12 +29,10 @@ import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +41,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class BasicPostService implements PostService {
 
-    public static final int PAGE_SIZE = 20;
+    public static final int DEFAULT_PAGE_SIZE = 20;
 
     private final AuthService authService;
     private final PostRepository postRepository;
@@ -68,7 +65,7 @@ public class BasicPostService implements PostService {
         validateArgument(postCategory, page);
 
         PageRequest pageRequest =
-                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+                PageRequest.of(page, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
         Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
         validatePage(page, postPage);
 
@@ -82,7 +79,7 @@ public class BasicPostService implements PostService {
             throw new InvalidPostPageException();
         }
 
-        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        PageRequest pageRequest = PageRequest.of(page, DEFAULT_PAGE_SIZE);
         Page<Post> postPage = postRepository.findUserScrapPosts(authenticatedUser, pageRequest);
         validatePage(page, postPage);
 
@@ -190,37 +187,6 @@ public class BasicPostService implements PostService {
     }
 
     @Override
-    public List<PostListDto> userWritePostList(final User user, final Pageable pageable) {
-        List<PostListDto> userWritePosts = new ArrayList<>();
-        List<Post> postListFive = postRepository.findByWriter(user, pageable);
-        postsToPostPreviewList(postListFive, userWritePosts);
-        return userWritePosts;
-    }
-
-    @Override
-    public List<PostListDto> userCommentPostList(final User user, final Pageable pageable) {
-        List<PostListDto> userCommentPosts = new ArrayList<>();
-        List<Post> postListFive = postRepository.findByCommentWriter(user, pageable);
-        postsToPostPreviewList(postListFive, userCommentPosts);
-        return userCommentPosts;
-    }
-
-    @Override
-    public List<PostListDto> userLikePostList(final User user, final Pageable pageable) {
-        List<PostListDto> userLikePosts = new ArrayList<>();
-        List<Post> postListFive = postRepository.findByLikeUser(user, pageable);
-        postsToPostPreviewList(postListFive, userLikePosts);
-        return userLikePosts;
-    }
-
-    private void postsToPostPreviewList(final List<Post> posts, final List<PostListDto> postPreviewList) {
-        for (Post post : posts) {
-            PostListDto postListDto = PostListDto.from(post);
-            postPreviewList.add(postListDto);
-        }
-    }
-
-    @Override
     public PostListResponseDto searchPosts(final PostSearchRequestDto postSearchRequestDto) {
         final int page = postSearchRequestDto.getPage() - 1;
         Page<Post> postPage = searchByCondition(
@@ -235,7 +201,7 @@ public class BasicPostService implements PostService {
             final String keyword, final int page
     ) {
         PageRequest pageRequest =
-                PageRequest.of(page, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+                PageRequest.of(page, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
         if (postCategory == null) {
             return searchInAllCategory(searchCondition, keyword, pageRequest);
         }
@@ -278,7 +244,7 @@ public class BasicPostService implements PostService {
             final SignInUser signInUser, final PostSearchRequestDto postSearchRequestDto) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         final int page = postSearchRequestDto.getPage() - 1;
-        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        PageRequest pageRequest = PageRequest.of(page, DEFAULT_PAGE_SIZE);
 
         Page<Post> postPage = searchInUserScrapPosts(
                 postSearchRequestDto.getCondition(), postSearchRequestDto.getKeyword(), authenticatedUser, pageRequest);
