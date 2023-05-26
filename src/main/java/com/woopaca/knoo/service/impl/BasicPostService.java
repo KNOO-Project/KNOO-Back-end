@@ -42,6 +42,7 @@ import java.util.Optional;
 public class BasicPostService implements PostService {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
+    private static final int SCRAP_PAGE_SIZE = 10;
 
     private final AuthService authService;
     private final PostRepository postRepository;
@@ -79,7 +80,7 @@ public class BasicPostService implements PostService {
             throw new InvalidPostPageException();
         }
 
-        PageRequest pageRequest = PageRequest.of(page, DEFAULT_PAGE_SIZE);
+        PageRequest pageRequest = PageRequest.of(page, SCRAP_PAGE_SIZE);
         Page<Post> postPage = postRepository.findUserScrapPosts(authenticatedUser, pageRequest);
         validatePage(page, postPage);
 
@@ -244,7 +245,7 @@ public class BasicPostService implements PostService {
             final SignInUser signInUser, final PostSearchRequestDto postSearchRequestDto) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         final int page = postSearchRequestDto.getPage() - 1;
-        PageRequest pageRequest = PageRequest.of(page, DEFAULT_PAGE_SIZE);
+        PageRequest pageRequest = PageRequest.of(page, SCRAP_PAGE_SIZE);
 
         Page<Post> postPage = searchInUserScrapPosts(
                 postSearchRequestDto.getCondition(), postSearchRequestDto.getKeyword(), authenticatedUser, pageRequest);
