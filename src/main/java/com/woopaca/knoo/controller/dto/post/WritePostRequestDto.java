@@ -1,7 +1,7 @@
 package com.woopaca.knoo.controller.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.woopaca.knoo.entity.attr.PostCategory;
+import com.woopaca.knoo.entity.value.PostCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

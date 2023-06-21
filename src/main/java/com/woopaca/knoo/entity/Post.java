@@ -2,7 +2,7 @@ package com.woopaca.knoo.entity;
 
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
-import com.woopaca.knoo.entity.attr.PostCategory;
+import com.woopaca.knoo.entity.value.PostCategory;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

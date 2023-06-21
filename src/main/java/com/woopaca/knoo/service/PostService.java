@@ -4,13 +4,18 @@ import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostPreviewResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
-import com.woopaca.knoo.entity.attr.PostCategory;
+import com.woopaca.knoo.entity.value.PostCategory;
+
+import java.util.List;
 
 public interface PostService {
+
+    List<PostPreviewResponseDto> getPostPreviewList();
 
     Long writePost(final SignInUser signInUser, final WritePostRequestDto writePostRequestDto);
 
@@ -31,4 +36,5 @@ public interface PostService {
     PostListResponseDto searchPosts(final PostSearchRequestDto postSearchRequestDto);
 
     PostListResponseDto searchUserScrapPosts(final SignInUser signInUser, final PostSearchRequestDto postSearchRequestDto);
+
 }

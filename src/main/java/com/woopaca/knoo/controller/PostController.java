@@ -5,11 +5,12 @@ import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostPreviewResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
-import com.woopaca.knoo.entity.attr.PostCategory;
+import com.woopaca.knoo.entity.value.PostCategory;
 import com.woopaca.knoo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.List;
 
 @Slf4j
 @Validated
@@ -37,6 +39,12 @@ import java.net.URI;
 public class PostController {
 
     private final PostService postService;
+
+    @GetMapping
+    public ResponseEntity<List<PostPreviewResponseDto>> postPreviewList() {
+        List<PostPreviewResponseDto> postPreviewList = postService.getPostPreviewList();
+        return ResponseEntity.ok().body(postPreviewList);
+    }
 
     @PostMapping
     public ResponseEntity<String> writeNewPost(

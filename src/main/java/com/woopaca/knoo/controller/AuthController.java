@@ -40,6 +40,7 @@ public class AuthController {
     @GetMapping("/mail")
     public ResponseEntity<String> userMailVerify(@RequestParam("code") final String code,
                                                  final HttpServletResponse response) throws IOException {
+        log.info("code = {}", code);
         authService.mailVerify(code);
         response.sendRedirect(host + "/mail-verify");
         return ResponseEntity.ok().body("이메일 인증이 완료되었습니다.");

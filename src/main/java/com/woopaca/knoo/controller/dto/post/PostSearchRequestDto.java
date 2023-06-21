@@ -1,6 +1,6 @@
 package com.woopaca.knoo.controller.dto.post;
 
-import com.woopaca.knoo.entity.attr.PostCategory;
+import com.woopaca.knoo.entity.value.PostCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

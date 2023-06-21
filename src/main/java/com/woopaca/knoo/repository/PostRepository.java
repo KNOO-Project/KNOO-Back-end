@@ -2,7 +2,7 @@ package com.woopaca.knoo.repository;
 
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.entity.attr.PostCategory;
+import com.woopaca.knoo.entity.value.PostCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

@@ -4,6 +4,7 @@ import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
+import com.woopaca.knoo.controller.dto.post.PostPreviewResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.SearchCondition;
@@ -14,7 +15,7 @@ import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostLike;
 import com.woopaca.knoo.entity.Scrap;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.entity.attr.PostCategory;
+import com.woopaca.knoo.entity.value.PostCategory;
 import com.woopaca.knoo.exception.post.impl.InvalidPostPageException;
 import com.woopaca.knoo.exception.post.impl.PageCountExceededException;
 import com.woopaca.knoo.exception.post.impl.PostCategoryNotFoundException;
@@ -33,6 +34,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,12 +45,28 @@ public class BasicPostService implements PostService {
 
     public static final int DEFAULT_PAGE_SIZE = 20;
     private static final int SCRAP_PAGE_SIZE = 10;
+    private static final int PREVIEW_PAGE_SIZE = 5;
 
     private final AuthService authService;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final ScrapRepository scrapRepository;
+
+    @Override
+    public List<PostPreviewResponseDto> getPostPreviewList() {
+        PageRequest pageRequest =
+                PageRequest.of(0, PREVIEW_PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
+
+        List<PostPreviewResponseDto> postPreviewList = new ArrayList<>();
+        for (PostCategory postCategory : PostCategory.values()) {
+            Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
+            PostPreviewResponseDto postPreviewResponseDto = PostPreviewResponseDto.of(postCategory, postPage);
+            postPreviewList.add(postPreviewResponseDto);
+        }
+
+        return postPreviewList;
+    }
 
     @Transactional
     @Override
