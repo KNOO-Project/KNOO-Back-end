@@ -1,6 +1,5 @@
 package com.woopaca.knoo.concurrency;
 
-import com.woopaca.knoo.config.jwt.JwtProvider;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.comment.WriteCommentRequestDto;
 import com.woopaca.knoo.repository.UserRepository;
@@ -23,8 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class ConcurrencyTest {
 
-    @Autowired
-    JwtProvider jwtProvider;
     @Autowired
     CommentService commentService;
     @Autowired
