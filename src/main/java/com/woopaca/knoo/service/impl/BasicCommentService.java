@@ -18,12 +18,14 @@ import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -40,6 +42,16 @@ public class BasicCommentService implements CommentService {
             final SignInUser signInUser, final WriteCommentRequestDto writeCommentRequestDto,
             @Nullable final Long postId, @Nullable final Long commentId
     ) {
+        /*Integer currentTransactionIsolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();
+        Isolation[] isolations = Isolation.values();
+        for (Isolation isolation : isolations) {
+            if (isolation.value() == currentTransactionIsolationLevel) {
+                String name = isolation.name();
+                log.info("isolationLevelName = {}", name);
+                break;
+            }
+        }*/
+
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Comment comment = Comment.from(writeCommentRequestDto);
 
