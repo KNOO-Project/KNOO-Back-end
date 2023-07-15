@@ -94,3 +94,14 @@ CREATE TABLE IF NOT EXISTS image
     PRIMARY KEY (image_id),
     FOREIGN KEY (post_id) REFERENCES post (post_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS restaurant
+(
+    restaurant_id   BIGINT       NOT NULL AUTO_INCREMENT,
+    restaurant_name VARCHAR(50)  NOT NULL,
+    address         VARCHAR(100) NOT NULL,
+    latitude        VARCHAR(20)  NOT NULL,
+    longitude       VARCHAR(20)  NOT NULL,
+    cuisine_type    VARCHAR(20)  NOT NULL,
+    PRIMARY KEY (restaurant_id)
+);
