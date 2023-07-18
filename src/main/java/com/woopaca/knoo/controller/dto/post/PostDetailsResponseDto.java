@@ -13,8 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,10 +34,10 @@ public class PostDetailsResponseDto {
 
     public static PostDetailsResponseDto of(final Post post, final List<Comment> comments, final User authenticatedUser) {
         PostDetailsDto postDetails = PostDetailsDto.of(post, authenticatedUser);
-        List<CommentListDto> commentList = new ArrayList<>();
-        for (Comment comment : comments) {
-            commentList.add(CommentListDto.of(comment, post, authenticatedUser));
-        }
+
+        List<CommentListDto> commentList = comments.stream()
+                .map(comment -> CommentListDto.of(comment, post, authenticatedUser))
+                .collect(toList());
 
         return PostDetailsResponseDto.builder()
                 .postDetailsDto(postDetails)
