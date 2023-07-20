@@ -1,5 +1,6 @@
 package com.woopaca.knoo.entity;
 
+import com.woopaca.knoo.entity.value.Campus;
 import com.woopaca.knoo.entity.value.Coordinate;
 import com.woopaca.knoo.entity.value.CuisineType;
 import lombok.AccessLevel;
@@ -39,11 +40,16 @@ public class Restaurant {
     @Column(name = "cuisine_type")
     private CuisineType cuisineType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "campus")
+    private Campus campus;
+
     @Builder
-    public Restaurant(String restaurantName, String address, Coordinate coordinate, CuisineType cuisineType) {
+    public Restaurant(String restaurantName, String address, Coordinate coordinate, CuisineType cuisineType, Campus campus) {
         this.restaurantName = restaurantName;
         this.address = address;
         this.coordinate = coordinate;
         this.cuisineType = cuisineType;
+        this.campus = campus;
     }
 }

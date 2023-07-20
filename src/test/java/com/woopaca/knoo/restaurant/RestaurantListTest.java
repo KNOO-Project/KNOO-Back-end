@@ -1,6 +1,7 @@
 package com.woopaca.knoo.restaurant;
 
 import com.woopaca.knoo.entity.Restaurant;
+import com.woopaca.knoo.entity.value.Campus;
 import com.woopaca.knoo.entity.value.Coordinate;
 import com.woopaca.knoo.entity.value.CuisineType;
 import com.woopaca.knoo.repository.RestaurantRepository;
@@ -38,8 +39,8 @@ public class RestaurantListTest {
     void getAllRestaurantsListSuccess() throws Exception {
         // given
         restaurantRepository.saveAll(Arrays.asList(
-                        new Restaurant("test1", "test1", new Coordinate("37.111", "128.111"), CuisineType.CAFE),
-                        new Restaurant("test2", "test2", new Coordinate("37.111", "128.111"), CuisineType.KOREAN)
+                        new Restaurant("test1", "test1", new Coordinate("37.111", "128.111"), CuisineType.CAFE, Campus.CHEONAN),
+                        new Restaurant("test2", "test2", new Coordinate("37.111", "128.111"), CuisineType.KOREAN, Campus.CHEONAN)
                 )
         );
 
