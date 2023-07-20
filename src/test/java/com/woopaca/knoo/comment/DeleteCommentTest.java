@@ -141,7 +141,7 @@ public class DeleteCommentTest {
     }
 
     private ResultActions resultActions(String authorization, Long commentId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/comments")
+        return mockMvc.perform(delete("/api/comments")
                         .param("comment_id", String.valueOf(commentId))
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());

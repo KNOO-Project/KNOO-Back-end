@@ -88,7 +88,7 @@ public class PostPreviewTest {
     }
 
     private ResultActions resultActions() throws Exception {
-        return mockMvc.perform(get("/api/v1/posts"))
+        return mockMvc.perform(get("/api/posts"))
                 .andDo(print());
     }
 }

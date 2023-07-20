@@ -152,7 +152,7 @@ public class CommentLikeTest {
     @DisplayName("게시글 좋아요 실패 - 삭제된 댓글")
     void likePostFailDeletedComment() throws Exception {
         // given
-        mockMvc.perform(delete("/api/v1/comments")
+        mockMvc.perform(delete("/api/comments")
                         .param("comment_id", String.valueOf(commentId))
                         .header(HttpHeaders.AUTHORIZATION, authorizationA))
                 .andDo(print());
@@ -180,7 +180,7 @@ public class CommentLikeTest {
     }
 
     private ResultActions resultActions(Long commentId, String authorization) throws Exception {
-        return mockMvc.perform(post("/api/v1/comments/likes")
+        return mockMvc.perform(post("/api/comments/likes")
                         .param("comment_id", String.valueOf(commentId))
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());

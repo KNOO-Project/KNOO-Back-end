@@ -160,7 +160,7 @@ public class SearchUserScrapListTest {
 
     private ResultActions resultActions(SearchCondition searchCondition, String keyword, int page)
             throws Exception {
-        return mockMvc.perform(get("/api/v1/users/scraps/search")
+        return mockMvc.perform(get("/api/users/scraps/search")
                         .header(HttpHeaders.AUTHORIZATION, authorization)
                         .param("condition", searchCondition.getConditionName())
                         .param("keyword", keyword)

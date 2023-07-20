@@ -109,7 +109,7 @@ class SignUpTest {
     private ResultActions resultActions(SignUpRequestDto signUpRequestDto) throws Exception {
         doNothing().when(mailService).sendAuthMail(anyString(), anyString());
 
-        return mockMvc.perform(post("/api/v1/auth/sign-up")
+        return mockMvc.perform(post("/api/auth/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(signUpRequestDto)))
                 .andDo(print());

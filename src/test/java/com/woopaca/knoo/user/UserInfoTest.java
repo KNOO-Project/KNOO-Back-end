@@ -129,7 +129,7 @@ public class UserInfoTest {
     }
 
     private ResultActions resultActions(String authorization) throws Exception {
-        return mockMvc.perform(get("/api/v1/users")
+        return mockMvc.perform(get("/api/users")
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());
     }
