@@ -114,8 +114,7 @@ public class PostController {
     @GetMapping("/search")
     public ResponseEntity<PostListResponseDto> searchPostsAllOrSpecificCategory(
             @Valid final PostSearchRequestDto postSearchRequestDto) {
-        PostListResponseDto postListResponseDto =
-                postService.searchPosts(postSearchRequestDto);
+        PostListResponseDto postListResponseDto = postService.searchPosts(postSearchRequestDto);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 }

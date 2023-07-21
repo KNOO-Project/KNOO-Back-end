@@ -14,4 +14,18 @@ public enum Campus {
     public String getCampusName() {
         return campusName;
     }
+
+    public static Campus of(String campusName) {
+        switch (campusName) {
+            case "천안":
+            case "cheonan": {
+                return CHEONAN;
+            }
+            case "공주":
+            case "gongju": {
+                return GONGJU;
+            }
+        }
+        return null;
+    }
 }
