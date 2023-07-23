@@ -1,5 +1,7 @@
 package com.woopaca.knoo.entity.value;
 
+import com.woopaca.knoo.exception.restaurant.CampusNameMatchException;
+
 public enum Campus {
 
     CHEONAN("천안"),
@@ -25,7 +27,9 @@ public enum Campus {
             case "gongju": {
                 return GONGJU;
             }
+            default: {
+                throw new CampusNameMatchException();
+            }
         }
-        return null;
     }
 }

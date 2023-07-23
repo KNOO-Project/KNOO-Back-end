@@ -21,10 +21,10 @@ public class RestaurantController {
 
     @GetMapping
     public ResponseEntity<List<RestaurantListResponseDto>> restaurantsList(
-            @RequestParam(name = "campus", required = false) final Campus campus
+            @RequestParam(name = "campus", required = false) final String campus
     ) {
         if (campus != null) {
-            return restaurantsByCampus(campus);
+            return restaurantsByCampus(Campus.of(campus));
         }
         return allRestaurants();
     }
