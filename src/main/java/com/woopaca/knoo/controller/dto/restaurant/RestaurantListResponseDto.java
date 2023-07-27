@@ -21,19 +21,22 @@ public class RestaurantListResponseDto {
     @JsonProperty("cuisine_type")
     private final String cuisineType;
 
+    private final String url;
+
     protected RestaurantListResponseDto(long restaurantId, String restaurantName, String address,
-                                        Coordinate coordinate, String cuisineType) {
+                                        Coordinate coordinate, String cuisineType, String url) {
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
         this.address = address;
         this.coordinate = coordinate;
         this.cuisineType = cuisineType;
+        this.url = url;
     }
 
     public static RestaurantListResponseDto from(final Restaurant restaurant) {
         return new RestaurantListResponseDto(
                 restaurant.getId(), restaurant.getRestaurantName(), restaurant.getAddress(),
-                restaurant.getCoordinate(), restaurant.getCuisineType().getTypeName()
+                restaurant.getCoordinate(), restaurant.getCuisineType().getTypeName(), restaurant.getUrl()
         );
     }
 }
