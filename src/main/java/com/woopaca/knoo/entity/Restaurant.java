@@ -44,12 +44,17 @@ public class Restaurant {
     @Column(name = "campus")
     private Campus campus;
 
+    @Column(name = "url")
+    private String url;
+
     @Builder
-    public Restaurant(String restaurantName, String address, Coordinate coordinate, CuisineType cuisineType, Campus campus) {
+    public Restaurant(String restaurantName, String address, Coordinate coordinate,
+                      CuisineType cuisineType, Campus campus, String url) {
         this.restaurantName = restaurantName;
         this.address = address;
         this.coordinate = coordinate;
         this.cuisineType = cuisineType;
         this.campus = campus;
+        this.url = url;
     }
 }

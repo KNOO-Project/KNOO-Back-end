@@ -40,8 +40,8 @@ public class RestaurantListTest {
     void getAllRestaurantsListSuccess() throws Exception {
         // given
         restaurantRepository.saveAll(Arrays.asList(
-                        new Restaurant("test1", "test1", new Coordinate("37.111", "128.111"), CuisineType.CAFE, Campus.CHEONAN),
-                        new Restaurant("test2", "test2", new Coordinate("37.111", "128.111"), CuisineType.KOREAN, Campus.CHEONAN)
+                        new Restaurant("test1", "test1", new Coordinate("37.111", "128.111"), CuisineType.CAFE, Campus.CHEONAN, "url"),
+                        new Restaurant("test2", "test2", new Coordinate("37.111", "128.111"), CuisineType.KOREAN, Campus.CHEONAN, "url")
                 )
         );
 
@@ -64,8 +64,8 @@ public class RestaurantListTest {
     void getRestaurantsListByCampusSuccess() throws Exception {
         // given
         restaurantRepository.saveAll(Arrays.asList(
-                        new Restaurant("test1", "test1", new Coordinate("37.111", "128.111"), CuisineType.CAFE, Campus.CHEONAN),
-                        new Restaurant("test2", "test2", new Coordinate("37.111", "128.111"), CuisineType.KOREAN, Campus.GONGJU)
+                        new Restaurant("test1", "test1", new Coordinate("37.111", "128.111"), CuisineType.CAFE, Campus.CHEONAN, "url"),
+                        new Restaurant("test2", "test2", new Coordinate("37.111", "128.111"), CuisineType.KOREAN, Campus.GONGJU, "url")
                 )
         );
 
