@@ -120,7 +120,7 @@ public class WriteReplyTest {
     }
 
     private ResultActions resultActions(WriteCommentRequestDto writeCommentRequestDto, Long commentId) throws Exception {
-        return mockMvc.perform(post("/api/v1/comments/reply")
+        return mockMvc.perform(post("/api/comments/reply")
                         .param("comment_id", String.valueOf(commentId))
                         .header(HttpHeaders.AUTHORIZATION, authorization)
                         .contentType(MediaType.APPLICATION_JSON)

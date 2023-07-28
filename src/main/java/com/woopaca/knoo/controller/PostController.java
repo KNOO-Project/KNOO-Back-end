@@ -33,7 +33,7 @@ import java.util.List;
 
 @Slf4j
 @Validated
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/api/posts")
 @RequiredArgsConstructor
 @RestController
 public class PostController {
@@ -52,7 +52,7 @@ public class PostController {
             @RequestBody @Valid final WritePostRequestDto writePostRequestDto
     ) {
         Long postId = postService.writePost(signInUser, writePostRequestDto);
-        return ResponseEntity.created(URI.create("/api/v1/posts/" + postId))
+        return ResponseEntity.created(URI.create("/api/posts/" + postId))
                 .body("게시글 작성이 완료되었습니다.");
     }
 
@@ -114,8 +114,7 @@ public class PostController {
     @GetMapping("/search")
     public ResponseEntity<PostListResponseDto> searchPostsAllOrSpecificCategory(
             @Valid final PostSearchRequestDto postSearchRequestDto) {
-        PostListResponseDto postListResponseDto =
-                postService.searchPosts(postSearchRequestDto);
+        PostListResponseDto postListResponseDto = postService.searchPosts(postSearchRequestDto);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 }

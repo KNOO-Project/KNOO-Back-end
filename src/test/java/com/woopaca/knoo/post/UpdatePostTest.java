@@ -172,7 +172,7 @@ public class UpdatePostTest {
     }
 
     private ResultActions resultActions(UpdatePostRequestDto updatePostRequestDto, String authorization, Long postId) throws Exception {
-        return mockMvc.perform(put("/api/v1/posts")
+        return mockMvc.perform(put("/api/posts")
                         .param("post_id", String.valueOf(postId))
                         .header(HttpHeaders.AUTHORIZATION, authorization)
                         .contentType(MediaType.APPLICATION_JSON)

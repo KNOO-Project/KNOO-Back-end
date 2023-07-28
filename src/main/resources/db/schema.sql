@@ -103,5 +103,7 @@ CREATE TABLE IF NOT EXISTS restaurant
     latitude        VARCHAR(20)  NOT NULL,
     longitude       VARCHAR(20)  NOT NULL,
     cuisine_type    VARCHAR(20)  NOT NULL,
+    campus          VARCHAR(10)  NOT NULL,
+    url             VARCHAR(500),
     PRIMARY KEY (restaurant_id)
 );

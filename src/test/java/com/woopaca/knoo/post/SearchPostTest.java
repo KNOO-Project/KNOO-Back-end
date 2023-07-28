@@ -241,7 +241,7 @@ public class SearchPostTest {
         // given
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/api/v1/posts/search")
+        ResultActions resultActions = mockMvc.perform(get("/api/posts/search")
                         .param("condition", "invalid")
                         .param("keyword", "10")
                         .param("page", "1"))
@@ -292,7 +292,7 @@ public class SearchPostTest {
         if (postCategory != null) {
             postCategoryName = postCategory.getCategoryName();
         }
-        return mockMvc.perform(get("/api/v1/posts/search")
+        return mockMvc.perform(get("/api/posts/search")
                         .param("category", postCategoryName)
                         .param("condition", searchCondition.getConditionName())
                         .param("keyword", keyword)

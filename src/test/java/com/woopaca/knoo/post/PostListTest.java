@@ -145,7 +145,7 @@ public class PostListTest {
     }
 
     private ResultActions resultActions(String postCategory, int page) throws Exception {
-        return mockMvc.perform(get("/api/v1/posts/" + postCategory)
+        return mockMvc.perform(get("/api/posts/" + postCategory)
                         .param("page", String.valueOf(page)))
                 .andDo(print());
     }

@@ -148,7 +148,7 @@ public class PostLikeTest {
     }
 
     private ResultActions resultActions(Long postId, String authorization) throws Exception {
-        return mockMvc.perform(post("/api/v1/posts/likes")
+        return mockMvc.perform(post("/api/posts/likes")
                         .param("post_id", String.valueOf(postId))
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());

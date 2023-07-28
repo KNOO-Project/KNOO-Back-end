@@ -135,7 +135,7 @@ public class DeletePostTest {
     }
 
     private ResultActions resultActions(String authorization, Long postId) throws Exception {
-        return mockMvc.perform(delete("/api/v1/posts")
+        return mockMvc.perform(delete("/api/posts")
                         .param("post_id", String.valueOf(postId))
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());

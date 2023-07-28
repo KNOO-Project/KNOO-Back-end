@@ -8,8 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,10 +28,10 @@ public class PostListResponseDto {
     }
 
     public static PostListResponseDto from(final Page<Post> postPage) {
-        List<PostListDto> postList = new ArrayList<>();
-        for (Post post : postPage) {
-            postList.add(PostListDto.from(post));
-        }
+        List<PostListDto> postList = postPage.stream()
+                .map(PostListDto::from)
+                .collect(toList());
+
         return PostListResponseDto.builder()
                 .totalPages(postPage.getTotalPages())
                 .posts(postList)

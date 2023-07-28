@@ -111,7 +111,7 @@ public class WriteCommentTest {
     }
 
     private ResultActions resultActions(WriteCommentRequestDto writeCommentRequestDto) throws Exception {
-        return mockMvc.perform(post("/api/v1/comments")
+        return mockMvc.perform(post("/api/comments")
                         .param("post_id", String.valueOf(postId))
                         .header(HttpHeaders.AUTHORIZATION, authorization)
                         .contentType(MediaType.APPLICATION_JSON)

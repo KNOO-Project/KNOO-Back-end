@@ -18,8 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -80,13 +81,9 @@ public class BasicUserService implements UserService {
     }
 
     private List<PostListDto> postPageToPostPreviewList(final Page<Post> postPage) {
-        List<PostListDto> postList = new ArrayList<>();
-        for (Post post : postPage) {
-            PostListDto postListDto = PostListDto.from(post);
-            postList.add(postListDto);
-        }
-
-        return postList;
+        return postPage.stream()
+                .map(PostListDto::from)
+                .collect(toList());
     }
 
     private static void validatePage(final int page, final Page<Post> postPage) {

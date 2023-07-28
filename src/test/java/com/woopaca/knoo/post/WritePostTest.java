@@ -81,7 +81,7 @@ public class WritePostTest {
     }
 
     private ResultActions resultActions(WritePostRequestDto writePostRequestDto) throws Exception {
-        return mockMvc.perform(post("/api/v1/posts")
+        return mockMvc.perform(post("/api/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", authorization)
                         .content(mapper.writeValueAsString(writePostRequestDto)))

@@ -204,7 +204,7 @@ public class UserProfilePostsTest {
     }
 
     private ResultActions resultActions(String authorization, String kind, int page) throws Exception {
-        return mockMvc.perform(get("/api/v1/users/more")
+        return mockMvc.perform(get("/api/users/more")
                         .param("kind", kind)
                         .param("page", String.valueOf(page))
                         .header(HttpHeaders.AUTHORIZATION, authorization))

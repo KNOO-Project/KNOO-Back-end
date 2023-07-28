@@ -152,7 +152,7 @@ public class UserScrapListTest {
     }
 
     private ResultActions resultActions(String authorization, int page) throws Exception {
-        return mockMvc.perform(get("/api/v1/users/scraps")
+        return mockMvc.perform(get("/api/users/scraps")
                         .param("page", String.valueOf(page))
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());

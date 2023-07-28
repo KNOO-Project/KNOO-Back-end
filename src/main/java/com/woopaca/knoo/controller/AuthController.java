@@ -21,7 +21,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @Slf4j
 public class AuthController {
 

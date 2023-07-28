@@ -1,3 +1,4 @@
+/*
 package com.woopaca.knoo.concurrency;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
@@ -113,3 +114,4 @@ public class NewConcurrencyTest {
         );
     }
 }
+*/

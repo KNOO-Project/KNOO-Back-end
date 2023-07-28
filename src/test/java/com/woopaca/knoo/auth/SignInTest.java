@@ -111,7 +111,7 @@ public class SignInTest {
     }
 
     private ResultActions resultActions(SignInRequestDto signInRequestDto) throws Exception {
-        return mockMvc.perform(post("/api/v1/auth/sign-in")
+        return mockMvc.perform(post("/api/auth/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(signInRequestDto)))
                 .andDo(print());

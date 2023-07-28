@@ -30,7 +30,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Getter
@@ -134,7 +135,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
