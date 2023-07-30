@@ -8,17 +8,14 @@ import lombok.Getter;
 @Getter
 public class RestaurantListResponseDto {
 
-    @JsonProperty("restaurant_id")
     private final long restaurantId;
 
-    @JsonProperty("restaurant_name")
     private final String restaurantName;
 
     private final String address;
 
     private final Coordinate coordinate;
 
-    @JsonProperty("cuisine_type")
     private final String cuisineType;
 
     private final String url;

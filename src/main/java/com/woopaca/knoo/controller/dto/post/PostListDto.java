@@ -1,38 +1,33 @@
 package com.woopaca.knoo.controller.dto.post;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.Post;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostListDto {
 
-    @JsonProperty(value = "post_id")
     private Long postId;
 
-    @JsonProperty(value = "post_title")
     private String postTitle;
 
-    @JsonProperty(value = "post_content")
     private String postContent;
 
-    @JsonProperty(value = "post_category")
     private String postCategory;
 
-    @JsonProperty(value = "post_date")
     private String postDate;
 
-    @JsonProperty(value = "writer_name")
     private String writerName;
 
-    @JsonProperty(value = "comments_count")
     private int commentsCount;
 
-    @JsonProperty(value = "likes_count")
     private int likesCount;
 
-    @JsonProperty(value = "scraps_count")
     private int scrapsCount;
 
     @Builder

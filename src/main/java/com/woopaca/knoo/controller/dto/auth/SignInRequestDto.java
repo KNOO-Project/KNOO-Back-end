@@ -19,7 +19,6 @@ public class SignInRequestDto {
     private String password;
 
     @NotNull(message = "자동 로그인 선택 항목이 null입니다. (true 또는 false)")
-    @JsonProperty(value = "auto_sign_in")
     private boolean autoSignIn;
 
     @Builder

@@ -29,7 +29,6 @@ public class SignUpRequestDto {
     private String password;
 
     @NotBlank(message = "비밀번호 확인은 비어있을 수 없습니다.")
-    @JsonProperty(value = "password_check")
     private String passwordCheck;
 
     @NotBlank(message = "회원 이름은 비어있을 수 없습니다.")

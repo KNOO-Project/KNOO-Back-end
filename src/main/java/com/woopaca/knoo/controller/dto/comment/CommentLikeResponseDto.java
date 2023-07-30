@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentLikeResponseDto {
 
-    @JsonProperty(value = "comment_id")
     private Long commentId;
 
-    @JsonProperty(value = "likes_count")
     private int likesCount;
 
     private Boolean liked;

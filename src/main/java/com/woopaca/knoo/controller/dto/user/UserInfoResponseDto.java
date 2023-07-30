@@ -17,13 +17,10 @@ public class UserInfoResponseDto {
 
     private String email;
 
-    @JsonProperty(value = "write_posts")
     private List<PostListDto> writePosts;
 
-    @JsonProperty(value = "comment_posts")
     private List<PostListDto> commentPosts;
 
-    @JsonProperty(value = "like_posts")
     private List<PostListDto> likePosts;
 
     @Builder

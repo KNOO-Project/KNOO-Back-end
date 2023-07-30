@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostScrapResponseDto {
 
-    @JsonProperty(value = "post_id")
     private Long postId;
 
-    @JsonProperty(value = "scraps_count")
     private int scrapsCount;
 
     private Boolean scrapped;

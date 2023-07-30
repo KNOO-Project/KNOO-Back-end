@@ -1,6 +1,5 @@
 package com.woopaca.knoo.controller.dto.post;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,7 +15,6 @@ import static java.util.stream.Collectors.toList;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostListResponseDto {
 
-    @JsonProperty(value = "total_pages")
     private int totalPages;
 
     private List<PostListDto> posts;
