@@ -1,6 +1,5 @@
 package com.woopaca.knoo.controller.dto.post;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

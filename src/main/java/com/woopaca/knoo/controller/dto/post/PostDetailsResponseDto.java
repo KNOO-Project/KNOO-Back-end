@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostDetailsResponseDto {
 
+    @JsonProperty(value = "post")
     private PostDetailsDto postDetailsDto;
 
     private List<CommentListDto> comments;
