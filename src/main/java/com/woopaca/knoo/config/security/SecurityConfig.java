@@ -6,6 +6,7 @@ import com.woopaca.knoo.exception.handler.security.CustomAuthenticationEntryPoin
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,6 +28,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 // permitAll() -> 모두 허용     authenticated() -> 인증 필요     hasRole() -> 권한 필요
                 .antMatchers("/api/auth/**", "/mail-verify").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/notifications/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/notifications/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

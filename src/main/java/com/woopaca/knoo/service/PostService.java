@@ -10,6 +10,7 @@ import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.value.PostCategory;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -37,4 +38,5 @@ public interface PostService {
 
     PostListResponseDto searchUserScrapPosts(final SignInUser signInUser, final PostSearchRequestDto postSearchRequestDto);
 
+    void uploadPostImageFiles(final Long postId, final List<MultipartFile> postImageFiles, final SignInUser signInUser);
 }
