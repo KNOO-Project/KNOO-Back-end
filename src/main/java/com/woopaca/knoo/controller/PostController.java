@@ -12,8 +12,10 @@ import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.value.PostCategory;
 import com.woopaca.knoo.service.PostService;
+import com.woopaca.knoo.service.impl.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +26,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -39,6 +43,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final ImageService imageService;
 
     @GetMapping
     public ResponseEntity<List<PostPreviewResponseDto>> postPreviewList() {
@@ -116,5 +121,22 @@ public class PostController {
             @Valid final PostSearchRequestDto postSearchRequestDto) {
         PostListResponseDto postListResponseDto = postService.searchPosts(postSearchRequestDto);
         return ResponseEntity.ok().body(postListResponseDto);
+    }
+
+    @PostMapping("/images")
+    public ResponseEntity<String> uploadPostImages(
+            @SignIn SignInUser signInUser,
+            @RequestPart(name = "post_images") final List<MultipartFile> postImageFiles,
+            @RequestParam(name = "post_id") final Long postId
+    ) {
+        postService.uploadPostImageFiles(postId, postImageFiles, signInUser);
+        return ResponseEntity.ok().body("게시글 사진이 등록되었습니다.");
+    }
+
+    @GetMapping(value = "/images/{imageId}",
+            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> postImage(@PathVariable("imageId") final Long imageId) {
+        byte[] imageBytes = imageService.getPostImageBytes(imageId);
+        return ResponseEntity.ok().body(imageBytes);
     }
 }

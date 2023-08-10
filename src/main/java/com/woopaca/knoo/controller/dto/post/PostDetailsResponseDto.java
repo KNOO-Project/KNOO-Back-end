@@ -3,6 +3,7 @@ package com.woopaca.knoo.controller.dto.post;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.CommentLike;
+import com.woopaca.knoo.entity.Image;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostLike;
 import com.woopaca.knoo.entity.Scrap;
@@ -71,11 +72,13 @@ public class PostDetailsResponseDto {
 
         private Boolean scrapped;
 
+        private List<Long> images;
+
         @Builder
         public PostDetailsDto(
                 String postTitle, String postContent, String postCategory, String postDate,
                 String writerName, int commentsCount, int likesCount, int scrapsCount,
-                Boolean isWrittenByUser, Boolean liked, Boolean scrapped
+                Boolean isWrittenByUser, Boolean liked, Boolean scrapped, List<Long> images
         ) {
             this.postTitle = postTitle;
             this.postContent = postContent;
@@ -88,6 +91,7 @@ public class PostDetailsResponseDto {
             this.isWrittenByUser = isWrittenByUser;
             this.liked = liked;
             this.scrapped = scrapped;
+            this.images = images;
         }
 
         public static PostDetailsDto of(final Post post, final User authenticatedUser) {
@@ -112,6 +116,9 @@ public class PostDetailsResponseDto {
                     .isWrittenByUser(isWrittenByUser)
                     .liked(liked)
                     .scrapped(scrapped)
+                    .images(post.getImages().stream()
+                            .map(Image::getId)
+                            .collect(toList()))
                     .build();
         }
 

@@ -11,6 +11,7 @@ import com.woopaca.knoo.controller.dto.post.SearchCondition;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
 import com.woopaca.knoo.entity.Comment;
+import com.woopaca.knoo.entity.Image;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.PostLike;
 import com.woopaca.knoo.entity.Scrap;
@@ -33,6 +34,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,7 @@ public class BasicPostService implements PostService {
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final ScrapRepository scrapRepository;
+    private final ImageService imageService;
 
     @Override
     public List<PostPreviewResponseDto> getPostPreviewList() {
@@ -142,6 +145,7 @@ public class BasicPostService implements PostService {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         validateWriterAuthority(post, authenticatedUser);
 
+        imageService.removeImageFiles(post.getImages());
         postRepository.delete(post);
     }
 
@@ -271,6 +275,19 @@ public class BasicPostService implements PostService {
         validatePage(page, postPage);
 
         return PostListResponseDto.from(postPage);
+    }
+
+    @Transactional
+    @Override
+    public void uploadPostImageFiles(final Long postId, final List<MultipartFile> postImageFiles, final SignInUser signInUser) {
+        User authentcatedUser = authService.getAuthenticatedUser(signInUser);
+        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+        if (!post.getWriter().equals(authentcatedUser)) {
+            throw new InvalidUserException();
+        }
+
+        List<Image> images = imageService.multipartFilesStoreAndConvertToImages(postImageFiles);
+        images.forEach(image -> image.uploadWith(post));
     }
 
     private Page<Post> searchInUserScrapPosts(final SearchCondition searchCondition, final String keyword,
