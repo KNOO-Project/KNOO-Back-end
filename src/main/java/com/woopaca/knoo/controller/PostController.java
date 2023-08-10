@@ -52,13 +52,12 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<String> writeNewPost(
+    public ResponseEntity<Long> writeNewPost(
             @SignIn final SignInUser signInUser,
             @RequestBody @Valid final WritePostRequestDto writePostRequestDto
     ) {
         Long postId = postService.writePost(signInUser, writePostRequestDto);
-        return ResponseEntity.created(URI.create("/api/posts/" + postId))
-                .body("게시글 작성이 완료되었습니다.");
+        return ResponseEntity.created(URI.create("/api/posts/" + postId)).body(postId);
     }
 
     @GetMapping("/{category}")
