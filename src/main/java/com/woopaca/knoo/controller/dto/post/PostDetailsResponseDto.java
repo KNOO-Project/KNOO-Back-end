@@ -69,13 +69,13 @@ public class PostDetailsResponseDto {
 
         private Boolean scrapped;
 
-        private List<Long> images;
+        private List<String> images;
 
         @Builder
         public PostDetailsDto(
                 String postTitle, String postContent, String postCategory, String postDate,
                 String writerName, int commentsCount, int likesCount, int scrapsCount,
-                Boolean isWrittenByUser, Boolean liked, Boolean scrapped, List<Long> images
+                Boolean isWrittenByUser, Boolean liked, Boolean scrapped, List<String> images
         ) {
             this.postTitle = postTitle;
             this.postContent = postContent;
@@ -114,7 +114,7 @@ public class PostDetailsResponseDto {
                     .liked(liked)
                     .scrapped(scrapped)
                     .images(post.getImages().stream()
-                            .map(Image::getId)
+                            .map(Image::getImageUrl)
                             .collect(toList()))
                     .build();
         }
