@@ -25,19 +25,19 @@ public class Image {
     @Column(name = "image_id")
     private Long id;
 
-    @Column(name = "image_name")
-    private String imageName;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
-    protected Image(String imageName) {
-        this.imageName = imageName;
+    protected Image(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public static Image of(String imageName) {
-        return new Image(imageName);
+    public static Image of(String imageUrl) {
+        return new Image(imageUrl);
     }
 
     public void uploadWith(Post post) {

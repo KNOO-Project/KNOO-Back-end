@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 @AllArgsConstructor
 public enum SearchCondition {
@@ -16,12 +18,9 @@ public enum SearchCondition {
     private final String conditionName;
 
     public static SearchCondition hasSearchCondition(String searchConditionName) {
-        for (SearchCondition searchCondition : SearchCondition.values()) {
-            if (searchCondition.conditionName.equals(searchConditionName)) {
-                return searchCondition;
-            }
-        }
-
-        throw new IllegalArgumentException("유효하지 않은 검색 조건입니다.");
+        return Arrays.stream(SearchCondition.values())
+                .filter(searchCondition -> searchCondition.conditionName.equals(searchConditionName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 검색 조건입니다."));
     }
 }

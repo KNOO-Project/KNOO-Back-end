@@ -36,9 +36,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,14 +62,12 @@ public class BasicPostService implements PostService {
         PageRequest pageRequest =
                 PageRequest.of(0, PREVIEW_PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
 
-        List<PostPreviewResponseDto> postPreviewList = new ArrayList<>();
-        for (PostCategory postCategory : PostCategory.values()) {
-            Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
-            PostPreviewResponseDto postPreviewResponseDto = PostPreviewResponseDto.of(postCategory, postPage);
-            postPreviewList.add(postPreviewResponseDto);
-        }
-
-        return postPreviewList;
+        return Arrays.stream(PostCategory.values())
+                .map(postCategory -> {
+                    Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
+                    return PostPreviewResponseDto.of(postCategory, postPage);
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -288,6 +287,7 @@ public class BasicPostService implements PostService {
 
         List<Image> images = imageService.multipartFilesStoreAndConvertToImages(postImageFiles);
         images.forEach(image -> image.uploadWith(post));
+        post.updateThumbnail(images.get(0));
     }
 
     private Page<Post> searchInUserScrapPosts(final SearchCondition searchCondition, final String keyword,

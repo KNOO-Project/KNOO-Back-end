@@ -2,11 +2,8 @@ package com.woopaca.knoo.controller.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.Comment;
-import com.woopaca.knoo.entity.CommentLike;
 import com.woopaca.knoo.entity.Image;
 import com.woopaca.knoo.entity.Post;
-import com.woopaca.knoo.entity.PostLike;
-import com.woopaca.knoo.entity.Scrap;
 import com.woopaca.knoo.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -123,27 +120,13 @@ public class PostDetailsResponseDto {
         }
 
         private static boolean isLiked(Post post, User authenticatedUser) {
-            boolean liked = false;
-            List<PostLike> postLikeList = post.getPostLikes();
-            for (PostLike postLike : postLikeList) {
-                if (postLike.getUser() == authenticatedUser) {
-                    liked = true;
-                    break;
-                }
-            }
-            return liked;
+            return post.getPostLikes().stream()
+                    .anyMatch(postLike -> postLike.getUser().equals(authenticatedUser));
         }
 
         private static boolean isScrapped(Post post, User authenticatedUser) {
-            boolean scrapped = false;
-            List<Scrap> scrapList = post.getScraps();
-            for (Scrap scrap : scrapList) {
-                if (scrap.getUser() == authenticatedUser) {
-                    scrapped = true;
-                    break;
-                }
-            }
-            return scrapped;
+            return post.getScraps().stream()
+                    .anyMatch(scrap -> scrap.getUser().equals(authenticatedUser));
         }
     }
 
@@ -200,14 +183,8 @@ public class PostDetailsResponseDto {
             boolean isWrittenByUser = authenticatedUser == commentWriter;
             String writerName = getDisplayWriterName(post, commentWriter);
 
-            boolean liked = false;
-            List<CommentLike> commentLikeList = comment.getCommentLikes();
-            for (CommentLike commentLike : commentLikeList) {
-                if (commentLike.getUser() == authenticatedUser) {
-                    liked = true;
-                    break;
-                }
-            }
+            boolean liked = comment.getCommentLikes().stream()
+                    .anyMatch(commentLike -> commentLike.getUser().equals(authenticatedUser));
 
             String formattedDate =
                     comment.getCommentDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));

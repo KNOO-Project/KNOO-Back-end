@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,6 +64,10 @@ public class Post {
 
     @Column(name = "scraps_count", nullable = false)
     private int scrapsCount;
+
+    @JoinColumn(name = "thumbnail")
+    @OneToOne(fetch = FetchType.LAZY)
+    private Image thumbnail;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -131,5 +136,9 @@ public class Post {
 
     public void cancelScrap() {
         scrapsCount--;
+    }
+
+    public void updateThumbnail(Image thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

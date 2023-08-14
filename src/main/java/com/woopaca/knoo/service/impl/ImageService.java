@@ -1,7 +1,6 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.entity.Image;
-import com.woopaca.knoo.exception.post.impl.ImageNotFoundException;
 import com.woopaca.knoo.exception.post.impl.ImageNotReadable;
 import com.woopaca.knoo.exception.post.impl.InvalidFileExtensionException;
 import com.woopaca.knoo.repository.ImageRepository;
@@ -33,6 +32,8 @@ public class ImageService {
     private Path path;
     @Value(value = "${file.path}")
     private String location;
+    @Value(value = "${image.url}")
+    private String imageUrl;
 
     @PostConstruct
     private void init() {
@@ -59,7 +60,7 @@ public class ImageService {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    return Image.of(storedFileName);
+                    return Image.of(imageUrl + storedFileName);
                 })
                 .collect(Collectors.toList());
     }
@@ -86,14 +87,13 @@ public class ImageService {
         throw new InvalidFileExtensionException();
     }
 
-    public byte[] getPostImageBytes(Long imageId) {
-        Image image = imageRepository.findById(imageId).orElseThrow(ImageNotFoundException::new);
-        return imageConvertToBytes(image);
+    public byte[] getPostImageBytes(String imageName) {
+        return imageConvertToBytes(imageName);
     }
 
-    private byte[] imageConvertToBytes(Image image) {
+    private byte[] imageConvertToBytes(String imageName) {
         try (FileInputStream fileInputStream =
-                     new FileInputStream(location + File.separator + image.getImageName())) {
+                     new FileInputStream(location + File.separator + imageName)) {
             return fileInputStream.readAllBytes();
         } catch (IOException e) {
             throw new ImageNotReadable();
@@ -102,7 +102,7 @@ public class ImageService {
 
     public void removeImageFiles(List<Image> images) {
         images.stream()
-                .map(Image::getImageName)
+                .map(image -> image.getImageUrl().substring(image.getImageUrl().lastIndexOf("/") + 1))
                 .forEach(imageName -> {
                     try {
                         Files.delete(Paths.get(location + File.separator + imageName));

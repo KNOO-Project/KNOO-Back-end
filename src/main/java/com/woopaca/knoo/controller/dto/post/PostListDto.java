@@ -1,5 +1,6 @@
 package com.woopaca.knoo.controller.dto.post;
 
+import com.woopaca.knoo.entity.Image;
 import com.woopaca.knoo.entity.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,9 +31,11 @@ public class PostListDto {
 
     private int scrapsCount;
 
+    private String thumbnail;
+
     @Builder
     public PostListDto(Long postId, String postTitle, String postContent, String postCategory, String postDate,
-                       String writerName, int commentsCount, int likesCount, int scrapsCount) {
+                       String writerName, int commentsCount, int likesCount, int scrapsCount, String thumbnail) {
         this.postId = postId;
         this.postTitle = postTitle;
         this.postContent = postContent;
@@ -42,6 +45,7 @@ public class PostListDto {
         this.commentsCount = commentsCount;
         this.likesCount = likesCount;
         this.scrapsCount = scrapsCount;
+        this.thumbnail = thumbnail;
     }
 
     public static PostListDto from(final Post post) {
@@ -52,6 +56,12 @@ public class PostListDto {
 
         String formattedDate =
                 post.getPostDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        Image thumbnail = post.getThumbnail();
+        String thumbnailUrl = null;
+        if (thumbnail != null) {
+            thumbnailUrl = thumbnail.getImageUrl();
+        }
+
         return PostListDto.builder()
                 .postId(post.getId())
                 .postTitle(post.getPostTitle())
@@ -62,6 +72,7 @@ public class PostListDto {
                 .commentsCount(post.getCommentsCount())
                 .likesCount(post.getLikesCount())
                 .scrapsCount(post.getScrapsCount())
+                .thumbnail(thumbnailUrl)
                 .build();
     }
 }

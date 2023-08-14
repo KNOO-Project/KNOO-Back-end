@@ -132,10 +132,10 @@ public class PostController {
         return ResponseEntity.ok().body("게시글 사진이 등록되었습니다.");
     }
 
-    @GetMapping(value = "/images/{imageId}",
+    @GetMapping(value = "/images/{imageName}",
             produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<byte[]> postImage(@PathVariable("imageId") final Long imageId) {
-        byte[] imageBytes = imageService.getPostImageBytes(imageId);
+    public ResponseEntity<byte[]> postImage(@PathVariable("imageName") final String imageName) {
+        byte[] imageBytes = imageService.getPostImageBytes(imageName);
         return ResponseEntity.ok().body(imageBytes);
     }
 }

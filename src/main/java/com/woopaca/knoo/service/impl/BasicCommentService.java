@@ -21,8 +21,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
@@ -42,7 +45,18 @@ public class BasicCommentService implements CommentService {
             final SignInUser signInUser, final WriteCommentRequestDto writeCommentRequestDto,
             @Nullable final Long postId, @Nullable final Long commentId
     ) {
-        /*Integer currentTransactionIsolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();
+        Integer currentTransactionIsolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();
+        assert currentTransactionIsolationLevel != null;
+
+        Arrays.stream(Isolation.values())
+                .filter(isolation -> isolation.value() == currentTransactionIsolationLevel)
+                .findFirst()
+                .map(isolation -> {
+                    String name = isolation.name();
+                    log.info("name = {}", name);
+                    return isolation;
+                });
+
         Isolation[] isolations = Isolation.values();
         for (Isolation isolation : isolations) {
             if (isolation.value() == currentTransactionIsolationLevel) {
@@ -50,7 +64,7 @@ public class BasicCommentService implements CommentService {
                 log.info("isolationLevelName = {}", name);
                 break;
             }
-        }*/
+        }
 
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
         Comment comment = Comment.from(writeCommentRequestDto);

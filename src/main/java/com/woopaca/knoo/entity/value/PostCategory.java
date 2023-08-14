@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+
 @Getter
 @AllArgsConstructor
 @Slf4j
@@ -21,12 +23,9 @@ public enum PostCategory {
     private final String categoryName;
 
     public static PostCategory hasCategoryName(String categoryName) {
-        for (PostCategory postCategory : PostCategory.values()) {
-            if (postCategory.categoryName.equals(categoryName)) {
-                return postCategory;
-            }
-        }
-
-        return null;
+        return Arrays.stream(PostCategory.values())
+                .filter(category -> category.getCategoryName().equals(categoryName))
+                .findFirst()
+                .orElse(null);
     }
 }

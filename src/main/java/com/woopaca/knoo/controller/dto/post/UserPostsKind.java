@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum UserPostsKind {
@@ -17,12 +19,9 @@ public enum UserPostsKind {
     private final String kindName;
 
     public static UserPostsKind getUserPostsKind(String postsKindName) {
-        for (UserPostsKind userPostsKind : UserPostsKind.values()) {
-            if (userPostsKind.kindName.equals(postsKindName)) {
-                return userPostsKind;
-            }
-        }
-
-        throw new IllegalArgumentException("유효하지 않은 회원 게시글 종류입니다.");
+        return Arrays.stream(UserPostsKind.values())
+                .filter(userPostsKind -> userPostsKind.kindName.equals(postsKindName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 회원 게시글 종류입니다."));
     }
 }

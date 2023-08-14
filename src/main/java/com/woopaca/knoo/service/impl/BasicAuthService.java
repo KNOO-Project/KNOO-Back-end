@@ -6,7 +6,6 @@ import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.auth.SignUpRequestDto;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.exception.user.impl.InvalidAuthenticationException;
-import com.woopaca.knoo.exception.user.impl.UserNotFoundException;
 import com.woopaca.knoo.exception.user.impl.VerificationNotFoundException;
 import com.woopaca.knoo.repository.UserRepository;
 import com.woopaca.knoo.service.AuthService;
@@ -14,6 +13,7 @@ import com.woopaca.knoo.service.MailService;
 import com.woopaca.knoo.validator.AuthValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,8 @@ public class BasicAuthService implements AuthService {
 
     @Override
     public User getAuthenticatedUser(final SignInUser signInUser) {
-        return userRepository.findById(signInUser.getId()).orElseThrow(UserNotFoundException::new);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (User) authentication.getPrincipal();
     }
 
     @Transactional
