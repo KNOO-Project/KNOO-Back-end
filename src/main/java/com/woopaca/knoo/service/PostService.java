@@ -1,6 +1,7 @@
 package com.woopaca.knoo.service;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.home.HomePostListResponse;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
@@ -39,4 +40,6 @@ public interface PostService {
     PostListResponseDto searchUserScrapPosts(final SignInUser signInUser, final PostSearchRequestDto postSearchRequestDto);
 
     void uploadPostImageFiles(final Long postId, final List<MultipartFile> postImageFiles, final SignInUser signInUser);
+
+    List<HomePostListResponse> getPopularAndRecentPosts();
 }

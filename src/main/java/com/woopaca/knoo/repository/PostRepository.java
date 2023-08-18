@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.LockModeType;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
@@ -76,4 +77,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "ORDER BY s.scrapDate DESC")
     Page<Post> searchByContentInUserScrap(@Param("keyword") String keyword, @Param("user") User authenticatedUser,
                                           PageRequest pageRequest);
+
+    Page<Post> findByOrderByPostDateDesc(Pageable pageable);
+
+    @Query("SELECT p FROM Post p LEFT JOIN p.postLikes pl " +
+            "WHERE pl.postLikeDate >= :twoWeeksAgo ORDER BY SIZE(p.postLikes) DESC")
+    Page<Post> findPopularPosts(@Param(value = "twoWeeksAgo") LocalDateTime twoWeeksAgo, Pageable pageable);
 }

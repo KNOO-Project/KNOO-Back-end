@@ -1,6 +1,7 @@
 package com.woopaca.knoo.service.impl;
 
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
+import com.woopaca.knoo.controller.dto.home.HomePostListResponse;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -304,12 +306,25 @@ public class BasicPostService implements PostService {
         return null;
     }
 
-    private static void validatePage(final int page, final Page<Post> postPage) {
+    private void validatePage(final int page, final Page<Post> postPage) {
         if (postPage.getTotalPages() == 0 && page == 0) {
             return;
         }
         if (postPage.getTotalPages() <= page) {
             throw new PageCountExceededException();
         }
+    }
+
+    @Override
+    public List<HomePostListResponse> getPopularAndRecentPosts() {
+        PageRequest pageRequest = PageRequest.of(0, PREVIEW_PAGE_SIZE);
+        Page<Post> recentPosts = postRepository.findByOrderByPostDateDesc(pageRequest);
+        HomePostListResponse recent = HomePostListResponse.of("recent", recentPosts);
+
+        LocalDateTime twoWeeksAgo = LocalDateTime.now().minusWeeks(2);
+        Page<Post> popularPosts = postRepository.findPopularPosts(twoWeeksAgo, pageRequest);
+        HomePostListResponse popular = HomePostListResponse.of("popular", popularPosts);
+
+        return List.of(recent, popular);
     }
 }
