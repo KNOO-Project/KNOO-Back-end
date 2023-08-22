@@ -1,6 +1,7 @@
 package com.woopaca.knoo.controller.dto.post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.woopaca.knoo.common.DateFormatter;
 import com.woopaca.knoo.entity.Comment;
 import com.woopaca.knoo.entity.Image;
 import com.woopaca.knoo.entity.Post;
@@ -100,7 +101,7 @@ public class PostDetailsResponseDto {
             boolean scrapped = isScrapped(post, authenticatedUser);
 
             String formattedDate =
-                    post.getPostDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+                    post.getPostDate().format(DateFormatter.getFormatter());
             return PostDetailsDto.builder()
                     .postTitle(post.getPostTitle())
                     .postContent(post.getPostContent())
@@ -187,7 +188,7 @@ public class PostDetailsResponseDto {
                     .anyMatch(commentLike -> commentLike.getUser().equals(authenticatedUser));
 
             String formattedDate =
-                    comment.getCommentDate().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+                    comment.getCommentDate().format(DateFormatter.getFormatter());
             return CommentListDto.builder()
                     .commentId(comment.getId())
                     .commentContent(comment.getCommentContent())

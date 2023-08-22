@@ -18,6 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -32,6 +34,10 @@ import static javax.persistence.CascadeType.REMOVE;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedEntityGraph(
+        name = "Post.writer",
+        attributeNodes = @NamedAttributeNode(value = "writer")
+)
 @Table(name = "post")
 public class Post {
 
@@ -68,6 +74,9 @@ public class Post {
     @JoinColumn(name = "thumbnail")
     @OneToOne(fetch = FetchType.LAZY)
     private Image thumbnail;
+
+    @Column(name = "images_count")
+    private int imagesCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -140,5 +149,10 @@ public class Post {
 
     public void updateThumbnail(Image thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public void registerImage(Image image) {
+        images.add(image);
+        imagesCount++;
     }
 }

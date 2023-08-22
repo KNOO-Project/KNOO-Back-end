@@ -42,6 +42,6 @@ public class Image {
 
     public void uploadWith(Post post) {
         this.post = post;
-        post.getImages().add(this);
+        post.registerImage(this);
     }
 }

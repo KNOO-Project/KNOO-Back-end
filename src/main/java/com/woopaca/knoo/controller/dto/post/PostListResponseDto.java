@@ -16,7 +16,6 @@ import static java.util.stream.Collectors.toList;
 public class PostListResponseDto {
 
     private int totalPages;
-
     private List<PostListDto> posts;
 
     @Builder
