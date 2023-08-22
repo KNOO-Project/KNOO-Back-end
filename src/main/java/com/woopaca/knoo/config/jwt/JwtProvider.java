@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
 
@@ -30,11 +32,12 @@ public class JwtProvider {
         claims.put("roles", authenticatedUser.getRoles());
         claims.put("code", authenticatedUser.getVerificationCode());
 
-        Date now = new Date();
+        Instant now = Instant.now();
+        Instant expirationTime = now.plus(tokenExpireHour, ChronoUnit.HOURS);
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + HOUR_TIME * tokenExpireHour))
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .setIssuer("KNOO")
                 .compact();

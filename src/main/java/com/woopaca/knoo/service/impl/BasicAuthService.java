@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class BasicAuthService implements AuthService {
 
+    public static final int HOURS_OF_DAY = 24;
     private final UserRepository userRepository;
     private final AuthValidator authValidator;
     private final MailService mailService;
@@ -67,9 +68,9 @@ public class BasicAuthService implements AuthService {
         }
 
         User authenticatedUser = (User) authentication.getPrincipal();
-        /*if (signInRequestDto.isAutoSignIn()) {
-            return "Bearer " + jwtProvider.createToken(authenticatedUser, 24 * 7);
-        }*/
-        return "Bearer " + jwtProvider.createToken(authenticatedUser, 24 * 30);
+        if (signInRequestDto.isAutoSignIn()) {
+            return "Bearer " + jwtProvider.createToken(authenticatedUser, HOURS_OF_DAY);
+        }
+        return "Bearer " + jwtProvider.createToken(authenticatedUser, HOURS_OF_DAY * 30);
     }
 }
