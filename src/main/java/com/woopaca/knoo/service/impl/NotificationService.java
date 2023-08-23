@@ -4,6 +4,7 @@ import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.notification.NotificationListResponseDto;
 import com.woopaca.knoo.entity.Notification;
 import com.woopaca.knoo.entity.User;
+import com.woopaca.knoo.exception.notification.NotificationNotFoundException;
 import com.woopaca.knoo.repository.NotificationRepository;
 import com.woopaca.knoo.service.AuthService;
 import org.springframework.data.domain.Page;
@@ -37,5 +38,13 @@ public class NotificationService {
         Page<Notification> notifications =
                 notificationRepository.findByUser(authenticatedUser, pageRequest);
         return NotificationListResponseDto.of(notifications);
+    }
+
+    @Transactional
+    public void readNotification(final Long notificationId, final SignInUser signInUser) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(NotificationNotFoundException::new);
+        notification.readByUser(authenticatedUser);
     }
 }

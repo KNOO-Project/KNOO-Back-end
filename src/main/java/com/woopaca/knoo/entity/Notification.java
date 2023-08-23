@@ -1,6 +1,7 @@
 package com.woopaca.knoo.entity;
 
 import com.woopaca.knoo.entity.value.NotificationType;
+import com.woopaca.knoo.exception.user.impl.InvalidUserException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,7 +44,7 @@ public class Notification {
     @Column(name = "notification_type")
     private NotificationType notificationType;
 
-    @Column(name = "read")
+    @Column(name = "`read`")
     private boolean isRead;
 
     @Column(name = "notification_date")
@@ -64,5 +65,12 @@ public class Notification {
         this.notificationType = notificationType;
         this.isRead = isRead;
         this.notificationDate = notificationDate;
+    }
+
+    public void readByUser(User authenticatedUser) {
+        if (!user.equals(authenticatedUser)) {
+            throw new InvalidUserException();
+        }
+        isRead = true;
     }
 }

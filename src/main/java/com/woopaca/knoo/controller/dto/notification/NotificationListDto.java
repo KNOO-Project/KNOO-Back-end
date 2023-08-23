@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public class NotificationListDto {
 
+    private final Long notificationId;
     private final String notificationDescription;
     private final String notificationDate;
     private final String notificationType;
@@ -15,7 +16,8 @@ public class NotificationListDto {
     private final Long postId;
 
     @Builder
-    protected NotificationListDto(String notificationDescription, String notificationDate, String notificationType, boolean isRead, Long postId) {
+    protected NotificationListDto(Long notificationId, String notificationDescription, String notificationDate, String notificationType, boolean isRead, Long postId) {
+        this.notificationId = notificationId;
         this.notificationDescription = notificationDescription;
         this.notificationDate = notificationDate;
         this.notificationType = notificationType;
@@ -25,6 +27,7 @@ public class NotificationListDto {
 
     public static NotificationListDto of(final Notification notification) {
         return NotificationListDto.builder()
+                .notificationId(notification.getId())
                 .notificationDescription(notification.getNotificationDescription())
                 .notificationDate(notification.getNotificationDate().format(DateFormatter.getFormatter()))
                 .notificationType(notification.getNotificationType().toString())
