@@ -1,6 +1,7 @@
 package com.woopaca.knoo.controller;
 
 import com.woopaca.knoo.annotation.SignIn;
+import com.woopaca.knoo.controller.dto.PageDto;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 
@@ -61,9 +62,9 @@ public class PostController {
     @GetMapping("/{category}")
     public ResponseEntity<PostListResponseDto> writtenPostList(
             @PathVariable("category") final PostCategory postCategory,
-            @RequestParam("page") @Positive(message = "유효하지 않은 페이지입니다.") final int page
+            @ModelAttribute @Valid final PageDto pageDto
     ) {
-        PostListResponseDto postListResponseDto = postService.postList(postCategory, page - 1);
+        PostListResponseDto postListResponseDto = postService.postList(postCategory, pageDto.getPage() - 1);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 

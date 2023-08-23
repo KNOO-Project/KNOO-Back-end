@@ -18,8 +18,6 @@ import com.woopaca.knoo.entity.PostLike;
 import com.woopaca.knoo.entity.Scrap;
 import com.woopaca.knoo.entity.User;
 import com.woopaca.knoo.entity.value.PostCategory;
-import com.woopaca.knoo.exception.post.impl.InvalidPostPageException;
-import com.woopaca.knoo.exception.post.impl.PageCountExceededException;
 import com.woopaca.knoo.exception.post.impl.PostCategoryNotFoundException;
 import com.woopaca.knoo.exception.post.impl.PostNotFoundException;
 import com.woopaca.knoo.exception.user.impl.InvalidUserException;
@@ -85,12 +83,13 @@ public class BasicPostService implements PostService {
 
     @Override
     public PostListResponseDto postList(final PostCategory postCategory, final int page) {
-        validateArgument(postCategory, page);
+        if (postCategory == null) {
+            throw new PostCategoryNotFoundException();
+        }
 
         PageRequest pageRequest =
                 PageRequest.of(page, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.DESC, "postDate"));
         Page<Post> postPage = postRepository.findByPostCategory(postCategory, pageRequest);
-        validatePage(page, postPage);
 
         return PostListResponseDto.from(postPage);
     }
@@ -98,24 +97,11 @@ public class BasicPostService implements PostService {
     @Override
     public PostListResponseDto scrapPostList(final SignInUser signInUser, final int page) {
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
-        if (page < 0) {
-            throw new InvalidPostPageException();
-        }
 
         PageRequest pageRequest = PageRequest.of(page, SCRAP_PAGE_SIZE);
         Page<Post> postPage = postRepository.findUserScrapPosts(authenticatedUser, pageRequest);
-        validatePage(page, postPage);
 
         return PostListResponseDto.from(postPage);
-    }
-
-    private static void validateArgument(PostCategory postCategory, int page) {
-        if (postCategory == null) {
-            throw new PostCategoryNotFoundException();
-        }
-        if (page < 0) {
-            throw new InvalidPostPageException();
-        }
     }
 
     @Override
@@ -190,11 +176,8 @@ public class BasicPostService implements PostService {
         Post post = postRepository.findPostById(postId).orElseThrow(PostNotFoundException::new);
         Optional<Scrap> scrapOptional = scrapRepository.findByPostAndUser(post, authenticatedUser);
 
-        if (scrapOptional.isPresent()) {
-            return cancelScrapPost(post, scrapOptional);
-        }
-
-        return scrapPost(post, authenticatedUser);
+        return scrapOptional.map(scrap -> cancelScrapPost(post, scrap))
+                .orElseGet(() -> scrapPost(post, authenticatedUser));
     }
 
     private PostScrapResponseDto scrapPost(final Post post, final User authenticatedUser) {
@@ -203,8 +186,7 @@ public class BasicPostService implements PostService {
         return PostScrapResponseDto.ofScrap(post);
     }
 
-    private PostScrapResponseDto cancelScrapPost(final Post post, final Optional<Scrap> scrapOptional) {
-        Scrap scrap = scrapOptional.get();
+    private PostScrapResponseDto cancelScrapPost(final Post post, final Scrap scrap) {
         scrapRepository.delete(scrap);
         post.cancelScrap();
         return PostScrapResponseDto.ofCancelScrap(post);
@@ -216,7 +198,6 @@ public class BasicPostService implements PostService {
         Page<Post> postPage = searchByCondition(
                 postSearchRequestDto.getCategory(), postSearchRequestDto.getCondition(),
                 postSearchRequestDto.getKeyword(), page);
-        validatePage(page, postPage);
         return PostListResponseDto.from(postPage);
     }
 
@@ -273,7 +254,6 @@ public class BasicPostService implements PostService {
         Page<Post> postPage = searchInUserScrapPosts(
                 postSearchRequestDto.getCondition(), postSearchRequestDto.getKeyword(), authenticatedUser, pageRequest);
         assert postPage != null;
-        validatePage(page, postPage);
 
         return PostListResponseDto.from(postPage);
     }
@@ -304,15 +284,6 @@ public class BasicPostService implements PostService {
             return postRepository.searchByContentInUserScrap(keyword, authenticatedUser, pageRequest);
         }
         return null;
-    }
-
-    private void validatePage(final int page, final Page<Post> postPage) {
-        if (postPage.getTotalPages() == 0 && page == 0) {
-            return;
-        }
-        if (postPage.getTotalPages() <= page) {
-            throw new PageCountExceededException();
-        }
     }
 
     @Override

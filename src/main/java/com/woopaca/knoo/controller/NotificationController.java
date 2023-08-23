@@ -1,15 +1,18 @@
 package com.woopaca.knoo.controller;
 
 import com.woopaca.knoo.annotation.SignIn;
+import com.woopaca.knoo.controller.dto.PageDto;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.notification.NotificationListResponseDto;
 import com.woopaca.knoo.service.impl.NotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RequestMapping("/api/notifications")
@@ -30,10 +33,10 @@ public class NotificationController {
 
     @GetMapping("")
     public ResponseEntity<NotificationListResponseDto> userNotifications(
-            @SignIn final SignInUser signInUser,
-            @RequestParam(name = "page", defaultValue = "0") final int page
+            @SignIn final SignInUser signInUser, @ModelAttribute @Valid final PageDto pageDto
     ) {
-        NotificationListResponseDto notificationListResponseDto = notificationService.getUserNotifications(signInUser, page);
+        NotificationListResponseDto notificationListResponseDto =
+                notificationService.getUserNotifications(signInUser, pageDto.getPage() - 1);
         return ResponseEntity.ok().body(notificationListResponseDto);
     }
 }

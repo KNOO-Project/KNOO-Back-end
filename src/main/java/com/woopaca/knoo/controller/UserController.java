@@ -1,6 +1,7 @@
 package com.woopaca.knoo.controller;
 
 import com.woopaca.knoo.annotation.SignIn;
+import com.woopaca.knoo.controller.dto.PageDto;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostListResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
@@ -11,6 +12,7 @@ import com.woopaca.knoo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,18 +36,20 @@ public class UserController {
     @GetMapping("/more")
     public ResponseEntity<PostListResponseDto> userWritePostList(
             @SignIn final SignInUser signInUser,
-            @RequestParam("kind") final UserPostsKind userPostsKind, @RequestParam("page") final int page
+            @RequestParam("kind") final UserPostsKind userPostsKind,
+            @ModelAttribute @Valid final PageDto pageDto
     ) {
         PostListResponseDto postListResponseDto =
-                userService.seeMoreUserPosts(signInUser, userPostsKind, page - 1);
+                userService.seeMoreUserPosts(signInUser, userPostsKind, pageDto.getPage() - 1);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 
     @GetMapping("/scraps")
     public ResponseEntity<PostListResponseDto> userScrapPostList(
-            @SignIn final SignInUser signInUser, @RequestParam("page") final int page
+            @SignIn final SignInUser signInUser, @ModelAttribute @Valid final PageDto pageDto
     ) {
-        PostListResponseDto postListResponseDto = postService.scrapPostList(signInUser, page - 1);
+        PostListResponseDto postListResponseDto =
+                postService.scrapPostList(signInUser, pageDto.getPage() - 1);
         return ResponseEntity.ok().body(postListResponseDto);
     }
 

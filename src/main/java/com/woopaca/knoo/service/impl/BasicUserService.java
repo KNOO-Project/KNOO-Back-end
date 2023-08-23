@@ -7,8 +7,6 @@ import com.woopaca.knoo.controller.dto.post.UserPostsKind;
 import com.woopaca.knoo.controller.dto.user.UserInfoResponseDto;
 import com.woopaca.knoo.entity.Post;
 import com.woopaca.knoo.entity.User;
-import com.woopaca.knoo.exception.post.impl.InvalidPostPageException;
-import com.woopaca.knoo.exception.post.impl.PageCountExceededException;
 import com.woopaca.knoo.repository.PostRepository;
 import com.woopaca.knoo.service.AuthService;
 import com.woopaca.knoo.service.UserService;
@@ -55,10 +53,6 @@ public class BasicUserService implements UserService {
     @Override
     public PostListResponseDto seeMoreUserPosts(final SignInUser signInUser,
                                                 final UserPostsKind userPostsKind, final int page) {
-        if (page < 0) {
-            throw new InvalidPostPageException();
-        }
-
         User authenticatedUser = authService.getAuthenticatedUser(signInUser);
 
         Page<Post> postPage = null;
@@ -77,7 +71,6 @@ public class BasicUserService implements UserService {
                 break;
             }
         }
-        validatePage(page, postPage);
 
         return PostListResponseDto.from(postPage);
     }
@@ -86,14 +79,5 @@ public class BasicUserService implements UserService {
         return postPage.stream()
                 .map(PostListDto::from)
                 .collect(toList());
-    }
-
-    private static void validatePage(final int page, final Page<Post> postPage) {
-        if (postPage.getTotalPages() == 0 && page == 0) {
-            return;
-        }
-        if (postPage.getTotalPages() <= page) {
-            throw new PageCountExceededException();
-        }
     }
 }
