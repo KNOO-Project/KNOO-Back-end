@@ -56,12 +56,12 @@ public class NotificationService {
     }
 
     @Transactional
-    public void generateNotification(final Long generatorId, final Post post, final NotificationType notificationType) {
+    public void generateNotification(final Long generatorId, final Post post, final NotificationType notificationType, final User targetUser) {
         if (generatorId.equals(post.getWriter().getId())) {
             return;
         }
 
-        Notification notification = Notification.of(generatorId, post, notificationType);
+        Notification notification = Notification.of(generatorId, post, notificationType, targetUser);
         notificationRepository.save(notification);
     }
 

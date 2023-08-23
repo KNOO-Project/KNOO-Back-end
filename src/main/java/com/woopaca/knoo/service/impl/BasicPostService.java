@@ -158,7 +158,7 @@ public class BasicPostService implements PostService {
             return cancelLikePost(post, postLikeOptional);
         }
 
-        notificationService.generateNotification(authenticatedUser.getId(), post, LIKE);
+        notificationService.generateNotification(authenticatedUser.getId(), post, LIKE, post.getWriter());
         return likePost(post, authenticatedUser);
     }
 
@@ -189,7 +189,7 @@ public class BasicPostService implements PostService {
                     return cancelScrapPost(post, scrap);
                 })
                 .orElseGet(() -> {
-                    notificationService.generateNotification(authenticatedUser.getId(), post, SCRAP);
+                    notificationService.generateNotification(authenticatedUser.getId(), post, SCRAP, post.getWriter());
                     return scrapPost(post, authenticatedUser);
                 });
     }

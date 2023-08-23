@@ -71,7 +71,7 @@ public class Notification {
         this.generatorId = generatorId;
     }
 
-    public static Notification of(Long generatorId, final Post post, final NotificationType notificationType) {
+    public static Notification of(Long generatorId, final Post post, final NotificationType notificationType, final User targetUser) {
         Notification notification = Notification.builder()
                 .notificationDescription(notificationType.getDescription())
                 .notificationType(notificationType)
@@ -80,7 +80,7 @@ public class Notification {
                 .generatorId(generatorId)
                 .build();
         notification.post = post;
-        notification.user = post.getWriter();
+        notification.user = targetUser;
         return notification;
     }
 

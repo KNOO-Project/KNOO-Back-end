@@ -66,7 +66,7 @@ public class BasicCommentService implements CommentService {
         comment.writtenBy(authenticatedUser);
         comment.writeOn(post);
 
-        notificationService.generateNotification(authenticatedUser.getId(), post, COMMENT);
+        notificationService.generateNotification(authenticatedUser.getId(), post, COMMENT, post.getWriter());
         return commentRepository.save(comment);
     }
 
@@ -82,7 +82,7 @@ public class BasicCommentService implements CommentService {
         comment.writtenBy(authenticatedUser);
         comment.reply(parentComment, post);
 
-        notificationService.generateNotification(authenticatedUser.getId(), post, REPLY);
+        notificationService.generateNotification(authenticatedUser.getId(), post, REPLY, parentComment.getWriter());
         return commentRepository.save(comment);
     }
 
