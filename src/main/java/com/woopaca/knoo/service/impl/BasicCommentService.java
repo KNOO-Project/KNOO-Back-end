@@ -25,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.woopaca.knoo.entity.value.NotificationType.COMMENT;
+import static com.woopaca.knoo.entity.value.NotificationType.REPLY;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,6 +38,7 @@ public class BasicCommentService implements CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final CommentLikeRepository commentLikeRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     @Override
@@ -61,6 +65,8 @@ public class BasicCommentService implements CommentService {
         Post post = getPostWithLock(postId);
         comment.writtenBy(authenticatedUser);
         comment.writeOn(post);
+
+        notificationService.generateNotification(authenticatedUser.getId(), post, COMMENT);
         return commentRepository.save(comment);
     }
 
@@ -75,6 +81,8 @@ public class BasicCommentService implements CommentService {
         Post post = getPostWithLock(parentCommentPost.getId());
         comment.writtenBy(authenticatedUser);
         comment.reply(parentComment, post);
+
+        notificationService.generateNotification(authenticatedUser.getId(), post, REPLY);
         return commentRepository.save(comment);
     }
 

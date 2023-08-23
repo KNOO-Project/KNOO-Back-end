@@ -50,6 +50,9 @@ public class Notification {
     @Column(name = "notification_date")
     private LocalDateTime notificationDate;
 
+    @Column(name = "generator_id")
+    private Long generatorId;
+
     @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
@@ -60,11 +63,25 @@ public class Notification {
 
     @Builder
     protected Notification(String notificationDescription, NotificationType notificationType,
-                           boolean isRead, LocalDateTime notificationDate) {
+                           boolean isRead, LocalDateTime notificationDate, Long generatorId) {
         this.notificationDescription = notificationDescription;
         this.notificationType = notificationType;
         this.isRead = isRead;
         this.notificationDate = notificationDate;
+        this.generatorId = generatorId;
+    }
+
+    public static Notification of(Long generatorId, final Post post, final NotificationType notificationType) {
+        Notification notification = Notification.builder()
+                .notificationDescription(notificationType.getDescription())
+                .notificationType(notificationType)
+                .isRead(false)
+                .notificationDate(LocalDateTime.now())
+                .generatorId(generatorId)
+                .build();
+        notification.post = post;
+        notification.user = post.getWriter();
+        return notification;
     }
 
     public void readByUser(User authenticatedUser) {

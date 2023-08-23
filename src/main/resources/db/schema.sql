@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS notification
     notification_type        VARCHAR(20)  NOT NULL,
     `read`                   BOOLEAN      NOT NULL DEFAULT FALSE,
     notification_date        DATETIME(6)  NOT NULL,
+    generator_id             BIGINT,
     post_id                  BIGINT,
     user_id                  BIGINT       NOT NULL,
     PRIMARY KEY (notification_id),

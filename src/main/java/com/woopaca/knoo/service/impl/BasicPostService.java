@@ -41,6 +41,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.woopaca.knoo.entity.value.NotificationType.LIKE;
+import static com.woopaca.knoo.entity.value.NotificationType.SCRAP;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -56,6 +59,7 @@ public class BasicPostService implements PostService {
     private final PostLikeRepository postLikeRepository;
     private final ScrapRepository scrapRepository;
     private final ImageService imageService;
+    private final NotificationService notificationService;
 
     @Override
     public List<PostPreviewResponseDto> getPostPreviewList() {
@@ -150,15 +154,18 @@ public class BasicPostService implements PostService {
         Optional<PostLike> postLikeOptional = postLikeRepository.findByPostAndUser(post, authenticatedUser);
 
         if (postLikeOptional.isPresent()) {
+            notificationService.removeNotification(authenticatedUser.getId(), post, LIKE);
             return cancelLikePost(post, postLikeOptional);
         }
 
+        notificationService.generateNotification(authenticatedUser.getId(), post, LIKE);
         return likePost(post, authenticatedUser);
     }
 
     private PostLikeResponseDto likePost(Post post, User authentcatedUser) {
         postLikeRepository.save(PostLike.userLikePost(post, authentcatedUser));
         post.like();
+
         return PostLikeResponseDto.ofLike(post);
     }
 
@@ -166,6 +173,7 @@ public class BasicPostService implements PostService {
         PostLike postLike = postLikeOptional.get();
         postLikeRepository.delete(postLike);
         post.cancelLike();
+
         return PostLikeResponseDto.ofCancelLike(post);
     }
 
@@ -176,8 +184,14 @@ public class BasicPostService implements PostService {
         Post post = postRepository.findPostById(postId).orElseThrow(PostNotFoundException::new);
         Optional<Scrap> scrapOptional = scrapRepository.findByPostAndUser(post, authenticatedUser);
 
-        return scrapOptional.map(scrap -> cancelScrapPost(post, scrap))
-                .orElseGet(() -> scrapPost(post, authenticatedUser));
+        return scrapOptional.map(scrap -> {
+                    notificationService.removeNotification(authenticatedUser.getId(), post, SCRAP);
+                    return cancelScrapPost(post, scrap);
+                })
+                .orElseGet(() -> {
+                    notificationService.generateNotification(authenticatedUser.getId(), post, SCRAP);
+                    return scrapPost(post, authenticatedUser);
+                });
     }
 
     private PostScrapResponseDto scrapPost(final Post post, final User authenticatedUser) {
