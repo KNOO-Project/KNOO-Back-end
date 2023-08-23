@@ -107,3 +107,15 @@ CREATE TABLE IF NOT EXISTS restaurant
     url             VARCHAR(500),
     PRIMARY KEY (restaurant_id)
 );
+
+CREATE TABLE IF NOT EXISTS notification
+(
+    notification_id          BIGINT       NOT NULL AUTO_INCREMENT,
+    notification_description VARCHAR(100) NOT NULL,
+    notification_type        VARCHAR(20)  NOT NULL,
+    `read`                   BOOLEAN      NOT NULL DEFAULT FALSE,
+    notification_date        DATETIME(6)  NOT NULL,
+    user_id                  BIGINT       NOT NULL,
+    PRIMARY KEY (notification_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+);
