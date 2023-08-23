@@ -8,17 +8,25 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedEntityGraph(
+        name = "Notification.post",
+        attributeNodes = @NamedAttributeNode(value = "post")
+)
 @Table(name = "notification")
 @Entity
 public class Notification {
@@ -31,6 +39,7 @@ public class Notification {
     @Column(name = "notification_description")
     private String notificationDescription;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "notification_type")
     private NotificationType notificationType;
 
@@ -39,6 +48,10 @@ public class Notification {
 
     @Column(name = "notification_date")
     private LocalDateTime notificationDate;
+
+    @JoinColumn(name = "post_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Post post;
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)

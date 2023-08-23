@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class BasicPostService implements PostService {
 
-    public static final int DEFAULT_PAGE_SIZE = 20;
+    private static final int DEFAULT_PAGE_SIZE = 20;
     private static final int SCRAP_PAGE_SIZE = 10;
     private static final int PREVIEW_PAGE_SIZE = 5;
 

@@ -1,6 +1,5 @@
 package com.woopaca.knoo.controller.dto.comment;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.woopaca.knoo.entity.Comment;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,9 +11,7 @@ import lombok.NoArgsConstructor;
 public class CommentLikeResponseDto {
 
     private Long commentId;
-
     private int likesCount;
-
     private Boolean liked;
 
     @Builder

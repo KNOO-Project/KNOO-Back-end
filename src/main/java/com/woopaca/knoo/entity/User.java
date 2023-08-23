@@ -88,6 +88,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Scrap> scraps = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "Role", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role_name")
