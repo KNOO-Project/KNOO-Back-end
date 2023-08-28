@@ -57,7 +57,7 @@ public class NotificationService {
 
     @Transactional
     public void generateNotification(final Long generatorId, final Post post, final NotificationType notificationType, final User targetUser) {
-        if (generatorId.equals(post.getWriter().getId())) {
+        if (generatorId.equals(targetUser.getId())) {
             return;
         }
 
