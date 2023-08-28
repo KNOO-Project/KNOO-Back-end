@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -70,5 +71,12 @@ public class NotificationService {
         Optional<Notification> notificationOptional =
                 notificationRepository.findAlreadyGeneratedNotification(generatorId, post, notificationType);
         notificationOptional.ifPresent(notificationRepository::delete);
+    }
+
+    @Transactional
+    public void markAllNotificationsAsRead(final SignInUser signInUser) {
+        User authenticatedUser = authService.getAuthenticatedUser(signInUser);
+        List<Notification> notifications = notificationRepository.findByUserAndIsReadFalse(authenticatedUser);
+        notifications.forEach(notification -> notification.readByUser(authenticatedUser));
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
@@ -19,6 +20,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     @EntityGraph(value = "Notification.post")
     Page<Notification> findByUser(User user, Pageable pageable);
+
+    List<Notification> findByUserAndIsReadFalse(User user);
 
     @Query(value = "SELECT n FROM Notification n " +
             "WHERE n.generatorId = :generatorId AND n.post = :post AND n.notificationType = :type")

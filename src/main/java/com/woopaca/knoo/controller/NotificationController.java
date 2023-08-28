@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,11 +42,17 @@ public class NotificationController {
         return ResponseEntity.ok().body(notificationListResponseDto);
     }
 
-    @GetMapping("/{notificationId}")
+    @PutMapping("/{notification_id}")
     public ResponseEntity<String> readNotification(
-            @SignIn final SignInUser signInUser, @PathVariable final Long notificationId
+            @SignIn final SignInUser signInUser, @PathVariable final Long notification_id
     ) {
-        notificationService.readNotification(notificationId, signInUser);
-        return ResponseEntity.ok().body(String.format("User read notification [%s]", notificationId));
+        notificationService.readNotification(notification_id, signInUser);
+        return ResponseEntity.ok().body(String.format("User read notification [%s]", notification_id));
+    }
+
+    @PutMapping("")
+    public ResponseEntity<String> markAllAsRead(@SignIn final SignInUser signInUser) {
+        notificationService.markAllNotificationsAsRead(signInUser);
+        return ResponseEntity.ok().body("User read all notifications.");
     }
 }
