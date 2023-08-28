@@ -1,7 +1,6 @@
 package com.woopaca.knoo.controller;
 
 import com.woopaca.knoo.annotation.SignIn;
-import com.woopaca.knoo.controller.dto.PageDto;
 import com.woopaca.knoo.controller.dto.auth.SignInUser;
 import com.woopaca.knoo.controller.dto.post.PostDetailsResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostLikeResponseDto;
@@ -11,7 +10,6 @@ import com.woopaca.knoo.controller.dto.post.PostScrapResponseDto;
 import com.woopaca.knoo.controller.dto.post.PostSearchRequestDto;
 import com.woopaca.knoo.controller.dto.post.UpdatePostRequestDto;
 import com.woopaca.knoo.controller.dto.post.WritePostRequestDto;
-import com.woopaca.knoo.entity.value.PostCategory;
 import com.woopaca.knoo.service.PostService;
 import com.woopaca.knoo.service.impl.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,19 +56,9 @@ public class PostController {
         return ResponseEntity.created(URI.create("/api/posts/" + postId)).body(postId);
     }
 
-    @GetMapping("/{category}")
-    public ResponseEntity<PostListResponseDto> writtenPostList(
-            @PathVariable("category") final PostCategory postCategory,
-            @ModelAttribute @Valid final PageDto pageDto
-    ) {
-        PostListResponseDto postListResponseDto = postService.postList(postCategory, pageDto.getPage() - 1);
-        return ResponseEntity.ok().body(postListResponseDto);
-    }
-
-    @GetMapping("/{category}/{postId}")
+    @GetMapping("/{postId}")
     public ResponseEntity<PostDetailsResponseDto> postDetailsInfo(
-            @SignIn final SignInUser signInUser,
-            @PathVariable("postId") final Long postId, @PathVariable("category") String ignore
+            @SignIn final SignInUser signInUser, @PathVariable("postId") final Long postId
     ) {
         PostDetailsResponseDto postDetails = postService.postDetails(signInUser, postId);
         return ResponseEntity.ok().body(postDetails);
