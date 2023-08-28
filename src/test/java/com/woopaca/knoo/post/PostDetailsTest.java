@@ -90,7 +90,7 @@ public class PostDetailsTest {
     }
 
     private ResultActions resultActions(Long postId) throws Exception {
-        return mockMvc.perform(get("/api/posts/free/" + postId)
+        return mockMvc.perform(get("/api/posts/{post_id}", postId)
                         .header(HttpHeaders.AUTHORIZATION, authorization))
                 .andDo(print());
     }

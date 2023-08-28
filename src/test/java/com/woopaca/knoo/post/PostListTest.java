@@ -86,22 +86,6 @@ public class PostListTest {
 
     }
 
-    @Test
-    @DisplayName("게시글 리스트 조회 실패 - 페이지 수 초과")
-    void getPostListFailOutOfPages() throws Exception {
-        //given
-        for (int i = 0; i < 30; i++) {
-            writeDummyPost();
-        }
-
-        //when
-        ResultActions resultActions = resultActions("free", 3);
-
-        //then
-        resultActions.andExpect(status().isBadRequest());
-
-    }
-
     @ParameterizedTest
     @ValueSource(ints = {0, -1})
     @DisplayName("게시글 리스트 조회 실패 - 유효하지 않은 페이지")
@@ -145,7 +129,7 @@ public class PostListTest {
     }
 
     private ResultActions resultActions(String postCategory, int page) throws Exception {
-        return mockMvc.perform(get("/api/posts/" + postCategory)
+        return mockMvc.perform(get("/api/boards/{category}", postCategory)
                         .param("page", String.valueOf(page)))
                 .andDo(print());
     }

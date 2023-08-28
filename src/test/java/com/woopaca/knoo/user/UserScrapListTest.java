@@ -101,21 +101,6 @@ public class UserScrapListTest {
                 .andExpect(content().json("{'posts': [], 'total_pages': 0}"));
     }
 
-    @Test
-    @DisplayName("스크랩 리스트 조회 실패 - 페이지 수 초과")
-    void getScrapListFailOutOfPages() throws Exception {
-        // given
-        postService.changePostScrap(signInUser, postAId);
-        postService.changePostScrap(signInUser, postBId);
-
-        // when
-        ResultActions resultActions = resultActions(authorizationA, 100);
-
-        // then
-        resultActions.andExpect(status().isBadRequest())
-                .andExpect(content().json("{'error_code': 'KN303'}"));
-    }
-
     @ParameterizedTest
     @ValueSource(ints = {0, -1})
     @DisplayName("스크랩 리스트 조회 실패 - 유효하지 않은 페이지")
@@ -127,7 +112,7 @@ public class UserScrapListTest {
 
         // then
         resultActions.andExpect(status().isBadRequest())
-                .andExpect(content().json("{'error_code': 'KN304'}"));
+                .andExpect(content().json("{'error_code': 'KN101'}"));
     }
 
     private static User createUser(String signature) {

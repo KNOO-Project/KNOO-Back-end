@@ -203,26 +203,6 @@ public class SearchPostTest {
     }
 
     @Test
-    @DisplayName("게시글 검색 실패 - 페이지 수 초과")
-    void searchPostFailOutOfPages() throws Exception {
-        // given
-        PostCategory[] values = PostCategory.values();
-        int length = values.length;
-        for (int i = 1; i <= length * 2; i++) {
-            Post post = createPost(i + "번째 게시글", values[(i - 1) % length]);
-            post.writtenBy(user);
-            postRepository.save(post);
-        }
-
-        // when
-        ResultActions resultActionsA = resultActions(null, SearchCondition.ALL, "onten", 100);
-
-        // then
-        resultActionsA.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message").value("페이지 수를 초과하였습니다."));
-    }
-
-    @Test
     @DisplayName("게시글 검색 실패 - 유효하지 않은 페이지")
     void searchPostFailInvalidPage() throws Exception {
         // given

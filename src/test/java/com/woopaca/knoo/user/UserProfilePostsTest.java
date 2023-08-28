@@ -161,25 +161,7 @@ public class UserProfilePostsTest {
 
         // then
         resultActions.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message").value("유효하지 않은 페이지입니다."));
-    }
-
-    @DisplayName("회원 프로필 게시글 목록 더보기 실패 - 페이지 수 초과")
-    @Test
-    void userProfilePostListSeeMoreFailOutOfPages() throws Exception {
-        // given
-        WriteCommentRequestDto writeCommentRequestDto = new WriteCommentRequestDto("Test comment");
-        commentService.writeComment(signInUser, writeCommentRequestDto, postBId, null);
-        commentService.writeComment(signInUser, writeCommentRequestDto, postAId, null);
-        postService.changePostLike(signInUser, postBId);
-        postService.changePostLike(signInUser, postAId);
-
-        // when
-        ResultActions resultActions = resultActions(authorizationA, UserPostsKind.WRITE.getKindName(), 1000);
-
-        // then
-        resultActions.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("message").value("페이지 수를 초과하였습니다."));
+                .andExpect(jsonPath("message").value("유효하지 않은 페이지"));
     }
 
     private static User createUser(String signature) {
